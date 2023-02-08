@@ -115,6 +115,7 @@ class Auth:
         print(f"{Fore.GREEN}[OpenAI] {Fore.WHITE}Beginning auth process")
         # First, make a request to https://chat.openai.com/auth/login
         url = "https://chat.openai.com/auth/login"
+        # url = "https://www.baidu.com"
         headers = {
             "Host": "ask.openai.com",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -123,6 +124,9 @@ class Auth:
             "Accept-Encoding": "gzip, deflate, br",
             "Connection": "keep-alive",
         }
+        # headers = {
+        #     "key1": "value1"
+        # }
         print(f"{Fore.GREEN}[OpenAI][1] {Fore.WHITE}Making request to {url}")
 
         response = self.__session.get(url=url, headers=headers)
