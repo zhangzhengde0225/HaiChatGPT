@@ -1,0 +1,9 @@
+openai
+tiktoken
+pyside2
+numpy
+pillow
+pyyaml
+damei
+opencv-python
+easydict

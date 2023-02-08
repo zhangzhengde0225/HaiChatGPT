@@ -1,0 +1,8 @@
+
+*.code-workspace
+HaiChatGPT/repos/PyChatGPT/*
+
+build/*
+dist/*
+hai_chat_gpt.egg-info/*
+

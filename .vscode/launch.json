@@ -10,7 +10,10 @@
             "request": "launch",
             "program": "${workspaceFolder}/run.py",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "args": [
+                "--cli"
+            ]
         },
         {
             "name": "Python: Current File",

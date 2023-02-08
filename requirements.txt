@@ -1,0 +1,18 @@
+
+
+openai
+tiktoken
+
+# haigf
+pyside2  # for haigf
+numpy  # for haigf
+pillow  # for haigf
+pyyaml  # for haigf
+# pyqtgraph  # for haigf
+
+damei
+opencv-python  # for damei
+easydict  # for damei
+
+
+

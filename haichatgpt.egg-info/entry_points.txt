@@ -1,0 +1,2 @@
+[console_scripts]
+hai = hai.uaii.cli.cli_main:run
