@@ -8,7 +8,7 @@
             "name": "Python: run",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/run.py",
+            "program": "${workspaceFolder}/run_cli.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
