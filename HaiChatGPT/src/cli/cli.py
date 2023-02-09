@@ -6,7 +6,7 @@ from HaiChatGPT.apis import Chatbot
 def cli_main():
     print(
         """
-    ChatGPT - A command-line interface to OpenAI's ChatGPT (https://chat.openai.com/chat)
+    HaiChatGPT - A command-line interface to OpenAI's ChatGPT (https://chat.openai.com/chat)
     Repo: github.com/zhangzhengde0225/HaiChatGPT
     """,
     )
