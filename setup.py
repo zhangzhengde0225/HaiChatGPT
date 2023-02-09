@@ -137,7 +137,8 @@ setup(
     # py_modules=['mypackage'],
 
     entry_points={
-         'console_scripts': ['HaiChatGPT = HaiChatGPT.src.cli.cli:cli_main'],
+         'console_scripts': ['HaiChatGPT = HaiChatGPT.src.cli.cli:cli_main',
+                             'haichatgpt = HaiChatGPT.src.cli.cli:cli_main',],
     },
 
     install_requires=REQUIRED,

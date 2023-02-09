@@ -387,7 +387,7 @@ class Conversation:
 def main():
     print(
         """
-    ChatGPT - A command-line interface to OpenAI's ChatGPT (https://chat.openai.com/chat)
+    HaiChatGPT - A command-line interface to OpenAI's ChatGPT (https://chat.openai.com/chat)
     Repo: github.com/acheong08/ChatGPT
     """,
     )
