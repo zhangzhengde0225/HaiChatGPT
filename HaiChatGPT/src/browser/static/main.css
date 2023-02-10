@@ -25,7 +25,7 @@ body {
 display: flex;
 flex-direction: row;
 /* align-items: center; */
-padding: 10px;
+/* padding: 10px; */
 font-size: 16px;
 font-family: "ColfaxAI", Helvetica, sans-serif;
 }
@@ -38,7 +38,8 @@ font-family: "ColfaxAI", Helvetica, sans-serif;
   /* border: 1px solid #353740; */
   margin-right: 10px;
   background-color: #353740;
-  color: white
+  color: white;
+  border-radius: 5px;
 }
 
 .new-chat {

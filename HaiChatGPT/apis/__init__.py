@@ -10,3 +10,5 @@ from ..src.hai_chat_gpt import HaiChatGPT
 from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot, AsyncChatbot
 # from ..repos.ChatGPT.src.revChatGPT.Official import main as chatgpt_main
 from ..src.cli.cli import cli_main
+
+from ..src.hai_chat_bot import HChatBot
