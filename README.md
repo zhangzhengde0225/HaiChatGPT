@@ -7,7 +7,7 @@ This project is a ChatGPT GUI based on Hai GUI Framework ([HaiGF](https://code.i
 # Quickstart
 
 ```bash
-pip install hai-chat-gpt  # install
+pip install hai-chat-gpt --upgrade  # install
 
 HaiChatGPT  # run
 

@@ -1,5 +1,5 @@
 __appname__ = 'HaiChatGPT'
-__version__ = '0.0.6'
+__version__ = '0.0.8'
 __version_suffix__ = 'Stable'  # version suffix, like: 1.0.0-Dev, Beta, Stable
 __author__ = 'ZhengDe Zhang'
 __email__ = 'zdzhang@ihep.ac.cn'

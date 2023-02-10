@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HaiChatGPT</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='dog.png')}}"/>
+    <!-- <link rel="stylesheet" type="text/css" href="main.css"/> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+    </head>
+
+<body>
+    <div class="sidebar">
+        <div class="new-chat">
+          New Chat
+        </div>
+        <div class="history">
+          History
+        </div>
+        <div class="settings">
+          Settings
+        </div>
+      </div>
+
+    <div class="main">
+
+      <div class="title">
+        <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
+        <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
+        <div>a free trail version based on OpenAI API.</div>
+      </div>
+      
+      <div class="output">
+        {% if result %}
+        <div class="result">{{ result }}</div>
+        {% endif %}
+      </div>
+
+      <form>
+        <textarea name="prompt" placeholder="Type your prompt here"></textarea>
+        <button>Send</button>
+      </form>
+    </div>
+  </body>
+</html>
+

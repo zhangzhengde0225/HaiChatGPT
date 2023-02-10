@@ -1,3 +1,5 @@
+import os
+
 import argparse
 
 from HaiChatGPT import HaiChatGPT
