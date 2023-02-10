@@ -102,7 +102,7 @@ def cli_main():
     # Start chat
     while True:
         try:
-            prompt = get_input("\nUser:\n")
+            prompt = get_input("\nPrompt:\n")
         except KeyboardInterrupt:
             print("\nExiting...")
             sys.exit()

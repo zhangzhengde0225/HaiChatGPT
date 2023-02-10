@@ -6,12 +6,15 @@ from flask import Flask, redirect, render_template, request, url_for
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+import logging
+os.environ['LOGGING_LEVEL'] = str(logging.DEBUG)
+
 import damei as dm
 
 logger = dm.get_logger('app')
 
 
-class X(object):
+class FakeChatGPT(object):
     def __init__(self) -> None:
         self.count = 0
 
@@ -19,7 +22,7 @@ class X(object):
         self.count += 1
         return f'I am the anser {self.count}.'
 
-xx = X()
+chatgpt = FakeChatGPT()
 
 @app.route("/", methods=("GET", "POST"))
 def index():
@@ -35,8 +38,9 @@ def index():
         # logger.info(response)
         # return redirect(url_for("index", result=response.choices[0].text))
         prompt = request.form["prompt"]
-        logger.info(prompt)
-        response = xx.query(prompt)
+        logger.debug(f'prompt: {prompt}')
+        response = chatgpt.query(prompt)
+        logger.debug(f'response: {response}')
         return redirect(url_for("index", result=response))
 
 
@@ -55,6 +59,13 @@ Animal: {}
 Names:""".format(
         animal.capitalize()
     )
+
+def run(**kwargs):
+    app.run(host='0.0.0.0', port=5000)
+
+if __name__ == "__main__":
+    run(debug=True)
+    
 
 
 
