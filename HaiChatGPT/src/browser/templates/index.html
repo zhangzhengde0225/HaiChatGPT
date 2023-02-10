@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>HaiChatGPT</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='dog.png')}}"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='ai.png')}}"/>
     <!-- <link rel="stylesheet" type="text/css" href="main.css"/> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
     </head>
@@ -23,7 +23,7 @@
     <div class="main">
 
       <div class="title">
-        <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
+        <img src="{{ url_for('static', filename='ai.png') }}" class="icon" />
         <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
         <div>a free trail version based on OpenAI API.</div>
       </div>
@@ -34,9 +34,10 @@
         {% endif %}
       </div>
 
-      <form>
-        <textarea name="prompt" placeholder="Type your prompt here"></textarea>
+      <form action="/" method="post">
+        <textarea name="prompt" placeholder="Type your prompt here" required></textarea>
         <button>Send</button>
+        <button>Clear</button>
       </form>
     </div>
   </body>
