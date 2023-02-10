@@ -7,10 +7,10 @@ from pathlib import Path
 
 here = Path(__file__).parent
 
-from HaiChatGPT.src.browser import app
+from HaiChatGPT.src.browser.app import run as run_app
 
 def run():
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    run_app(host='0.0.0.0', port=5000, debug=True)
     # dir_ = f'{here}/HaiChatGPT/src/browser'
     # os.chdir(dir_)
     # os.system('flask run')

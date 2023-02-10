@@ -2,10 +2,17 @@
 <html>
   <head>
     <title>HaiChatGPT</title>
+    <script>
+      var source = new EventSource("/stream");
+      source.onmessage = function(event) {
+          document.getElementById("output").innerHTML += event.data;
+      };
+    </script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='ai.png')}}"/>
     <!-- <link rel="stylesheet" type="text/css" href="main.css"/> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
-    </head>
+    
+  </head>
 
 <body>
     <div class="sidebar">
@@ -33,11 +40,12 @@
         <div class="result">{{ result }}</div>
         {% endif %}
       </div>
-
+      <div id="output"></div>
+      
       <form action="/" method="post">
         <textarea name="prompt" placeholder="Type your prompt here"></textarea>
         <button>Send</button>
-        <button>Clear</button>
+        <!-- <button>Clear</button> -->
       </form>
     </div>
   </body>
