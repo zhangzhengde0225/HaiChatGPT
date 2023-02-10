@@ -1,4 +1,5 @@
 
+import os, sys
 import damei as dm
 from flask import Flask, redirect, render_template, request, url_for
 
@@ -35,14 +36,28 @@ class WebObject(object):
         """
         if not self.stream:
             ret = self.chatbot.query(text)
+            # logger.debug(f'result: {ret}')
+            logger.info(f'result: {ret}')
             return self.render(ret)
         else:
             generator = self.chatbot.query_stream(text)
+            print('webo generator: ', generator)
+            sys.stdout.flush()
             for ret in generator:
-                return self.render(ret)
+                # logger.info(f'result: {ret}')
+                print(ret)
+                sys.stdout.flush()
+                yield self.render(ret)
+            print('webo generator end.')
 
     def render(self, ret, **kwargs):
-
         return redirect(url_for("index", result=ret))
 
+
+class ErrorHandler:
+    
+    """
+    error类型：
+    openai.error.RateLimitError， 点击速率太快
+    """
 

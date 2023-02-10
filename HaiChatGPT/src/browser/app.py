@@ -10,11 +10,11 @@ app = Flask(__name__)
 os.environ['LOGGING_LEVEL'] = str(logging.DEBUG)
 logger = dm.get_logger('app')
 
-wo = WebObject()
+webo = WebObject()
 
 @app.route("/", methods=("GET", "POST"))
 def index():
-    print(request)
+    print(f'req: {request}. method: {request.method}')
     
     if request.method == "POST":
         # animal = request.form["animal"]
@@ -25,13 +25,12 @@ def index():
         # )
         # logger.info(response)
         # return redirect(url_for("index", result=response.choices[0].text))
-        request = request.form["prompt"]  # this is the query
-        # logger.debug(f'prompt: {request}')
-        # response = chatgpt.query(prompt)
-        wo.query(request)
-        # logger.debug(f'response: {response}')
+        text = request.form["prompt"]  # this is the query
+        if text == '':
+            text = '你是谁？'
+        print('text: ', text)
+        return webo.query(text)
         # return redirect(url_for("index", result=response))
-
 
     result = request.args.get("result")
     return render_template("index.html", result=result)

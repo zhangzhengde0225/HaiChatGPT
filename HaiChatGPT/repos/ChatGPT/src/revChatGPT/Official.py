@@ -106,6 +106,8 @@ class Chatbot:
         user: str = "User",
     ) -> str:
         full_response = ""
+        print("Waiting for response...")
+        print(completion)
         for response in completion:
             if response.get("choices") is None:
                 raise Exception("ChatGPT API returned no choices")
