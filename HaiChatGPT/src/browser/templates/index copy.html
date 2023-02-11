@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HaiChatGPT</title>
+    <script>
+      var source = new EventSource("/stream");
+      source.onmessage = function(event) {
+          if (event.data === "<|im_end|>") {
+            source.close();
+            return
+          }
+          document.getElementById("output").innerHTML += event.data;
+      };
+    </script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='ai.png')}}"/>
+    <!-- <link rel="stylesheet" type="text/css" href="main.css"/> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+    
+  </head>
+
+<body>
+    <div class="sidebar">
+        <div class="new-chat">
+          New Chat
+        </div>
+        <div class="history">
+          History
+        </div>
+        <div class="settings">
+          Settings
+        </div>
+      </div>
+
+    <div class="main">
+
+      <div class="title">
+        <img src="{{ url_for('static', filename='ai.png') }}" class="icon" />
+        <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
+        <div>a free trail version based on OpenAI API.</div>
+      </div>
+      
+      <div class="output">
+        <div id="output"></div>
+        {% if result %}
+        <div class="result">{{ result }}</div>
+        {% endif %}
+      </div>
+      
+      <form action="/" method="post">
+        <textarea name="prompt" placeholder="输入prompt(支持中英文等)"></textarea>
+        <button>Send</button>
+        <!-- <button>Clear</button> -->
+      </form>
+    </div>
+  </body>
+</html>
+

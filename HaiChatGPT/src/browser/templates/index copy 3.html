@@ -15,7 +15,7 @@
         }
         div.innerHTML += event.data;
         i += 1;
-        document.getElementById("last_answer").innerHTML += event.data;
+        document.getElementById("output").innerHTML += event.data;
         // document.getElementById("output").appendChild(div);
         // document.getElementById("output").scrollTop = document.getElementById("output").scrollHeight;
       };
@@ -67,11 +67,7 @@
           answer_div.appendChild(answer_text);
 
           document.getElementById("qa_pairs").appendChild(qustion_div);
-          // 最后一个答案不添加
-          if (i != qa_pairs.length - 1) {
-            document.getElementById("qa_pairs").appendChild(answer_div);
-          }
-          // document.getElementById("qa_pairs").appendChild(answer_div);
+          document.getElementById("qa_pairs").appendChild(answer_div);
           
         };
       };
@@ -105,10 +101,7 @@
       
       <div class="output">
         <div class="qa_pairs" id="qa_pairs"></div>
-        <div class="answer_div", id="last_answer">
-          <!-- 添加图片 -->
-          <img src="{{ url_for('static', filename='ai.png') }}" class="answer_img" />
-        </div>
+        <div id="output"></div>
         {% if result %}
         <div class="result">{{ result }}</div>
         {% endif %}

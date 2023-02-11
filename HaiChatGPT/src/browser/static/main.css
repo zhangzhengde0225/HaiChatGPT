@@ -16,8 +16,8 @@
 
 body,
 input {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 14px;
+  line-height: 20px;
   color: #353740;
   font-family: "ColfaxAI", Helvetica, sans-serif;
 }
@@ -26,14 +26,14 @@ display: flex;
 flex-direction: row;
 /* align-items: center; */
 /* padding: 10px; */
-font-size: 16px;
+font-size: 14px;
 font-family: "ColfaxAI", Helvetica, sans-serif;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 200px;
   height: calc(100vh - 50px);
   /* border: 1px solid #353740; */
   margin-right: 10px;
@@ -50,6 +50,7 @@ height: 50px;
 margin-bottom: 10px;
 display: flex;
 align-items: center;
+padding: 10px;
 }
 
 .history {
@@ -103,6 +104,54 @@ height: calc(100vh - 50px);
   height: 100%;
   border: 1px solid rgb(60, 60, 60);
   margin-bottom: 10px;
+}
+.output::-webkit-scrollbar {
+  width: 0.2em;
+  background-color: #F5F5F5;
+}
+
+.output::-webkit-scrollbar-thumb {
+background-color: #000000;
+}
+
+.output::-webkit-scrollbar-thumb:hover {
+background-color: #555555;
+}
+
+.user-message {
+  background-color: #f9ebf7;
+  padding: 10px;
+  margin: 10px;
+}
+
+.chatbot-message {
+  background-color: #f3f2f9;
+  padding: 10px;
+  margin: 10px;
+}
+
+.question_div {
+  background-color: #e9e6f9;
+  padding: 10px;
+  margin: 10px;
+}
+
+.answer_div {
+  background-color: #eafcf2;
+  padding: 10px;
+  margin: 10px;
+}
+
+.question_img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.answer_img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 }
 
 textarea {
