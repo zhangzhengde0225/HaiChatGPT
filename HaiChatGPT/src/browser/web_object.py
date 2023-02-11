@@ -9,8 +9,47 @@ from .app import app
 from HaiChatGPT.apis import HChatBot
 from .fake_bot import FakeChatGPT
 
-logger = dm.get_logger('web_object')
+# logger = dm.get_logger('web_object')
+import logging
+from pathlib import Path
 
+
+logg_dir = f'{Path.home()}/.logs/haichatgpt/{Path(os.getcwd()).name}'
+if not os.path.exists(logg_dir):
+    os.makedirs(logg_dir)
+save_path = f'{logg_dir}/{Path(os.getcwd()).name}.log'
+handler = logging.FileHandler(save_path)
+# handler.setLevel(logging.DEBUG)
+app.logger.addHandler(handler)
+
+def getLogger(name=None, **kwargs):
+
+    name = name if name else 'root'
+    name_lenth = kwargs.get('name_lenth', 12)
+    name = f'{name:<{name_lenth}}'
+    logger = logging.getLogger(name)
+    # level = kwargs.get('level', LOGGING_LEVEL)
+    level = kwargs.get('level', logging.DEBUG)
+    format_str = f"\033[1;35m[%(asctime)s]\033[0m \033[1;32m[%(name)s]\033[0m " \
+                 f"\033[1;36m[%(levelname)s]:\033[0m %(message)s"
+    logging.basicConfig(level=level,
+                        format=format_str,
+                        # datefmt='%d %b %Y %H:%M:%S'
+                        )
+    logg_dir = f'{Path.home()}/.logs/haichatgpt/{Path(os.getcwd()).name}'
+    if not os.path.exists(logg_dir):
+        os.makedirs(logg_dir)
+    fh = logging.FileHandler(f'{logg_dir}/{Path(os.getcwd()).name}.log')
+    fh.setLevel(level=level)
+    # ch = logging.StreamHandler()
+    # ch.setLevel(level=level)
+    fh.setFormatter(logging.Formatter(format_str))
+    # ch.setFormatter(logging.Formatter(format_str))
+    logger.addHandler(fh)
+    # logger.addHandler(ch)
+    return logger
+
+logger = getLogger('web_object')
 
 class WebObject(object):
     """
@@ -22,6 +61,7 @@ class WebObject(object):
         为适应不同ip的请求，不同的ip需要不同的chatbot
         """
         self.chatbots = {}  # key: ip, value: chatbot
+        self.query_count = 0
     
     def get_bot_by_ip(self, ip, create_new=True):
         if ip not in self.chatbots:
@@ -109,6 +149,23 @@ class WebObject(object):
 
     def render(self, ret, **kwargs):
         return redirect(url_for("index", result=ret))
+
+    def write_log(self, ip, text):
+        self.query_count += 1
+        timet = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        context = f'[{timet}] query once. ip: {ip}, text: {text} count: {self.query_count}'
+        logger.info(context)
+        save_file = f'{logg_dir}/query.log'
+        # 手动写入日志，save_path为日志文件路径，日志文件正在被使用
+        while True:
+            try:
+                with open(save_file, 'a') as f:
+                    f.write(context + '\n')
+                break
+            except Exception as e:
+                # logger.error(f'write log error: {e}')
+                time.sleep(1)
+         
 
 class ErrorHandler:
     

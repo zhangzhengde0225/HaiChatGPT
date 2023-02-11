@@ -3,9 +3,12 @@ import copy
 
 from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot, AsyncChatbot
 
+import damei as dm
 
 ENGINE = "text-davinci-003"
 # ENGINE = "text-chat-davinci-002-20221215"
+
+logger = dm.get_logger('hai_chat_bot')
 
 class HChatBot(Chatbot):
 

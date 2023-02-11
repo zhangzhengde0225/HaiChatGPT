@@ -3,7 +3,8 @@ import time
 import openai
 import logging
 import damei as dm
-import queue
+# import queue
+from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response
 os.environ['LOGGING_LEVEL'] = str(logging.DEBUG)
 logger = dm.get_logger('app')
@@ -11,6 +12,7 @@ logger = dm.get_logger('app')
 app = Flask(__name__)
 from .web_object import WebObject
 webo = WebObject()
+
 
 @app.route("/", methods=("GET", "POST"))
 def index():
@@ -32,6 +34,9 @@ def index():
         lastq = text 
         lasta = chatbot.query_stream(text)  # it's a generator
         # lasta = ''
+
+        # logger.info(f'query once. ip: {ip}, text: {text}, ')
+        webo.write_log(ip, text)
         
         return render_template("index.html", result=lasta, lastq=lastq)
         return webo.query(ip, text)
