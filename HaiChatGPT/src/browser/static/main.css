@@ -46,7 +46,7 @@ font-family: "ColfaxAI", Helvetica, sans-serif;
 margin: 5px;
 border: 1px solid rgb(108, 108, 108);
 border-radius: 5px;
-height: 50px;
+height: 30px;
 margin-bottom: 10px;
 display: flex;
 align-items: center;
@@ -54,6 +54,7 @@ padding: 10px;
 }
 
 .history {
+overflow-y: auto;
 margin: 5px;
 /* border: 1px solid black; */
 /* height: 300px; */
@@ -64,7 +65,7 @@ margin-bottom: 10px;
 .settings {
 margin: 5px;
 border: 1px solid rgb(90, 90, 90);
-height: 100px;
+height: 30px;
 display: flex;
 align-items: flex-end;
 }
