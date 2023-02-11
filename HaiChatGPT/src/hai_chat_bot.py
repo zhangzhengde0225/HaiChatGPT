@@ -1,10 +1,11 @@
 import os
-
+import copy
 
 from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot, AsyncChatbot
 
 
 ENGINE = "text-davinci-003"
+# ENGINE = "text-chat-davinci-002-20221215"
 
 class HChatBot(Chatbot):
 
@@ -21,7 +22,20 @@ class HChatBot(Chatbot):
         super().__init__(api_key, buffer, engine, proxy)
         self.temperature = temperature
 
-        pass
+        # 为对话增加的设置
+        self.max_qa = 50
+        self.qa_pairs = []  # 保存历史的问答对qustion, answer
+        self.show_history = False
+
+        self.show_last_question = False
+        self.show_last_answer = False
+        self.last_question = None
+        self.last_answer = None
+
+    def append_qa(self, text, answer):
+        if len(self.qa_pairs) >= self.max_qa:
+            self.qa_pairs.pop(0)
+        self.qa_pairs.append((text, answer))
 
     def set_api_key(self, api_key: str) -> None:
         self.api_key = api_key
@@ -102,8 +116,40 @@ class HChatBot(Chatbot):
                     user=user,
                     )
 
-        return generator
+        # self.last_question = query
+        self.last_answer = ''
+        def convert_generator():
+            # str_need_del = "<|im_end|>"
+            str_need_del_list = ["<|im", "_", "end", "|", ">", ""]
+            idx = 0
+            next_skip = None
+            continuous = False
+            for x in generator:
+                if x in [" <|im", "<|im", "><|im"]:
+                    # idx = str_need_del_list.index(x)
+                    next_skip = str_need_del_list[idx + 1]
+                    print(f'make next_skip: {next_skip}')
+                    continuous = True
+                    continue
+                elif x == next_skip and continuous:  # x: _ 
+                    idx += 1
+                    try:
+                        next_skip = str_need_del_list[idx + 1]
+                    except:
+                        next_skip = None
+                    continue
+                continuous = False
+                # print(f'data: {x} next_skip: {next_skip}')
+                yield f'data: {x}\n\n'
+                self.last_answer += x
+        converted_generator = convert_generator()
+        # self.new_question = query
+        return converted_generator
 
+    
+    
+
+    
         
         
 

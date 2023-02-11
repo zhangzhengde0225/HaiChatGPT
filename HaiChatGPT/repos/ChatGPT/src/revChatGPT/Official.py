@@ -106,8 +106,8 @@ class Chatbot:
         user: str = "User",
     ) -> str:
         full_response = ""
-        print("Waiting for response...")
-        print(completion)
+       
+        # print(completion)
         for response in completion:
             if response.get("choices") is None:
                 raise Exception("ChatGPT API returned no choices")
@@ -119,6 +119,7 @@ class Chatbot:
                 raise Exception("ChatGPT API returned no text")
             if response["choices"][0]["text"] == "<|im_end|>":
                 break
+            # print(response['choices'][0]['text'], response.keys())
             yield response["choices"][0]["text"]
             full_response += response["choices"][0]["text"]
 
