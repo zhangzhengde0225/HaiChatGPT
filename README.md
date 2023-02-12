@@ -14,8 +14,12 @@ HaiChatGPT  # run with command line
 
 #### Command Line Interface:
 
-<!-- 插入图片 -->
 ![hai-chat-gpt-cli](https://zhangzhengde0225.github.io/images/blog/hai-chat-gpt_cli.png)
+
+#### Web GUI:
+
+![hai-chat-gpt-webui](https://zhangzhengde0225.github.io/images/blog/haichatgpt-web-gui.png)
+
 
 ## Features
 
