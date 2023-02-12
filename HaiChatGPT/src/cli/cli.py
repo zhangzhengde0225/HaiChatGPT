@@ -1,7 +1,10 @@
 
 import sys, os
 import damei as dm
-from HaiChatGPT.apis import Chatbot
+try:
+    from HaiChatGPT.apis import Chatbot
+except:
+    from ...repos.ChatGPT.src.revChatGPT.Official import Chatbot
 
 def cli_main():
     print(

@@ -6,7 +6,10 @@ from flask import Flask, redirect, render_template, request, url_for
 from flask import Response
 import requests
 from .app import app
-from HaiChatGPT.apis import HChatBot
+try:
+    from HaiChatGPT.apis import HChatBot
+except:
+    from ..hai_chat_bot import HChatBot
 from .fake_bot import FakeChatGPT
 
 # logger = dm.get_logger('web_object')
