@@ -150,10 +150,12 @@ class WebObject(object):
     def render(self, ret, **kwargs):
         return redirect(url_for("index", result=ret))
 
-    def write_log(self, ip, text):
+    def write_log(self, ip, text, query_once='query once', answer=''):
         self.query_count += 1
         timet = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        context = f'[{timet}] query once. ip: {ip}, text: {text} count: {self.query_count}'
+        # query_once = 'query once' if query_once else ''
+        context = f'[{timet}] {query_once}. ip: {ip}, text: {text}, count: {self.query_count}'
+        context += f', answer: {answer}' if answer else ''
         logger.info(context)
         save_file = f'{logg_dir}/query.log'
         # 手动写入日志，save_path为日志文件路径，日志文件正在被使用

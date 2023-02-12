@@ -124,6 +124,7 @@ def stream():  # 即获取流式的last_answer
         print(f'保存')
         if lastq is not None and lasta is not None:
             chatbot.append_qa(lastq, lasta)  # 保存到历史记录中
+            webo.write_log(ip, lastq, query_once='', answer=lasta)
         chatbot.last_question = None
         chatbot.last_answer = None
         
