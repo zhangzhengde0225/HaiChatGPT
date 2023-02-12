@@ -8,4 +8,5 @@ hai_chat_gpt.egg-info/*
 haichatgpt.egg-info/*
 
 *.venv
+nohup.out
 

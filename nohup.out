@@ -248,3 +248,193 @@ ip: 127.0.0.1. bot: None
 [1;35m[2023-02-12 10:47:08,276][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:08] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
 [1;35m[2023-02-12 10:47:09,247][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:09] "GET /stream HTTP/1.1" 200 -
 [1;35m[2023-02-12 10:47:14,396][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:14] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:29,874][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:29] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:31,048][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:31] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:31,108][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:31] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:49:31,139][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:31] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:31,167][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:31] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:49:31,176][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:31] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:31,177][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:31] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:49:32,271][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:32] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:34,198][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:34] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:39,185][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:39] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:54,243][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:54] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:54,305][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:54] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:49:54,329][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:54] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:54,356][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:54] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:49:54,358][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:54] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:49:54,361][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:54] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:55,311][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:55] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:49:57,392][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:49:57] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:50:01,796][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:50:01] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:02,272][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:02] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:02,346][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:02] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:02,368][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:02] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:02,374][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:02] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:02,376][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:02] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:02,394][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:02] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:03,443][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:03] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:03,565][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:03] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:03,653][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:03] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:03,678][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:03] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:03,681][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:03] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:03,683][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:03] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:03,687][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:03] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:03,690][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:03] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:03,721][0m [1;32m[werkzeug][0m [1;36m[ERROR]:[0m Error on request:
+Traceback (most recent call last):
+  File "/home/zzd/anaconda3/envs/chatgpt/lib/python3.9/site-packages/werkzeug/serving.py", line 319, in run_wsgi
+    execute(self.server.app)
+  File "/home/zzd/anaconda3/envs/chatgpt/lib/python3.9/site-packages/werkzeug/serving.py", line 310, in execute
+    for data in application_iter:
+  File "/home/zzd/anaconda3/envs/chatgpt/lib/python3.9/site-packages/werkzeug/wsgi.py", line 462, in __next__
+    return self._next()
+  File "/home/zzd/anaconda3/envs/chatgpt/lib/python3.9/site-packages/werkzeug/wrappers/response.py", line 49, in _iter_encoded
+    for item in iterable:
+  File "/home/zzd/VSProjects/HaiChatGPT/HaiChatGPT/src/hai_chat_bot.py", line 147, in convert_generator
+    self.last_answer += x
+TypeError: unsupported operand type(s) for +=: 'NoneType' and 'str'
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: None
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [GET]>. method: GET
+ip: 127.0.0.1. bot: None
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: None
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: None
+返回stream响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: None
+text: 你好
+ 
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+qa_pairs: []
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+请求stream: lastq = 你好
+, lasta = stream
+返回stream响应: <generator object HChatBot.query_stream.<locals>.convert_generator at 0x7f5559b6d120>
+make next_skip: _
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+请求stream2: lastq = 你好
+, lasta =  你好！我能为你做些什么？
+保存
+返回stream响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+text: 可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN
+ 
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+text: 可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN
+ 
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+qa_pairs: [('你好\r\n', ' 你好！我能为你做些什么？')]
+返回qa_pairs响应: data: 你好
+<|im_sep|> 你好！我能为你做些什么？
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+请求stream: lastq = 可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN
+, lasta = stream
+返回stream响应: <generator object HChatBot.query_stream.<locals>.convert_generator at 0x7f5559b6d7b0>
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+返回qa_pairs响应: data: <|im_end|>
+
+
+make next_skip: _
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+请求stream2: lastq = 可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN
+, lasta =  当然可以！我可以为您提供一篇关于天体物理的综述，涵盖中子星、黑洞和AGN。
+保存
+返回stream响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+text: 请提供
+ 
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+qa_pairs: [('你好\r\n', ' 你好！我能为你做些什么？'), ('可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN\r\n', ' 当然可以！我可以为您提供一篇关于天体物理的综述，涵盖中子星、黑洞和AGN。')]
+返回qa_pairs响应: data: 你好
+<|im_sep|> 你好！我能为你做些什么？<|im_br|>可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN
+<|im_sep|> 当然可以！我可以为您提供一篇关于天体物理的综述，涵盖中子星、黑洞和AGN。
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+请求stream: lastq = 请提供
+, lasta = stream
+返回stream响应: <generator object HChatBot.query_stream.<locals>.convert_generator at 0x7f5559b6d3c0>
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+返回qa_pairs响应: data: <|im_end|>
+
+
+make next_skip: _
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+请求stream2: lastq = 请提供
+, lasta =  好的！我正在为您准备关于天体物理的综述，涵盖中子星、黑洞和AGN。请稍等片刻。
+保存
+返回stream响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+text: 需要很久吗
+ 
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+qa_pairs: [('你好\r\n', ' 你好！我能为你做些什么？'), ('可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN\r\n', ' 当然可以！我可以为您提供一篇关于天体物理的综述，涵盖中子星、黑洞和AGN。'), ('请提供\r\n', ' 好的！我正在为您准备关于天体物理的综述，涵盖中子星、黑洞和AGN。请稍等片刻。')]
+返回qa_pairs响应: data: 你好
+<|im_sep|> 你好！我能为你做些什么？<|im_br|>可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN
+<|im_sep|> 当然可以！我可以为您提供一篇关于天体物理的综述，涵盖中子星、黑洞和AGN。<|im_br|>请提供
+<|im_sep|> 好的！我正在为您准备关于天体物理的综述，涵盖中子星、黑洞和AGN。请稍等片刻。
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+请求stream: lastq = 需要很久吗
+, lasta = stream
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+text: 你是谁？ 
+返回stream响应: <generator object HChatBot.query_stream.<locals>.convert_generator at 0x7f5559b6d6d0>
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+qa_pairs: [('你好\r\n', ' 你好！我能为你做些什么？'), ('可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN\r\n', ' 当然可以！我可以为您提供一篇关于天体物理的综述，涵盖中子星、黑洞和AGN。'), ('请提供\r\n', ' 好的！我正在为您准备关于天体物理的综述，涵盖中子星、黑洞和AGN。请稍等片刻。')]
+返回qa_pairs响应: data: 你好
+<|im_sep|> 你好！我能为你做些什么？<|im_br|>可以帮我写一篇关于天体物理的综述吗？包括中子星，黑洞，AGN
+<|im_sep|> 当然可以！我可以为您提供一篇关于天体物理的综述，涵盖中子星、黑洞和AGN。<|im_br|>请提供
+<|im_sep|> 好的！我正在为您准备关于天体物理的综述，涵盖中子星、黑洞和AGN。请稍等片刻。
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559b80d00>
+请求stream2: lastq = 你是谁？, lasta = 
+保存
+返回stream响应: data: <|im_end|>
+
+
+[1;35m[2023-02-12 10:51:06,737][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:06] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:18,511][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:18] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:18,575][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:18] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:18,599][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:18] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:18,626][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:18] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:18,632][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:18] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:18,633][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:18] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:19,484][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:19] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:21,661][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:21] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:30,905][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:30] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:35,104][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:35] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:35,169][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:35] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:35,196][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:35] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:35,224][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:35] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:35,227][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:35] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:51:35,230][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:35] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:36,109][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:36] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:38,256][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:38] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:51:41,307][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:51:41] "GET /stream HTTP/1.1" 200 -
