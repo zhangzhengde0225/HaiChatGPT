@@ -1,0 +1,250 @@
+ * Serving Flask app 'HaiChatGPT.src.browser.app' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+[1;35m[2023-02-12 10:37:46,217][0m [1;32m[werkzeug][0m [1;36m[WARNING]:[0m  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[1;35m[2023-02-12 10:37:46,217][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m  * Running on http://192.168.32.148:5000/ (Press CTRL+C to quit)
+[1;35m[2023-02-12 10:37:51,186][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:51] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:37:53,189][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:53] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:37:53,244][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:53] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:37:53,246][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:53] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:37:53,249][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:53] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:37:53,255][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:53] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:37:53,372][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:53] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:37:54,313][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:54] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:37:58,947][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:37:58] "GET / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:01,921][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:01] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:38:01,923][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:01] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:38:02,450][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:02] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:02,475][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:02] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:02,477][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:02] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:10,076][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:10] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:10,151][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:10] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:38:10,183][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:10] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:10,212][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:10] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:10,213][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:10] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:38:10,222][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:10] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:38:11,133][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:11] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:13,293][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:13] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:38:21,053][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:38:21] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:39:46,930][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:39:46] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:39:46,954][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:39:46] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:39:46,962][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:39:46] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:41:23,700][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:41:23] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:41:23,873][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:41:23] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:41:23,906][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:41:23] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:41:23,930][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:41:23] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:41:23,933][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:41:23] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:41:23,938][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:41:23] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:41:24,901][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:41:24] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:41:27,017][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:41:27] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:34,229][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:34] "GET / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:34,398][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:34] "GET /static/main.css HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:34,422][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:34] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:34,424][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:34] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:34,426][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:34] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:34,429][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:34] "GET /static/ai.png HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:34,599][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:34] "GET /static/user.png HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:34,991][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:34] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:43:37,611][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:37] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:46,889][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:46] "POST /clear HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:47,094][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:47] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:47,096][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:47] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:47,118][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:47] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:43:47,120][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:47] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:43:47,123][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:47] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:47,268][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:47] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:43:54,220][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:54] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:54,486][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:54] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:43:54,508][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:54] "[36mGET /static/user.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:43:54,511][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:54] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:43:54,513][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:54] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:54,517][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:54] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:43:54,733][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:54] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:43:55,570][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:43:55] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:32,176][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:32] "GET / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:47,258][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:47] "GET /clear HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:55,828][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:55] "GET / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:55,977][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:55] "GET /static/main.css HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:55,979][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:55] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:56,001][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:56] "GET /static/ai.png HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:56,004][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:56] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:56,007][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:56] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:44:56,498][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:44:56] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:45:34,037][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:34] "GET / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:34,195][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:34] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:34,199][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:34] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:45:34,220][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:34] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:34,223][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:34] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:45:34,225][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:34] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:34,398][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:34] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:45:39,376][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:39] "GET / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:39,557][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:39] "GET /static/main.css HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:39,623][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:39] "GET /static/ai.png HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:39,645][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:39] "GET /stream HTTP/1.1" 200 -
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: None
+text: 你好 
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+qa_pairs: []
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+请求stream: lastq = 你好, lasta = stream
+返回stream响应: <generator object HChatBot.query_stream.<locals>.convert_generator at 0x7f5559b6d190>
+make next_skip: _
+收到index请求: <Request 'http://47.114.37.111/' [GET]>. method: GET
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+qa_pairs: []
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+请求stream2: lastq = 你好, lasta =  你好！我今天能为你做什么？
+保存
+返回stream响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+text: 那啥，你是谁 
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+qa_pairs: [('你好', ' 你好！我今天能为你做什么？')]
+返回qa_pairs响应: data: 你好<|im_sep|> 你好！我今天能为你做什么？
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+请求stream: lastq = 那啥，你是谁, lasta = stream
+返回stream响应: <generator object HChatBot.query_stream.<locals>.convert_generator at 0x7f5559b6d3c0>
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+返回qa_pairs响应: data: <|im_end|>
+
+
+make next_skip: _
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+请求stream2: lastq = 那啥，你是谁, lasta =  我是ChatGPT，一个由OpenAI训练的大型语言模型。我可以帮助你解决各种语言问题。
+保存
+返回stream响应: data: <|im_end|>
+
+
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+请求stream2: lastq = None, lasta = None
+保存
+返回stream响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+text: 你在干什么？ 
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+qa_pairs: [('你好', ' 你好！我今天能为你做什么？'), ('那啥，你是谁', ' 我是ChatGPT，一个由OpenAI训练的大型语言模型。我可以帮助你解决各种语言问题。')]
+返回qa_pairs响应: data: 你好<|im_sep|> 你好！我今天能为你做什么？<|im_br|>那啥，你是谁<|im_sep|> 我是ChatGPT，一个由OpenAI训练的大型语言模型。我可以帮助你解决各种语言问题。
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+请求stream: lastq = 你在干什么？, lasta = stream
+返回stream响应: <generator object HChatBot.query_stream.<locals>.convert_generator at 0x7f5559b6d2e0>
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+返回qa_pairs响应: data: <|im_end|>
+
+
+make next_skip: _
+收到index请求: <Request 'http://47.114.37.111/' [GET]>. method: GET
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+qa_pairs: [('你好', ' 你好！我今天能为你做什么？'), ('那啥，你是谁', ' 我是ChatGPT，一个由OpenAI训练的大型语言模型。我可以帮助你解决各种语言问题。')]
+返回qa_pairs响应: data: 你好<|im_sep|> 你好！我今天能为你做什么？<|im_br|>那啥，你是谁<|im_sep|> 我是ChatGPT，一个由OpenAI训练的大型语言模型。我可以帮助你解决各种语言问题。
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+请求stream2: lastq = 你在干什么？, lasta =  我正在帮助人们解决语言问题，并且可以提供与语言相关的对话。
+保存
+返回stream响应: data: <|im_end|>
+
+
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5510bef730>
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到clear请求， <Request 'http://47.114.37.111/clear' [POST]>, ip: 127.0.0.1
+返回clear响应: data: <|im_end|>
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: None
+返回stream响应: data: <|im_end|>
+
+
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: None
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [POST]>. method: POST
+ip: 127.0.0.1. bot: None
+text: 你能干嘛 
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559acb100>
+请求stream: lastq = 你能干嘛, lasta = stream
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559acb100>
+qa_pairs: []
+返回qa_pairs响应: data: <|im_end|>
+
+
+返回stream响应: <generator object HChatBot.query_stream.<locals>.convert_generator at 0x7f5559b6d2e0>
+make next_skip: _
+收到index请求: <Request 'http://47.114.37.111/' [GET]>. method: GET
+ip: 127.0.0.1. bot: <HaiChatGPT.src.hai_chat_bot.HChatBot object at 0x7f5559acb100>
+收到clear请求， <Request 'http://47.114.37.111/clear' [GET]>, ip: 127.0.0.1
+返回clear响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [GET]>. method: GET
+ip: 127.0.0.1. bot: None
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: None
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: None
+返回stream响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [GET]>. method: GET
+ip: 127.0.0.1. bot: None
+收到qa_pairs请求， <Request 'http://47.114.37.111/qa_pairs' [GET]>, ip: 127.0.0.1, chatbot: None
+返回qa_pairs响应: data: <|im_end|>
+
+
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: None
+返回stream响应: data: <|im_end|>
+
+
+收到index请求: <Request 'http://47.114.37.111/' [GET]>. method: GET
+ip: 127.0.0.1. bot: None
+收到stream请求， <Request 'http://47.114.37.111/stream' [GET]>, ip: 127.0.0.1, chatbot: None
+返回stream响应: data: <|im_end|>
+
+
+[1;35m[2023-02-12 10:45:39,651][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:39] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:39,652][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:39] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:45:42,360][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:45:42] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+[1;35m[2023-02-12 10:46:55,399][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:46:55] "GET / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:46:55,487][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:46:55] "GET /static/main.css HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:46:55,506][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:46:55] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:46:55,531][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:46:55] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:46:55,533][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:46:55] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:46:55,537][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:46:55] "GET /static/ai.png HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:46:56,192][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:46:56] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:47:08,156][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:08] "POST / HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:47:08,220][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:08] "[36mGET /static/main.css HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:47:08,244][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:08] "GET /qa_pairs HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:47:08,269][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:08] "GET /ip_addr HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:47:08,272][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:08] "GET /static/user.png HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:47:08,276][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:08] "[36mGET /static/ai.png HTTP/1.1[0m" 304 -
+[1;35m[2023-02-12 10:47:09,247][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:09] "GET /stream HTTP/1.1" 200 -
+[1;35m[2023-02-12 10:47:14,396][0m [1;32m[werkzeug][0m [1;36m[INFO]:[0m 127.0.0.1 - - [12/Feb/2023 10:47:14] "GET /stream HTTP/1.1" 200 -
