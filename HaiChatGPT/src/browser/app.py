@@ -17,7 +17,8 @@ webo = WebObject()
 @app.route("/", methods=("GET", "POST"))
 def index():
     print(f'收到index请求: {request}. method: {request.method}')
-    ip = request.remote_addr
+    # ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
     print(f'ip: {ip}. bot: {chatbot}')
 
@@ -71,7 +72,8 @@ def ip_addr():
 
 @app.route('/qa_pairs')  # question and 
 def qa_pairs():
-    ip = request.remote_addr
+    # ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
     print(f'收到qa_pairs请求， {request}, ip: {ip}, chatbot: {chatbot}')
     if chatbot is None:
@@ -93,7 +95,8 @@ def qa_pairs():
 
 @app.route('/stream')
 def stream():  # 即获取流式的last_answer
-    ip = request.remote_addr
+    # ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
     print(f'收到stream请求， {request}, ip: {ip}, chatbot: {chatbot}')
 
@@ -135,7 +138,8 @@ def stream():  # 即获取流式的last_answer
 
 @app.route('/clear', methods=['GET', 'POST'])
 def clear():
-    ip = request.remote_addr
+    # ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     # chatbot = webo.get_bot_by_ip(ip, create_new=False)
     print(f'收到clear请求， {request}, ip: {ip}')
     # 删除chatbot
