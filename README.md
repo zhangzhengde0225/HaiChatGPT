@@ -33,7 +33,7 @@ HaiChatGPT # 使用命令行运行
 + 当前版本是**试用版**，使用同一作者的“api_key”。
 + 您可以通过[OpenAI]（www.OpenAI.com）获取自己的`api_key`，并将其设置为环境变量**`OpenAI_api_key`**。例如：
     ```bash
-    在linux上导出OPENAI_APT_KEY=“sk-xxxxxxxxxxxxxx”#
+    export OPENAI_APT_KEY="sk-xxxxxxxxxxxxxx"  # on lunix
     ```
 ## TODO
 + Web GUI，20230211，已完成
