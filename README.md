@@ -8,14 +8,6 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。�
 + 快速且无需使用VPN。
 + 流输出，更好的聊天体验。
 
-## 命令行界面 
-![hai chat gpt cli](https://zhangzhengde0225.github.io/images/blog/hai-chat-gpt_cli.png)
-
-使用命令界面:
-```bash
-pip install hai-chat-gpt --upgrade # 安装，需python3.6+
-HaiChatGPT # 使用命令行运行
-```
 
 ## 网页界面
 ![hai-gpt-webui](https://zhangzhengde0225.github.io/images/blog/haichatgpt-web-gui.jpg)
@@ -25,6 +17,17 @@ HaiChatGPT # 使用命令行运行
 python flask_run.py --host 0.0.0.0 --port 5000
 ```
 然后访问：http://localhost:5000
+
+
+## 命令行界面 
+![hai chat gpt cli](https://zhangzhengde0225.github.io/images/blog/hai-chat-gpt_cli.png)
+
+使用命令界面:
+```bash
+pip install hai-chat-gpt --upgrade # 安装，需python3.6+
+HaiChatGPT # 使用命令行运行
+```
+
 
 ## 注意
 + 当前版本是**试用版**，使用同一作者的“api_key”。
