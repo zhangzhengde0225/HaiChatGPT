@@ -11,7 +11,7 @@ haichatgpt.egg-info/*
 nohup.out
 .vscode
 
-__pycache__/*
+*__pycache__/*
 
 *~
 *.autosave
