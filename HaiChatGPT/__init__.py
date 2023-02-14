@@ -2,7 +2,7 @@
 import os
 import logging
 
-os.environ["LOGGING_LEVEL"] = str(logging.ERROR)
+os.environ["LOGGING_LEVEL"] = str(logging.DEBUG)
 
 from . import env
 

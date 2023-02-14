@@ -3,6 +3,7 @@ import time
 import openai
 import logging
 import damei as dm
+import traceback
 # import queue
 from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response
@@ -25,6 +26,7 @@ def index():
     if request.method == "POST":
         text = request.form["prompt"]  # this is the query
         text = '你是谁？' if text == '' else text
+        
         print(f'text: {text} ')
         chatbot = webo.get_bot_by_ip(ip, create_new=True)
         chatbot.show_history = True
@@ -32,11 +34,9 @@ def index():
         chatbot.show_last_answer = True
 
         chatbot.last_question = text
-        lastq = text 
+        lastq = text
         lasta = chatbot.query_stream(text)  # it's a generator
-        # lasta = ''
-
-        # logger.info(f'query once. ip: {ip}, text: {text}, ')
+        
         webo.write_log(ip, text)
         
         return render_template("index.html", result=lasta, lastq=lastq)
@@ -111,10 +111,7 @@ def stream():  # 即获取流式的last_answer
             ret = f"data: <|im_end|>\n\n"
         else:
             assert chatbot.last_question != '', 'last_question is empty'
-            # question = chatbot.new_question
             generator = webo.get_generator(ip, lastq)
-            # chatbot.new_question = None
-            # ret = f"data: <|im_end|>\n\n"
             ret = generator
             chatbot.show_last_answer = False
         # return Response(ret, mimetype="text/event-stream")
