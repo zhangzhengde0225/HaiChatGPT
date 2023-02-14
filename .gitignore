@@ -9,8 +9,9 @@ haichatgpt.egg-info/*
 
 *.venv
 nohup.out
+.vscode
 
-__pycache__
+__pycache__/*
 
 *~
 *.autosave

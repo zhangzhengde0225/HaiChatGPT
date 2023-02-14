@@ -168,23 +168,5 @@ class WebObject(object):
                 # logger.error(f'write log error: {e}')
                 time.sleep(1)
 
-    def text2generator(self, text):
-        """
-        text: string
-        text转为generator
-        """
-        def generator():
-            for line in text:
-                yield f'data: {line}\n\n'
-                time.sleep(0.01)
-        return generator()
-         
-
-class ErrorHandler:
     
-    """
-    error类型：
-    openai.error.RateLimitError， 点击速率太快
-
-    """
 
