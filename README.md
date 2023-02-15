@@ -8,6 +8,11 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。�
 + 快速且无需使用VPN。
 + 流输出，更好的聊天体验。
 
+## 更新日志
+
++ 2021.02.14 添加了错误处理，错误信息会显示在网页界面上，而不会导致程序崩溃。
++ 2023.02.13 个人API可以可设置在~/.openai/api_key中，或者环境变量`OPENAI_API_KEY`中。
+
 
 ## 网页界面
 ![hai-gpt-webui](https://zhangzhengde0225.github.io/images/blog/haichatgpt-web-gui.jpg)
