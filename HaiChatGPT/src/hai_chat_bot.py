@@ -1,9 +1,11 @@
 import os
 import copy
+import traceback
 
 from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot, AsyncChatbot
 
 import damei as dm
+import time
 
 ENGINE = "text-davinci-003"
 # ENGINE = "text-chat-davinci-002-20221215"
@@ -34,6 +36,8 @@ class HChatBot(Chatbot):
         self.show_last_answer = False
         self.last_question = None
         self.last_answer = None
+
+        self.error_handler = ErrorHandler()
 
     def append_qa(self, text, answer):
         if len(self.qa_pairs) >= self.max_qa:
@@ -88,9 +92,10 @@ class HChatBot(Chatbot):
         return response
 
 
-    def query_stream(self, query):
+    def _query_stream(self, query):
         """
         return a generator
+        无错误处理，新增query_stream里面的错误处理
         """
         temp = self.temperature
         cvid = None  # conversation id
@@ -150,7 +155,45 @@ class HChatBot(Chatbot):
         return converted_generator
 
     
+    def query_stream(self, query):
+        """包含错误处理"""
+        try:
+            generator = self._query_stream(query)
+            return generator
+        except Exception as e:
+            error_info = self.error_handler.handle(e)
+            return error_info
+
+
     
+class ErrorHandler:
+    
+    """
+    error类型：
+    openai.error.RateLimitError， 点击速率太快
+
+    """
+
+    def text2generator(self, text):
+        """
+        text: string
+        text转为generator
+        """
+        def generator():
+            for line in text:
+                yield f'data: {line}\n\n'
+                time.sleep(0.01)
+        return generator()
+         
+
+    def handle(self, e):
+        
+        error_info = f'{type(e)}: {e}'
+        logger.error(f'{error_info}\n {traceback.format_exc()}')
+        return self.text2generator(error_info)
+
+    
+
 
     
         

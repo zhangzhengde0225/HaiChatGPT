@@ -140,7 +140,7 @@
       <div class="title">
         <img src="{{ url_for('static', filename='ai.png') }}" class="icon" />
         <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
-        <div>a free trail version based on OpenAI API.</div>
+        <div>a free trail version based on <a href="openai.com">OpenAI</a> API.</div>
       </div>
       
       <div class="output" id="output">
@@ -164,7 +164,7 @@
       </div>
       
       <form action="/" method="post">
-        <textarea name="prompt" placeholder="输入prompt(支持中英文等)" id="prompt"></textarea>
+        <textarea name="prompt" placeholder="输入prompt(支持中英文等)" id="prompt" required></textarea>
         <button id="send">send</button>
       </form>
       <form action="/clear" method="post" name="clear_form">

@@ -3,6 +3,7 @@ import time
 import openai
 import logging
 import damei as dm
+import traceback
 # import queue
 from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response
@@ -17,13 +18,15 @@ webo = WebObject()
 @app.route("/", methods=("GET", "POST"))
 def index():
     print(f'收到index请求: {request}. method: {request.method}')
-    ip = request.remote_addr
+    # ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
     print(f'ip: {ip}. bot: {chatbot}')
 
     if request.method == "POST":
         text = request.form["prompt"]  # this is the query
         text = '你是谁？' if text == '' else text
+        
         print(f'text: {text} ')
         chatbot = webo.get_bot_by_ip(ip, create_new=True)
         chatbot.show_history = True
@@ -31,11 +34,9 @@ def index():
         chatbot.show_last_answer = True
 
         chatbot.last_question = text
-        lastq = text 
+        lastq = text
         lasta = chatbot.query_stream(text)  # it's a generator
-        # lasta = ''
-
-        # logger.info(f'query once. ip: {ip}, text: {text}, ')
+        
         webo.write_log(ip, text)
         
         return render_template("index.html", result=lasta, lastq=lastq)
@@ -71,7 +72,8 @@ def ip_addr():
 
 @app.route('/qa_pairs')  # question and 
 def qa_pairs():
-    ip = request.remote_addr
+    # ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
     print(f'收到qa_pairs请求， {request}, ip: {ip}, chatbot: {chatbot}')
     if chatbot is None:
@@ -93,7 +95,8 @@ def qa_pairs():
 
 @app.route('/stream')
 def stream():  # 即获取流式的last_answer
-    ip = request.remote_addr
+    # ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
     print(f'收到stream请求， {request}, ip: {ip}, chatbot: {chatbot}')
 
@@ -108,10 +111,7 @@ def stream():  # 即获取流式的last_answer
             ret = f"data: <|im_end|>\n\n"
         else:
             assert chatbot.last_question != '', 'last_question is empty'
-            # question = chatbot.new_question
             generator = webo.get_generator(ip, lastq)
-            # chatbot.new_question = None
-            # ret = f"data: <|im_end|>\n\n"
             ret = generator
             chatbot.show_last_answer = False
         # return Response(ret, mimetype="text/event-stream")
@@ -124,6 +124,7 @@ def stream():  # 即获取流式的last_answer
         print(f'保存')
         if lastq is not None and lasta is not None:
             chatbot.append_qa(lastq, lasta)  # 保存到历史记录中
+            webo.write_log(ip, lastq, query_once='', answer=lasta)
         chatbot.last_question = None
         chatbot.last_answer = None
         
@@ -134,7 +135,8 @@ def stream():  # 即获取流式的last_answer
 
 @app.route('/clear', methods=['GET', 'POST'])
 def clear():
-    ip = request.remote_addr
+    # ip = request.remote_addr
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     # chatbot = webo.get_bot_by_ip(ip, create_new=False)
     print(f'收到clear请求， {request}, ip: {ip}')
     # 删除chatbot
