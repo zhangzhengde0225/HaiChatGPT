@@ -12,6 +12,7 @@ ENGINE = "text-davinci-003"
 
 logger = dm.get_logger('hai_chat_bot')
 
+
 class HChatBot(Chatbot):
 
     def __init__(self, 

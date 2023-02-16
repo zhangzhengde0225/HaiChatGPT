@@ -1,15 +1,12 @@
 
 import sys, os
 import damei as dm
-try:
-    from HaiChatGPT.apis import Chatbot
-except:
-    from ...repos.ChatGPT.src.revChatGPT.Official import Chatbot
 
 
-# xx
 
 def cli_main():
+
+
     print(
         """
     HaiChatGPT - A command-line interface to OpenAI's ChatGPT (https://chat.openai.com/chat)
@@ -102,6 +99,10 @@ def cli_main():
     )
     args = parser.parse_args()
     # Initialize chatbot
+    try:
+        from HaiChatGPT.apis import Chatbot
+    except:
+        from ...repos.ChatGPT.src.revChatGPT.Official import Chatbot
     args.api_key = args.api_key or os.getenv("OPENAI_API_KEY")
     args.stream = True
     chatbot = Chatbot(api_key=args.api_key)
@@ -125,3 +126,20 @@ def cli_main():
                 print(response, end="")
                 sys.stdout.flush()
             print()
+
+
+
+def cli_main_v1():
+    from ...repos.ChatGPT.src.revChatGPT.V1 import Chatbot
+    from ...repos.ChatGPT.src.revChatGPT.V1 import configure
+    from ...repos.ChatGPT.src.revChatGPT.V1 import main as main_v1
+
+    print(
+        """
+        ChatGPT - A command-line interface to OpenAI's ChatGPT (https://chat.openai.com/chat)
+        Repo: github.com/acheong08/ChatGPT
+        """,
+    )
+    print("Type '!help' to show a full list of commands")
+    print("Press enter twice to submit your question.\n")
+    main_v1(configure())

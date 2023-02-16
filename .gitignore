@@ -13,6 +13,9 @@ nohup.out
 
 *__pycache__/*
 
+# picoGPT
+HaiChatGPT/repos/picoGPT/models/*
+
 *~
 *.autosave
 *.a
@@ -84,3 +87,4 @@ CMakeLists.txt.user*
 *.dll
 *.exe
 
+HaiChatGPT/repos/openai-quickstart-python

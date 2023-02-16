@@ -13,8 +13,11 @@ class HaiChatGPT(object):
     @staticmethod
     def run_cli():
         """Run the command line interface."""
-        from ..apis import cli_main
+        # from ..apis import cli_main
+        from .cli.cli import cli_main, cli_main_v1
+
         cli_main()
+        # cli_main_v1()
 
     
     @staticmethod
