@@ -1,9 +1,10 @@
 
 
-## 科学上网客户端安装
+## 科学上网客户端
 
 采用shadowsocks方案，支持win10, macos, linux, android, ios等系统。
 
+#### 1. 根据您的系统选择客户端安装：
 + Windows: [Shadowsocks-electron](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/r05fCTTBEsSIpW1) v1.2.3
 + MacOS: [ShadowsocksX-NG](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/Lq3erI8OTqiswky) v1.10
 + Linux: [Shadowsocks-electron](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/GQKwS7iOl4Nr6xk) v1.2.3
@@ -15,6 +16,7 @@
 例如shadowsocks-electron系列客户端v1.2.3[下载地址](https://github.com/nojsja/shadowsocks-electron/releases/tag/v1.2.3).
 
 
+#### 2. 配置客户端
 设置示例如图：
 ### MasOS
 
@@ -30,4 +32,4 @@
 + 密码
 + 加密方式: 使用aes-256-cfb
 
-参数请联系作者获取。
+参数请联系邮箱获取：zdzhang@ihep.ac.cn。
