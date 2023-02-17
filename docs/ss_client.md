@@ -8,15 +8,15 @@
 + MacOS: [ShadowsocksX-NG](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/Lq3erI8OTqiswky) v1.10
 + Linux: [Shadowsocks-electron](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/GQKwS7iOl4Nr6xk) v1.2.3
 + Android: [Shadowsocks-android](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/ctYj5QqIjdEJehp) v5.2.6
-+ IOS: Potatso, apple应用商店搜索
++ IOS: Potatso, apple应用商店搜索安装即可
 
 
 如安装遇到问题，可以自行下载其他shadowsocks客户端。
 例如shadowsocks-electron系列客户端v1.2.3[下载地址](https://github.com/nojsja/shadowsocks-electron/releases/tag/v1.2.3).
 
-### MasOS
 
 设置示例如图：
+### MasOS
 
 <!-- 设置图片尺寸 -->
 <img src="https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg" width="50%"/>
