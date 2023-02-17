@@ -4,7 +4,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。�
 
 如果本项目对您有帮助，请右上角给个**star**，谢谢！
 
-已发布页面[ai.ihep.ac.cn](http://ai.ihep.ac.cn)(需所内网或连VPN)，[公网体验在此](http://47.114.37.111/)(作者个人api_key额度已耗尽，仅展示界面用)。
+已发布页面[ai.ihep.ac.cn](http://ai.ihep.ac.cn)(需所内网或连VPN)，[点此公网](http://47.114.37.111/)(作者个人api_key额度已耗尽，仅展示界面用)。
 
 # 更新日志
 
