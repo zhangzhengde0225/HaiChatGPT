@@ -1,22 +1,21 @@
 # HaiChatGPT
 
-HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。无需翻墙，快速体验GPT-3的聊天功能。
+HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。无需翻墙，流式输出，快速体验GPT-3的聊天功能。
 
 如果本项目对您有帮助，请右上角给个**star**，谢谢！
 
-## 功能
-+ 快速且无需使用VPN。
-+ 流输出，更好的聊天体验。
+已发布页面[ai.ihep.ac.cn](http://ai.ihep.ac.cn)(需所内网或连VPN)，[公网体验在此](http://47.114.37.111/)(作者个人api_key额度已耗尽，仅展示界面用)。
 
-## 更新日志
+# 更新日志
 
-+ 【2021.02.14】 添加了错误处理，错误信息会显示在网页界面上，而不会导致程序崩溃。
-+ 【2023.02.13】 个人API可以可设置在~/.openai/api_key中，或者环境变量`OPENAI_API_KEY`中。
-+ 【2023.02.11】 添加了Web GUI，可通过python flask_run.py运行。
-+ 【2023.02.08】 初始版本，可通过命令行运行。
++ [2023.02.17] 推荐使用官方版本，保姆级注册教程和临时梯子奉上，[注册教程](docs/reg_tutorial.md)。
++ [2023.02.14] 添加了错误处理，错误信息会显示在网页界面上，而不会导致程序崩溃。
++ [2023.02.13] 个人API可以可设置在~/.openai/api_key中，或者环境变量`OPENAI_API_KEY`中。
++ [2023.02.11] 添加了Web GUI，可通过python flask_run.py运行。
++ [2023.02.08] 初始版本，可通过命令行运行。
 
 
-## 网页界面
+# 网页界面
 ![hai-gpt-webui](https://zhangzhengde0225.github.io/images/blog/haichatgpt-web-gui.jpg)
 
 部署：
@@ -26,7 +25,7 @@ python flask_run.py --host 0.0.0.0 --port 5000
 然后访问：http://localhost:5000
 
 
-## 命令行界面 
+# 命令行界面 
 ![hai chat gpt cli](https://zhangzhengde0225.github.io/images/blog/hai-chat-gpt_cli.png)
 
 使用命令界面:

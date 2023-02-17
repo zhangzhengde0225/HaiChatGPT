@@ -1,4 +1,6 @@
 
+gui_run.py
+
 *.code-workspace
 HaiChatGPT/repos/PyChatGPT/*
 
