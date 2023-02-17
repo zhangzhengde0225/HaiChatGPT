@@ -18,7 +18,10 @@
 
 设置示例如图：
 
-![ss_macos_setting](https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg)
+<!-- 设置图片尺寸 -->
+<img src="https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg" width="50%"/>
+<!-- 
+![ss_macos_setting](https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg) -->
 
 所需参数：
 
