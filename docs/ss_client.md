@@ -41,7 +41,6 @@ windows客户端需启用http代理。
     <img src="https://zhangzhengde0225.github.io/images/blog/ss/linux_set_proxy.jpg" width="80%"/>
 
 
-
 ### MasOS
 
 + 使用ShadowsocksX-NG客户端，无需手动配置代理。

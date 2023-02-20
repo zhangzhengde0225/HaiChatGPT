@@ -22,7 +22,9 @@ Note: 如果您已有梯子，使用自己的梯子即可。
 科学上网使用条件：
 + 遵守下述使用规则(**重要**)
     - 提供公共服务梯子不是政策支持的，请低调使用。
-    - 梯子为临时的、免费的，带宽很小，大家共用，仅用于注册，请勿用于其他用途。获取卡密请联系drivener@163.com。
+    - 梯子为临时的、免费的，带宽很小，大家共用，仅用于注册，请勿用于其他用途。
 + 安装[Shadowsocks客户端](ss_client.md)
++ 获取卡密请加wx: 
+    <img src="https://zhangzhengde0225.github.io/images/blog/ai4sci_ass.jpg" width=50%>
 
 
