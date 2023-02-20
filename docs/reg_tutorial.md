@@ -26,6 +26,6 @@ Note: 如果您已有梯子，使用自己的梯子即可。
 + 安装[Shadowsocks客户端](ss_client.md)
 + 获取卡密请加wx: 
 
-    <img src="https://zhangzhengde0225.github.io/images/blog/ai4sci_ass.jpg" width=30%>
+    <img src="https://zhangzhengde0225.github.io/images/blog/ai4sci_ass.jpg" width=20%>
 
 
