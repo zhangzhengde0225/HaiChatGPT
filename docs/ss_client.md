@@ -15,14 +15,18 @@
 如安装遇到问题，可以自行下载其他shadowsocks客户端。
 例如shadowsocks-electron系列客户端v1.2.3[下载地址](https://github.com/nojsja/shadowsocks-electron/releases/tag/v1.2.3).
 
+### 2. 卡密获取
++ 获取卡密请加小助手: 
 
-### 2. 配置方法
+    <img src="https://zhangzhengde0225.github.io/images/blog/ai4sci_ass.jpg" width=20%>
+
+### 3. 配置方法
 
 ### Windows
 
 windows客户端需启用http代理。
 
-+ 1. 配置服务器。设置地址、端口号、密码、加密方式等参数。
++ 1. 配置服务器卡密。设置地址、端口号、密码、加密方式等参数。
     <img src="https://zhangzhengde0225.github.io/images/blog/ss/edit_server.jpg" width="50%"/>
 + 2. 启用http代理。点击设置ss客户端`设置`，找到`http代理`，启用。如图打开了http代理，端口号`1095`；同时默认打开socks代理，端口号`1080`和pac代理，端口号`1090`。
     <img src="https://zhangzhengde0225.github.io/images/blog/ss/open_http_proxy.jpg" width="50%"/>
