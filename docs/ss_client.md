@@ -4,7 +4,7 @@
 
 采用shadowsocks方案，支持win10, macos, linux, android, ios等系统。
 
-#### 1. 根据您的系统选择客户端安装：
+### 1. 根据您的系统选择客户端安装：
 + Windows: [Shadowsocks-electron](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/r05fCTTBEsSIpW1) v1.2.3
 + MacOS: [ShadowsocksX-NG](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/Lq3erI8OTqiswky) v1.10
 + Linux: [Shadowsocks-electron](https://ihepbox.ihep.ac.cn/ihepbox/index.php/s/GQKwS7iOl4Nr6xk) v1.2.3
@@ -16,9 +16,9 @@
 例如shadowsocks-electron系列客户端v1.2.3[下载地址](https://github.com/nojsja/shadowsocks-electron/releases/tag/v1.2.3).
 
 
-#### 2. 配置方法
+### 2. 配置方法
 
-##### Windows
+### Windows
 
 windows客户端需启用http代理。
 
@@ -34,7 +34,7 @@ windows客户端需启用http代理。
 + 6. 使用结束后，请右键点击`断开连接`，取消手动代理设置。
 
 
-##### Linux
+### Linux
 
 + 1. 配置服务器和验证方法均与windows相同。
 + 2. Linux设置手动代理：打开`Settings`→`Network`，找到`Network Proxy`，点击配置，选择`Manual`，设置Socks Host为`127.0.0.1`，端口号为`1080`。
@@ -42,7 +42,7 @@ windows客户端需启用http代理。
 
 
 
-##### MasOS
+### MasOS
 
 + 使用ShadowsocksX-NG客户端，无需手动配置代理。
     <img src="https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg" width="50%"/>
