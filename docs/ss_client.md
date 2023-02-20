@@ -48,4 +48,4 @@ windows客户端需启用http代理。
     <img src="https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg" width="50%"/>
 
 
-如有问题可提pr或联系：drivener@163.com。
+如有问题可提Issue或联系：drivener@163.com。
