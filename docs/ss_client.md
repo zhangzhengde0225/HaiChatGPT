@@ -1,6 +1,6 @@
 
 
-## 科学上网客户端及配置方法
+## 科学上网客户端、卡密和配置方法
 
 采用shadowsocks方案，支持win10, macos, linux, android, ios等系统。
 
