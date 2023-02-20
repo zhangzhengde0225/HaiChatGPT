@@ -1,6 +1,6 @@
 
 
-## 科学上网客户端
+## 科学上网客户端及配置方法s
 
 采用shadowsocks方案，支持win10, macos, linux, android, ios等系统。
 
@@ -16,20 +16,39 @@
 例如shadowsocks-electron系列客户端v1.2.3[下载地址](https://github.com/nojsja/shadowsocks-electron/releases/tag/v1.2.3).
 
 
-#### 2. 配置客户端
+#### 2. 配置方法
 设置示例如图：
-### MasOS
 
-<!-- 设置图片尺寸 -->
-<img src="https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg" width="50%"/>
-<!-- 
-![ss_macos_setting](https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg) -->
 
-所需参数：
 
-+ 服务器地址
-+ 端口号
-+ 密码
-+ 加密方式: 使用aes-256-cfb
+##### Windows
 
-参数请联系邮箱获取：drivener@163.com。
+windows客户端需启用http代理。
+
++ 1. 配置服务器。设置地址、端口号、密码、加密方式等参数。
+    <img src="https://zhangzhengde0225.github.io/images/blog/ss/edit_server.jpg" width="50%"/>
++ 2. 启用http代理。点击设置ss客户端`设置`，找到`http代理`，启用。如图打开了http代理，端口号`1095`；同时默认打开socks代理，端口号`1080`和pac代理，端口号`1090`。
+    <img src="https://zhangzhengde0225.github.io/images/blog/ss/open_http_proxy.jpg" width="50%"/>
++ 3. Windows设置手动代理。点击桌面右下角`网络`→`网络和Internet设置`→`代理`→`手动设置代理`→`开`，设置代理地址为`127.0.0.1`(本机)、端口号为`1095`(ss客户端的http代理端口号)。
+    <img src="https://zhangzhengde0225.github.io/images/blog/ss/windows_set_port.jpg" width="50%"/>
++ 4. 在ss客户端主页，右下角选择`全局`，右键服务器，点击`连接`，会显示`在线`。
+    <img src="https://zhangzhengde0225.github.io/images/blog/ss/ss_online.jpg" width="50%"/>
++ 5. 验证，打开[谷歌学术](https://scholar.google.com/)，如果能打开，即说明能科学上网了。
++ 6. 使用结束后，请右键点击`断开连接`，取消手动代理设置。
+
+
+##### Linux
+
++ 1. 配置服务器和验证方法均与windows相同。
++ 2. Linux设置手动代理：打开`Settings`→`Network`，找到`Network Proxy`，点击配置，选择`Manual`，设置Socks Host为`127.0.0.1`，端口号为`1080`。
+    <img src="https://zhangzhengde0225.github.io/images/blog/ss/linux_set_proxy.jpg" width="80%"/>
+
+
+
+##### MasOS
+
++ 使用ShadowsocksX-NG客户端，无需手动配置代理。
+    <img src="https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg" width="50%"/>
+
+
+如有问题可提pr或联系：drivener@163.com。
