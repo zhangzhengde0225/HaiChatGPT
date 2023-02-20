@@ -6,7 +6,7 @@
 + 个人API key，18美元免费调用额度，约1000次调用，可用于调用OpenAI API。
 
 ## 注册
-注册需要条件：
+[点此官网注册](http://ai.com)，需要条件：
 + 科学上网
 + Gmail邮箱或Microsoft账号
 + 国外手机号(可用[sms-activate](https://sms-activate.org)代替)
