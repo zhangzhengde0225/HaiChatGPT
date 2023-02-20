@@ -32,4 +32,4 @@
 + 密码
 + 加密方式: 使用aes-256-cfb
 
-参数请联系邮箱获取：zdzhang@ihep.ac.cn。
+参数请联系邮箱获取：drivener@163.com。
