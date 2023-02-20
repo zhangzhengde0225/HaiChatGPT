@@ -45,6 +45,7 @@ windows客户端需启用http代理。
 ### MasOS
 
 + 使用ShadowsocksX-NG客户端，无需手动配置代理。
+
     <img src="https://zhangzhengde0225.github.io/images/blog/ss_macos_setting.jpg" width="50%"/>
 
 
