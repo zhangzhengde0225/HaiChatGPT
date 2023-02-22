@@ -29,7 +29,7 @@ class HChatBot(Chatbot):
         self.temperature = temperature
 
         # 为对话增加的设置
-        self.max_qa = 50
+        self.max_qa = 5
         self.qa_pairs = []  # 保存历史的问答对qustion, answer
         self.show_history = False
 
