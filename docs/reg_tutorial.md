@@ -10,7 +10,6 @@
 + 科学上网
 + Gmail邮箱或Microsoft账号
 + 国外手机号(可用[sms-activate](https://sms-activate.org)代替)
-+ 请使用官方[Chrome浏览器](https://www.google.cn/intl/zh-CN/chrome/)
 + 详见[保姆级注册教程](https://www.51cto.com/article/745771.html)
 
 
