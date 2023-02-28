@@ -1,0 +1,17 @@
+from revChatGPT.V1 import Chatbot
+
+chatbot = Chatbot(config={
+#   "email": "zhangzhengde0225@gmail.com",
+#   "password": "19930429Mz_",
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJ6aGFuZ3poZW5nZGUwMjI1QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJnZW9pcF9jb3VudHJ5IjoiU0cifSwiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjp7InVzZXJfaWQiOiJ1c2VyLXlMTDdCVVRoNllwcmViMDNQbjhpZUgxNiJ9LCJpc3MiOiJodHRwczovL2F1dGgwLm9wZW5haS5jb20vIiwic3ViIjoiYXV0aDB8NjM0Mjc0Zjk1OTFlM2I4MDM0OGUyMzJhIiwiYXVkIjpbImh0dHBzOi8vYXBpLm9wZW5haS5jb20vdjEiLCJodHRwczovL29wZW5haS5vcGVuYWkuYXV0aDBhcHAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY3NzU3MTY0MCwiZXhwIjoxNjc4NzgxMjQwLCJhenAiOiJUZEpJY2JlMTZXb1RIdE45NW55eXdoNUU0eU9vNkl0RyIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgbW9kZWwucmVhZCBtb2RlbC5yZXF1ZXN0IG9yZ2FuaXphdGlvbi5yZWFkIG9mZmxpbmVfYWNjZXNzIn0.Xh0UzRfHMP_yQKU3WY_QUI2kPEYzmnGNQXQ_0St18n_2jKU0_yH9U0DyL_t5Pp9QXsirVTAj4EOOOcYFCQBHODcK4nmLu4aAYnSL5UmELMIxev3-RS6kYSeLkqISRox5SMKiwgWVK2zp-K7LIoeSTzwHbgv9XUC0N8q8vdJk-fUvEDmv1noNOqS9VSu-eTrI-KnnxqcHsDw2G7uXSRvlZ7A3NUY2SQmNcSn6cJvuNTy_zch7KQ7sW9HxNS3z2hYlR6-Y-297MHMRWCl1TdpLPKWdZCQ1ZhKly8St1h11eZfBhglMWhHpUR66OlSvWMh-i9PVolI2zQJUihyozp0-KQ",
+})
+
+print("Chatbot: ")
+prev_text = ""
+for data in chatbot.ask(
+    "最快的排序算法是什么，用python实现",
+):
+    message = data["message"][len(prev_text) :]
+    print(message, end="", flush=True)
+    prev_text = data["message"]
+print()
