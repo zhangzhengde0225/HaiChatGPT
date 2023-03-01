@@ -60,7 +60,7 @@ class Runner(object):
                     config = json.load(f)
                 access_tokens = config['access_tokens']
                 if len(access_tokens) == 0:
-                    print("Please input your Access Token: ")
+                    print("No Access Token found, For more info: https://github.com/zhangzhengde0225/HaiChatGPT).\nPlease input your Access Token: ")
                     access_token = input()
                     config['access_tokens'].append(access_token)
                     self.save_config(config_path, config)

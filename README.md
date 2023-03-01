@@ -8,7 +8,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。�
 
 # 更新日志
 
-+ [2023.03.01] 新增Token登录，接入基于GPT3.5的ChatGPT(原使用API_KEY基于GPT3)
++ [2023.03.01] 性能升级！使用Token登录，接入官网版的ChatGPT(原使用API_KEY基于GPT3)
 + [2023.02.17] 官方版保姆级注册教程和临时梯子奉上，[注册教程](docs/reg_tutorial.md)。
 + [2023.02.14] 请求错误时不会崩溃，错误信息会显示在网页界面上。
 + [2023.02.13] 可以设置个人API_KEY了，将OpenAI的[API_KEY](https://platform.openai.com/account/api-keys)粘贴到~/.openai/api_key中并保存即可。
@@ -29,23 +29,20 @@ python flask_run.py --host 0.0.0.0 --port 5000
 # 命令行界面 
 ![hai chat gpt cli](https://zhangzhengde0225.github.io/images/blog/hai-chat-gpt_cli.png)
 
-使用命令界面:
+使用命令行界面:
 ```bash
 pip install hai-chat-gpt --upgrade # 安装，需python3.6+
 HaiChatGPT # 使用命令行运行
 ```
 
+## 获取Access Token
 
-## 注意
-+ 当前版本是**试用版**，使用同一作者的“api_key”，悠着点用 [/手动狗头]。
-+ 您可以通过[OpenAI](www.OpenAI.com)获取自己的`api_key`，并将其设置为环境变量**`OpenAI_api_key`**。例如：
-    ```bash
-    export OPENAI_APT_KEY="sk-xxxxxxxxxxxxxx"  # on lunix
-    ```
+需使用官方账号登录[ChatGPT](http://ai.com)后，从浏览器的cookies中获取，登录成功后点此处：
+[https://chat.openai.com/api/auth/session](https://chat.openai.com/api/auth/session)
+
 ## TODO
 + Web GUI，20230211，已完成
-+ GPT-3.5
-+ 可以反馈使用体验，以便改进
++ GPT-3.5，20230301，已完成
 
 ## 致谢
 该项目基于[OpenAI](www.OpenAI.com)和acheong08的[ChatGPT](https://github.com/acheong08/ChatGPT)项目。
