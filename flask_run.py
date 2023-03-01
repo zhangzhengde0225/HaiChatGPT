@@ -8,21 +8,19 @@ import argparse
 
 here = Path(__file__).parent
 
-from HaiChatGPT.src.browser.app import run as run_app
-
-def run(opt):
-    # dir_ = f'{here}/HaiChatGPT/src/browser'
-    # os.chdir(dir_)
-    # run_app(host='0.0.0.0', port=5000, debug=True)
-    run_app(host=opt.host, port=opt.port, debug=opt.debug)
-    # os.chdir(str(here))
-
+from HaiChatGPT.src.runner import Runner, run
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', type=str, default='0.0.0.0')
     parser.add_argument('--port', type=int, default=5000)
-    parser.add_argument('--debug', type=bool, default=False)
-    opt = parser.parse_args()
-    run(opt)
+    parser.add_argument('--proxy' , type=str, default=None, help='Proxy')
+    parser.add_argument('--use-api-key', action='store_true', help='Use API key if True, use Access Token by default')
+    parser.add_argument('--engine', type=str, default='text-davinci-003', help='Engine name, only used when use-api-key is True')
+    parser.add_argument('--temperature', type=float, default=0.5, help='Temperature, 0 to 1, more is more random')
+    parser.add_argument('--debug', action='store_true', help='use fakebot if true') 
 
+    opt = parser.parse_args()
+
+    runner = Runner(opt)
+    runner.run_webui()

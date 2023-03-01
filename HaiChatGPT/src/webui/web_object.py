@@ -6,53 +6,50 @@ from flask import Flask, redirect, render_template, request, url_for
 from flask import Response
 import requests
 from .app import app
-try:
-    from HaiChatGPT.apis import HChatBot
-except:
-    from ..hai_chat_bot import HChatBot
+from ...version import __appname__
 from .fake_bot import FakeChatGPT
 
-# logger = dm.get_logger('web_object')
 import logging
 from pathlib import Path
 
 
-logg_dir = f'{Path.home()}/.logs/haichatgpt/{Path(os.getcwd()).name}'
+logg_dir = f'{Path.home()}/.{__appname__}/logs'
 if not os.path.exists(logg_dir):
     os.makedirs(logg_dir)
-save_path = f'{logg_dir}/{Path(os.getcwd()).name}.log'
+save_path = f'{logg_dir}/webui.log'
 handler = logging.FileHandler(save_path)
-# handler.setLevel(logging.DEBUG)
-app.logger.addHandler(handler)
+handler.setLevel(logging.DEBUG)
+# app.logger.addHandler(handler)
 
-def getLogger(name=None, **kwargs):
+# def getLogger(name=None, **kwargs):
 
-    name = name if name else 'root'
-    name_lenth = kwargs.get('name_lenth', 12)
-    name = f'{name:<{name_lenth}}'
-    logger = logging.getLogger(name)
-    # level = kwargs.get('level', LOGGING_LEVEL)
-    level = kwargs.get('level', logging.DEBUG)
-    format_str = f"\033[1;35m[%(asctime)s]\033[0m \033[1;32m[%(name)s]\033[0m " \
-                 f"\033[1;36m[%(levelname)s]:\033[0m %(message)s"
-    logging.basicConfig(level=level,
-                        format=format_str,
-                        # datefmt='%d %b %Y %H:%M:%S'
-                        )
-    logg_dir = f'{Path.home()}/.logs/haichatgpt/{Path(os.getcwd()).name}'
-    if not os.path.exists(logg_dir):
-        os.makedirs(logg_dir)
-    fh = logging.FileHandler(f'{logg_dir}/{Path(os.getcwd()).name}.log')
-    fh.setLevel(level=level)
-    # ch = logging.StreamHandler()
-    # ch.setLevel(level=level)
-    fh.setFormatter(logging.Formatter(format_str))
-    # ch.setFormatter(logging.Formatter(format_str))
-    logger.addHandler(fh)
-    # logger.addHandler(ch)
-    return logger
+#     name = name if name else 'root'
+#     name_lenth = kwargs.get('name_lenth', 12)
+#     name = f'{name:<{name_lenth}}'
+#     logger = logging.getLogger(name)
+#     # level = kwargs.get('level', LOGGING_LEVEL)
+#     # level = kwargs.get('level', logging.DEBUG)
+#     level = kwargs.get('level', logging.INFO)
+#     format_str = f"\033[1;35m[%(asctime)s]\033[0m \033[1;32m[%(name)s]\033[0m " \
+#                  f"\033[1;36m[%(levelname)s]:\033[0m %(message)s"
+#     logging.basicConfig(level=level,
+#                         format=format_str,
+#                         # datefmt='%d %b %Y %H:%M:%S'
+#                         )
+#     logg_dir = f'{Path.home()}/.logs/haichatgpt/{Path(os.getcwd()).name}'
+#     if not os.path.exists(logg_dir):
+#         os.makedirs(logg_dir)
+#     fh = logging.FileHandler(f'{logg_dir}/{Path(os.getcwd()).name}.log')
+#     fh.setLevel(level=level)
+#     # ch = logging.StreamHandler()
+#     # ch.setLevel(level=level)
+#     fh.setFormatter(logging.Formatter(format_str))
+#     # ch.setFormatter(logging.Formatter(format_str))
+#     logger.addHandler(fh)
+#     # logger.addHandler(ch)
+#     return logger
 
-logger = getLogger('web_object')
+logger = dm.getLogger('web_object')
 
 class WebObject(object):
     """
@@ -65,6 +62,10 @@ class WebObject(object):
         """
         self.chatbots = {}  # key: ip, value: chatbot
         self.query_count = 0
+
+        self.uninstantiated_chatbot = FakeChatGPT
+        self.params_for_instantiation = {}
+
     
     def get_bot_by_ip(self, ip, create_new=True):
         if ip not in self.chatbots:
@@ -89,14 +90,6 @@ class WebObject(object):
         else:
             chatbot = self.chatbots[ip]
             return chatbot.has_new_pair
-    
-    # def get_qa_pairs(self, ip):
-    #     if ip not in self.chatbots:
-    #         # raise ValueError(f'ip: {ip} not in chatbots')
-    #         return []
-    #     else:
-    #         chatbot = self.chatbots[ip]
-    #         return chatbot.qa_pairs
 
     def get_generator(self, ip, question):
         if ip not in self.chatbots:
@@ -118,7 +111,10 @@ class WebObject(object):
             return qa_pairs
 
     def create_new_chatbot(self):
-        chatbot = HChatBot()
+        chatbot = self.uninstantiated_chatbot(
+            **self.params_for_instantiation
+        )
+        # chatbot = HChatBot()
         # chatbot = FakeChatGPT()
         return chatbot
 

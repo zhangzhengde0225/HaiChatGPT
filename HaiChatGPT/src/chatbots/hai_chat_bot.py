@@ -1,8 +1,12 @@
+"""
+HaiChatBot via OpenAI API_KEY, based on GPT-3
+"""
+
 import os
 import copy
 import traceback
 
-from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot, AsyncChatbot
+from ...repos.ChatGPT.src.revChatGPT.Official import Chatbot, AsyncChatbot
 
 import damei as dm
 import time
@@ -62,7 +66,6 @@ class HChatBot(Chatbot):
         cvid = None  # conversation id
         user = 'User'
 
-        
         if cvid is not None:
             # 加载旧会话，主要功能是将旧的会话内容加入到prompt的chat_history属性中
             self.load_conversation(cvid)
@@ -102,7 +105,6 @@ class HChatBot(Chatbot):
         cvid = None  # conversation id
         user = 'User'
 
-        
         if cvid is not None:
             self.load_conversation(cvid)
 
@@ -137,7 +139,7 @@ class HChatBot(Chatbot):
                 if x in [" <|im", "<|im", "><|im"]:
                     # idx = str_need_del_list.index(x)
                     next_skip = str_need_del_list[idx + 1]
-                    print(f'make next_skip: {next_skip}')
+                    # print(f'make next_skip: {next_skip}')
                     continuous = True
                     continue
                 elif x == next_skip and continuous:  # x: _ 
@@ -155,9 +157,8 @@ class HChatBot(Chatbot):
         # self.new_question = query
         return converted_generator
 
-    
     def query_stream(self, query):
-        """包含错误处理"""
+        """包含错误处理的query_stream"""
         try:
             generator = self._query_stream(query)
             return generator
@@ -166,7 +167,6 @@ class HChatBot(Chatbot):
             return error_info
 
 
-    
 class ErrorHandler:
     
     """

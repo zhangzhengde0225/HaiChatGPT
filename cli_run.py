@@ -2,18 +2,15 @@ import os
 
 import argparse
 
-from HaiChatGPT import HaiChatGPT
+from HaiChatGPT.src.runner import Runner, run
 
-
-def run_cli(args, **kwargs):
-    """Run the command line interface."""
-    HaiChatGPT.run_cli(**kwargs)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cli', action='store_true')
-    args = parser.parse_args()
+    parser.add_argument('--proxy' , type=str, default=None, help='Proxy')
+    parser.add_argument('--use-api-key', action='store_true', help='Use API key if True, use Access Token by default')
+    parser.add_argument('--engine', type=str, default='text-davinci-003', help='Engine name, only used when use-api-key is True')
+    opt = parser.parse_args()
 
-    args.cli = True
-
-    run_cli(args)
+    runner = Runner(opt)
+    runner.run_cli()

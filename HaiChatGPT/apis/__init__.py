@@ -4,11 +4,8 @@
 
 # from .apis import HaiGF
 from .apis import damei
-from ..src.hai_chat_gpt import HaiChatGPT
 
+from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot as API_ChatBot
+from ..repos.ChatGPT_token.src.revChatGPT.V1 import Chatbot as Token_ChatBot
 
-from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot, AsyncChatbot
-# from ..repos.ChatGPT.src.revChatGPT.Official import main as chatgpt_main
-from ..src.cli.cli import cli_main
-
-from ..src.hai_chat_bot import HChatBot
+from ..src.chatbots.hai_chat_bot import HChatBot

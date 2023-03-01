@@ -7,7 +7,8 @@ import traceback
 # import queue
 from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response
-os.environ['LOGGING_LEVEL'] = str(logging.DEBUG)
+# os.environ['LOGGING_LEVEL'] = str(logging.DEBUG)
+
 logger = dm.get_logger('app')
 
 app = Flask(__name__)
@@ -75,7 +76,9 @@ def qa_pairs():
     # ip = request.remote_addr
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
-    print(f'收到qa_pairs请求， {request}, ip: {ip}, chatbot: {chatbot}')
+    # print(f'收到qa_pairs请求， {request}, ip: {ip}, chatbot: {chatbot}')
+    logger.debug(f'收到qa_pairs请求， {request}, ip: {ip}, chatbot: {chatbot}')
+    
     if chatbot is None:
         data = '<|im_end|>'
     elif chatbot.show_history:  # True or False
@@ -89,7 +92,8 @@ def qa_pairs():
     else:
         data = '<|im_end|>'
     ret = f"data: {data}\n\n"
-    print(f'返回qa_pairs响应: {ret}')
+    # print(f'返回qa_pairs响应: {ret}')
+    logger.debug(f'返回qa_pairs响应: {ret}')
     return Response(ret, mimetype="text/event-stream")
 
 
@@ -98,8 +102,8 @@ def stream():  # 即获取流式的last_answer
     # ip = request.remote_addr
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
-    print(f'收到stream请求， {request}, ip: {ip}, chatbot: {chatbot}')
-
+    # print(f'收到stream请求， {request}, ip: {ip}, chatbot: {chatbot}')
+    logger.debug(f'收到stream请求， {request}, ip: {ip}, chatbot: {chatbot}')
     if chatbot is None:
         ret = f"data: <|im_end|>\n\n"
     elif chatbot.show_last_answer:
@@ -121,7 +125,7 @@ def stream():  # 即获取流式的last_answer
         lastq = chatbot.last_question
         lasta = chatbot.last_answer
         print(f'请求stream2: lastq = {lastq}, lasta = {lasta}')
-        print(f'保存')
+        # print(f'保存')
         if lastq is not None and lasta is not None:
             chatbot.append_qa(lastq, lasta)  # 保存到历史记录中
             webo.write_log(ip, lastq, query_once='', answer=lasta)
@@ -130,7 +134,8 @@ def stream():  # 即获取流式的last_answer
         
         ret = f"data: <|im_end|>\n\n"
         # return Response(generator, mimetype="text/event-stream")
-    print(f'返回stream响应: {ret}')
+    # print(f'返回stream响应: {ret}')
+    logger.debug(f'返回stream响应: {ret}')
     return Response(ret, mimetype="text/event-stream")
 
 @app.route('/clear', methods=['GET', 'POST'])
@@ -154,6 +159,8 @@ def run(**kwargs):
     work_dir = kwargs.get('work_dir', os.getcwd())
     here = os.path.dirname(os.path.abspath(__file__))
     # os.chdir(here)
+
+    # setup web object
 
     host = kwargs.get('host', '127.0.0.1')
     port = kwargs.get('port', 5000)

@@ -2,6 +2,9 @@
 
 openai
 tiktoken
+OpenAIAuth==0.3.2
+httpx
+prompt-toolkit
 
 # haigf
 # PySide2  # for haigf
