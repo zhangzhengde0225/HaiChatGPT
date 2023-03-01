@@ -106,11 +106,12 @@ def stream():  # 即获取流式的last_answer
     logger.debug(f'收到stream请求， {request}, ip: {ip}, chatbot: {chatbot}')
     if chatbot is None:
         ret = f"data: <|im_end|>\n\n"
-    elif chatbot.show_last_answer:
-        # 未处理的最后一个回答
+    elif chatbot.show_last_answer:  
+        # 每次收到post请求后，都会设置为True, 收到get请求后，设置为False
+        # 此处处理完后，设置为False
         lastq = chatbot.last_question
         lasta = 'stream'  # 用于标记是stream的回答
-        print(f'请求stream: lastq = {lastq}, lasta = {lasta}')
+        logger.debug(f'请求stream的show_last_answser为True, lastq = {lastq}')
         if lasta is None or lasta == '':
             ret = f"data: <|im_end|>\n\n"
         else:
@@ -118,7 +119,6 @@ def stream():  # 即获取流式的last_answer
             generator = webo.get_generator(ip, lastq)
             ret = generator
             chatbot.show_last_answer = False
-        # return Response(ret, mimetype="text/event-stream")
     else:  # TODO
         ### 存在chatbot但是由不显示last_answer的情况
         ### 是指

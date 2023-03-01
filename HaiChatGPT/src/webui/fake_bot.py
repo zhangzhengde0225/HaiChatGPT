@@ -12,7 +12,7 @@ class FakeChatGPT(object):
         self.show_history = False
 
         self.show_last_question = False
-        self.show_last_answer = False
+        self.show_last_answer = False  # its a flag, 
         self.last_question = None
         self.last_answer = None
 
@@ -25,7 +25,7 @@ class FakeChatGPT(object):
 
     def get_answer(self, text):
         answer = f'I am the answer {self.count} for "{text}".'
-        code_block = f'\n```import time\ntime.sleep(5)\nprint("Hello World!")```'
+        code_block = f'\n```\nimport time\ntime.sleep(5)\nprint("Hello World!")```'
         answer += code_block
         answer += '\nNote: This is a fake answer.'
 
@@ -41,7 +41,7 @@ class FakeChatGPT(object):
         self.last_answer = ''
         def generator():
             # data = f'I am the stream answer {self.count} for "{text}".'
-            data = self.get_answer(text)
+            data = self.get_answer(text) 
             for x in data:
                 yield f'data: {x}\n\n'
                 time.sleep(0.02)

@@ -6,6 +6,11 @@ python flask_run.py --host 0.0.0.0 --port 5000
 ```
 然后访问：http://localhost:5000
 
+可选参数：
+```bash
+--debug  # 使用FakeChatBot, 用于调试
+--use-api-key  # 使用API_KEY登录，不使用Access Token, 调用GPT3
+```
 
 ## CLI
 使用命令行界面:
