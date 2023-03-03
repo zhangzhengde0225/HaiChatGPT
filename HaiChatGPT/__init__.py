@@ -2,8 +2,8 @@
 import os
 import logging
 
-os.environ["LOGGING_LEVEL"] = str(logging.DEBUG)
-# os.environ['LOGGING_LEVEL'] = str(logging.INFO)
+# os.environ["LOGGING_LEVEL"] = str(logging.DEBUG)
+os.environ['LOGGING_LEVEL'] = str(logging.INFO)
 
 from . import env
 

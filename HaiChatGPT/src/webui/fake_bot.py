@@ -33,7 +33,7 @@ class FakeChatGPT(object):
 
 
     def query(self, text):
-        self.count += 1
+        # self.count += 1
         return self.get_answer(text)
 
     def query_stream(self, text):
