@@ -3,6 +3,8 @@ gui_run.py
 
 *.code-workspace
 HaiChatGPT/repos/PyChatGPT/*
+HaiChatGPT/repos/openai-quickstart-python
+*.pyc
 
 build/*
 dist/*
@@ -18,6 +20,8 @@ nohup.out
 # picoGPT
 HaiChatGPT/repos/picoGPT/models/*
 
+
+# #####################
 *~
 *.autosave
 *.a
@@ -88,5 +92,3 @@ CMakeLists.txt.user*
 # --------
 *.dll
 *.exe
-
-HaiChatGPT/repos/openai-quickstart-python
