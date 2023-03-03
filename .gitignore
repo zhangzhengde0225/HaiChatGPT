@@ -3,7 +3,7 @@ gui_run.py
 
 *.code-workspace
 HaiChatGPT/repos/PyChatGPT/*
-HaiChatGPT/repos/openai-quickstart-python
+HaiChatGPT/repos/openai-quickstart-python/*
 *.pyc
 
 build/*
