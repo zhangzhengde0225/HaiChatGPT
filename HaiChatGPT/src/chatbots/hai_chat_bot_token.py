@@ -6,6 +6,10 @@ from ...repos.ChatGPT_token.src.revChatGPT.V1 import Chatbot, AsyncChatbot
 
 from .hai_chat_bot import ErrorHandler
 
+import damei as dm
+
+logger = dm.get_logger('hai_chat_bot_token')
+
 
 class HTokenChatBot(Chatbot):
 
@@ -39,16 +43,20 @@ class HTokenChatBot(Chatbot):
     
     def _query_stream(self, query):
         """包含错误处理的query_stream"""
+        logger.info(f'ask bot: {query}')
         generator = self.ask(prompt=query)
+        """
+        每次返回结果的格式：
+        {'message': '好的，请问您需要表格的具体内容是什么？包括列数、行数和每个单元格的内容。', 'conversation_id': '66fd8b6e-a8ec-43b9-8701-8cee630c323c', 'parent_id': '0d2dcbd1-234d-4245-9e56-af3bb032145c', 'model': 'text-davinci-002-render-sha'}
+        """
 
         self.last_answer = ''
         
         def convert_generator():
-            prev_text = ''
             for data in generator:
-                text = data["message"][len(prev_text)::]
+                text = data["message"]
+                text = text.replace('\n', '<|im_br|>')
                 yield f'data: {text}\n\n'
-                prev_text = data["message"]
             self.last_answer = data["message"]
         return convert_generator()
         

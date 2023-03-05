@@ -175,6 +175,38 @@ background-color: #555555;
   border-radius: 5px; 
 }*/
 
+.code_block_title {
+  /* background-color: #6d717b; */
+  background-color: #606060;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 5px 5px;
+  display: flex;
+  align-items: center;
+  font-family: "ColfaxAI";
+}
+
+.code_block_pre {
+  /* background-color: #303030; */
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  padding: 5px 5px;
+}
+
+.small_code_block {
+  background-color: rgb(255, 255, 255);
+  /* color: #353740; */
+  padding: 0px 2px;
+  font-family: "ColfaxAI";
+}
+
+.copy-button {
+  background-color: #7f8cb3;
+  color: #ffffff;
+  border-radius: 5px;
+  border: 2px solid #7a88a6;
+}
+
 
 .question_img {
   width: 20px;

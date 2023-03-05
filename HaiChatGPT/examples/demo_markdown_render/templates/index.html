@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dynamic Markdown to HTML Example using EventSource</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+</head>
+<body>
+
+  <div id="markdown-content"></div>
+
+  <pre><code class="language-python">import os\n\na = range(10)
+  </code></pre>
+
+  <script>
+    hljs.initHighlighting();
+    const md = window.markdownit();
+    const markdownContent = document.getElementById('markdown-content');
+    // const eventSource = new EventSource('/stream');
+    const eventSource = new EventSource('/stream')
+  
+    eventSource.addEventListener('message', function(event) {
+      // console.log(event.data);
+      if (event.data !== '') {
+        var html = event.data.replace(/<\|im_br\|>/g, '\n');
+        html = md.render(html);
+        console.log(html);
+        // 把&lt;|im_br|&gt;替换成换行符&lf;
+        // const html = event.data.replace(/&lt;\|im_br\|&gt;/g, '\n');
+        // markdownContent.innerHTML = md.render(html);
+        markdownContent.innerHTML = html;
+      }
+
+
+      // 为每个代码块添加复制按钮
+      document.querySelectorAll('pre code').forEach((codeBlock) => {
+          // 创建复制按钮
+          const copyButton = document.createElement('button');
+          copyButton.className = 'copy-button';
+          copyButton.textContent = 'Copy';
+          // 添加点击事件处理程序
+          copyButton.addEventListener('click', () => {
+            // 复制代码块内容
+            const codeText = codeBlock.innerText;
+            const clipboard = new ClipboardJS(copyButton, {
+              text: function() {
+                return codeText;
+              }
+            });
+            // 在按钮上显示复制成功提示
+            clipboard.on('success', (e) => {
+              e.trigger.textContent = 'Copied!';
+              setTimeout(() => {
+                e.trigger.textContent = 'Copy';
+              }, 2000);
+              e.clearSelection();
+            });
+          });
+          // 获取类别名
+          var class_name = codeBlock.className;
+          var code_block_title = document.createElement("div");
+          code_block_title.className = "code_block_title";
+          if (class_name == "") {
+            class_name = "code";
+          }
+          // class_name = class_name.replace("language-", "");
+          // 
+          // code_block_title.innerText = class_name;  
+          code_block_title.appendChild(copyButton);
+          copyButton.style.marginLeft = "auto";
+          codeBlock.style.fontFamily = "ColfaxAI";
+          
+
+          // 将复制按钮插入到代码块前面
+          codeBlock.parentNode.insertBefore(code_block_title, codeBlock);
+        });
+        // 用hljs高亮代码
+      hljs.highlightBlock(codeBlock);
+    });
+
+    
+  </script>
+
+  <script>
+  // 初始化highlight.js
+  // hljs.initHighlighting();
+
+  // 为每个代码块添加复制按钮
+  document.querySelectorAll('pre code').forEach((codeBlock) => {
+    // 创建复制按钮
+    const copyButton = document.createElement('button');
+    copyButton.className = 'copy-button';
+    copyButton.textContent = 'Copy';
+    // 添加点击事件处理程序
+    copyButton.addEventListener('click', () => {
+      // 复制代码块内容
+      const codeText = codeBlock.innerText;
+      console.log(codeText);
+      const clipboard = new ClipboardJS(copyButton, {
+        text: function() {
+          return codeText;
+        }
+      });
+      // 在按钮上显示复制成功提示
+      clipboard.on('success', (e) => {
+        e.trigger.textContent = 'Copied!';
+        setTimeout(() => {
+          e.trigger.textContent = 'Copy';
+        }, 2000);
+        e.clearSelection();
+      });
+    });
+    // 将复制按钮插入到代码块前面
+    codeBlock.parentNode.insertBefore(copyButton, codeBlock);
+  });
+  </script>
+
+</body>
+</html>

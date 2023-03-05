@@ -2,14 +2,6 @@
 <html>
   <head>
     <title>HaiChatGPT</title>
-    <meta charset="utf-8">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='ai.png')}}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
-
     <script>
       // 该脚本用来监听和显示历史聊天记录，即问答对
       // 监听请求qa_pairs，显示在页面上
@@ -58,84 +50,31 @@
         };
       };
     </script>
-
     <script>
       // 该脚本用来监听和显示最后一次的回答，并流式显示
       var source = new EventSource("/stream");
-      const md = window.markdownit();
-      hljs.initHighlighting();  // 代码高亮的库
+      var i = 0;
+      var div = document.createElement("div");
+      div.className = i % 2 == 0 ? "user-message" : "chatbot-message";
       
       source.onmessage = function(event) {
         if (event.data === "<|im_end|>") {
           source.close();
-          document.getElementById("send").disabled = false;  // 启用send按钮
+          // 启用send按钮
+          document.getElementById("send").disabled = false;
           return
         }
-        document.getElementById("send").disabled = true;  // 禁用send按钮
-        const markdownContent = document.getElementById('markdown-content');
-        var html = event.data.replace(/<\|im_br\|>/g, '\n');
-        html = md.render(html);
-        // console.log(html);
-        markdownContent.innerHTML = html;
+        // 禁用send按钮
+        document.getElementById("send").disabled = true;
 
-        // 为每个代码块添加复制按钮
-        document.querySelectorAll('pre code').forEach((codeBlock) => {
-          const copyButton = document.createElement('button');  // 创建复制按钮
-          copyButton.className = 'copy-button';
-          copyButton.textContent = 'Copy';
-          // 添加点击事件处理程序
-          copyButton.addEventListener('click', () => {  // 复制代码块内容
-            const codeText = codeBlock.innerText;
-            const clipboard = new ClipboardJS(copyButton, {
-              text: function() {
-                return codeText;
-              }
-            });
-            // 在按钮上显示复制成功提示
-            clipboard.on('success', (e) => {
-              e.trigger.textContent = 'Copied!';
-              setTimeout(() => {
-                e.trigger.textContent = 'Copy';
-              }, 2000);
-              e.clearSelection();
-            });
-          });
-          // 添加代码块标题
-          var class_name = codeBlock.className;  // 来自markdown自动渲染，格式为language-python
-          var code_block_title = document.createElement("div");
-          code_block_title.className = "code_block_title";
-          if (class_name == "") {
-            class_name = "code";
-          }
-          class_name = class_name.replace("language-", "");
-          code_block_title.innerText = class_name;  
-          code_block_title.appendChild(copyButton);
-          copyButton.style.marginLeft = "auto";
-          // 设置<pre>的样式
-          codeBlock.parentNode.className = "code_block_pre";
-          
-          // 设置codeBlock的字体
-          codeBlock.style.fontFamily = "ColfaxAI";
-          // codeBlock.style.backgroundColor = "#303030";
-          // codeBlock.style.color = "#ffffff";
-          
-
-          // 将复制按钮插入到代码块前面
-          codeBlock.parentNode.insertBefore(code_block_title, codeBlock);
-          hljs.highlightBlock(codeBlock);
-        });
-
-        // 小代码块设置类名，便于css设置样式
-        document.querySelectorAll('code').forEach((codeBlock) => {
-          codeBlock.className = "small_code_block";
-          
-        });
-
-        
+        // div.innerHTML += event.data;
+        stream_div = document.getElementById("last_answer2")
+        stream_div.innerHTML += event.data;
+        // document.getElementById("output").appendChild(div);
         document.getElementById("output").scrollTop = document.getElementById("output").scrollHeight;
+        i += 1;
       };
     </script>
-
     <script>
       // 该脚本用来监听请求ip，显示在页面上，ip用于标识用户
       var ip_source = new EventSource("/ip_addr");
@@ -144,6 +83,18 @@
         ip_source.close();
       };
     </script>
+    <!-- <script>
+      document.getElementById("prompt").addEventListener("keyup", function(event) {
+        // 按shitf+enter，添加回车符, 直接按回车，发送消息
+        if (event.shiftKey && event.keyCode === 13) {
+          // event.preventDefault();
+          document.getElementById("prompt").value += "\n";
+        } else if (event.keyCode === 13) {
+          // event.preventDefault();
+          document.getElementById("send").click();
+        }
+      });
+    </script> -->
     <script>  // 没有用
       document.getElementById("prompt").addEventListener("keyup", function(event) {
         if (event.shiftKey && event.keyCode === 13) {
@@ -154,7 +105,10 @@
       });
     </script>
     
-    </head>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='ai.png')}}"/>
+    <!-- <link rel="stylesheet" type="text/css" href="main.css"/> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  </head>
 
 <body>
     <div class="sidebar">
@@ -205,7 +159,6 @@
         <div class="last_answer" id="last_answer">
           <img src="{{ url_for('static', filename='ai.png') }}" class="answer_img" />
           <div class="last_answer2" id="last_answer2"></div>
-          <div id="markdown-content"></div>
         </div>
         {% endif %}
       </div>

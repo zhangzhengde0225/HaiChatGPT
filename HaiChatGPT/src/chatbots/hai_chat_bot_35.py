@@ -1,23 +1,17 @@
 """
 HaiChatBot via OpenAI API_KEY, based on GPT-3
 """
-"""use GPT-3 to chat with you, deprecated in 20230305"""
-
 
 import os
 import copy
 import traceback
 
-from ...repos.ChatGPT.src.revChatGPT.Official import Chatbot, AsyncChatbot
+from ...repos.ChatGPT.src.revChatGPT.V3 import Chatbot
 
 import damei as dm
 import time
 
-ENGINE = "text-davinci-003"
-# ENGINE = "text-chat-davinci-002-20221215"
-
-logger = dm.get_logger('hai_chat_bot')
-
+logger = dm.get_logger('hai_chat_bot_35')
 
 class HChatBot(Chatbot):
 

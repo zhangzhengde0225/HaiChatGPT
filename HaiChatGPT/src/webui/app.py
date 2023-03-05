@@ -6,7 +6,7 @@ import damei as dm
 import traceback
 # import queue
 from pathlib import Path
-from flask import Flask, redirect, render_template, request, url_for, Response
+from flask import Flask, redirect, render_template, request, url_for, Response, stream_with_context
 # os.environ['LOGGING_LEVEL'] = str(logging.DEBUG)
 
 logger = dm.get_logger('app')
@@ -91,6 +91,7 @@ def qa_pairs():
             chatbot.show_history = False  # 读取一次后，关闭
     else:
         data = '<|im_end|>'
+    data = '<|im_end|>'
     ret = f"data: {data}\n\n"
     # print(f'返回qa_pairs响应: {ret}')
     logger.debug(f'返回qa_pairs响应: {ret}')
@@ -136,7 +137,7 @@ def stream():  # 即获取流式的last_answer
         # return Response(generator, mimetype="text/event-stream")
     # print(f'返回stream响应: {ret}')
     logger.debug(f'返回stream响应: {ret}')
-    return Response(ret, mimetype="text/event-stream")
+    return Response(stream_with_context(ret), mimetype="text/event-stream")
 
 @app.route('/clear', methods=['GET', 'POST'])
 def clear():
