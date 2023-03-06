@@ -29,7 +29,7 @@ class Runner(object):
             cli_main_token(chatbot)
         elif self.opt.use_api_key:
             # from ..apis import API_ChatBot as Chatbot
-            from ..apis import API_ChatBot_35 as Chatbot
+            from ..apis import API_ChatBot_35 as Chatbot  # need proxy
             api_key = self.auth_manager.current_api_key
             user = self.auth_manager.get_user_by_api_key(api_key)
             logger.debug(f"use {user}'s api_key: {api_key[:5]}{'*'*(len(api_key)-10)}{api_key[-5:]}")
@@ -41,7 +41,7 @@ class Runner(object):
                     temperature=0.5,
                     )
             # cli_main(chatbot)
-            cli_main_35(chatbot)
+            cli_main_35(chatbot, proxy=self.opt.proxy)
         else:
             from ..apis import Token_ChatBot as Chatbot
             config={}

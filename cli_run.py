@@ -9,7 +9,7 @@ if __name__ == '__main__':
     parser.add_argument('--proxy' , type=str, default=None, help='Proxy')
     parser.add_argument('--use-api-key', action='store_true', help='Use API key if True, use Access Token by default')
     parser.add_argument('--use-fake-bot', action='store_true', help='Use fake bot if True, use real bot by default')
-    parser.add_argument('--engine', type=str, default='gpt-3.5-turbo', help='Engine name, only used when use-api-key is True')
+    parser.add_argument('--engine', type=str, default='gpt-3.5-turbo-0301', help='Engine name, only used when use-api-key is True')
     parser.add_argument('--debug', action='store_true', help='Debug mode')
     opt = parser.parse_args()
 

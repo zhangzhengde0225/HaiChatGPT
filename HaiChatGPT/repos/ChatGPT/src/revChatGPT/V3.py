@@ -45,6 +45,8 @@ class Chatbot:
                 "https": self.proxy,
             }
             self.session.proxies = proxies
+        else:
+            self.session.proxies = None
         self.conversation: dict = {  # 默认会话等许多不同
             "default": [
                 {
@@ -116,10 +118,11 @@ class Chatbot:
             self.reset(convo_id=convo_id, system_prompt=self.system_prompt)
         self.add_to_conversation(prompt, "user", convo_id=convo_id)  # 添加用户输入到会话
         self.__truncate_conversation(convo_id=convo_id)  # 根据max_tokens截断会话
-        print(self.conversation)
+        # print(self.conversation)
         # Get response
         response = self.session.post(
             "https://api.openai.com/v1/chat/completions",
+            proxies=self.session.proxies,
             headers={"Authorization": f"Bearer {kwargs.get('api_key', self.api_key)}"},
             json={
                 "model": self.engine,
@@ -134,6 +137,7 @@ class Chatbot:
             },
             stream=True,
         )
+        # print(response)
         if response.status_code != 200:
             raise Exception(
                 f"Error: {response.status_code} {response.reason} {response.text}",

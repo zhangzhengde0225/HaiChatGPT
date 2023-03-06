@@ -149,7 +149,7 @@ def cli_main_token(chatbot):
 
 
 
-def cli_main_35(chatbot):
+def cli_main_35(chatbot, proxy=None):
     """
     Main function
     """
@@ -183,7 +183,7 @@ def cli_main_35(chatbot):
     parser.add_argument(
         "--proxy",
         type=str,
-        default=None,
+        default=proxy,
         help="Proxy address",
     )
     parser.add_argument(
@@ -287,6 +287,7 @@ def cli_main_35(chatbot):
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
     from prompt_toolkit.completion import WordCompleter
     from prompt_toolkit.history import InMemoryHistory
+
     def create_session() -> PromptSession:
         return PromptSession(history=InMemoryHistory())
 
@@ -300,6 +301,7 @@ def cli_main_35(chatbot):
         """
         return (
             session.prompt(
+                # proxy=proxy,
                 completer=completer,
                 multiline=True,
                 auto_suggest=AutoSuggestFromHistory(),
@@ -332,14 +334,14 @@ def cli_main_35(chatbot):
     while True:
         print()
         try:
-            print("User: ")
-            prompt = get_input35(session=session, completer=completer)
+            # print("User: ")
+            # prompt = get_input35(session=session, completer=completer)
+            prompt = get_input("\nYou:\n")
         except KeyboardInterrupt:
             print("\nExiting...")
             sys.exit()
         if prompt.startswith("!") and chatbot.handle_commands(prompt):
             continue
-        print()
         print("ChatGPT: ", flush=True)
         if args.enable_internet:
             query = chatbot.ask(

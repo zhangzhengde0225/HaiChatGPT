@@ -1,14 +1,14 @@
 
-# api_key = "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"
-api_key = "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"
+api_key = "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"
+# api_key = "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"
 
 def run():
     from revChatGPT.V3 import Chatbot
     chatbot = Chatbot(
         api_key=api_key,
-        proxy="localhost:1086",
+        proxy = "http://localhost:1086",
         )
-    for data in chatbot.ask_stream("Hello world"):
+    for data in chatbot.ask("Hello world"):
         print(data, end="", flush=True)
 
 
@@ -28,5 +28,5 @@ def run2():
     print(response)
 
 if __name__ == "__main__":
-    # run()
-    run2()
+    run()
+    # run2()
