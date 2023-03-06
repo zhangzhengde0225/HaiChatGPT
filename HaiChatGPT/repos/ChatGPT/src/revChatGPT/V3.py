@@ -45,7 +45,7 @@ class Chatbot:
                 "https": self.proxy,
             }
             self.session.proxies = proxies
-        self.conversation: dict = {
+        self.conversation: dict = {  # 默认会话等许多不同
             "default": [
                 {
                     "role": "system",
@@ -93,7 +93,7 @@ class Chatbot:
 
     def get_max_tokens(self, convo_id: str) -> int:
         """
-        Get max tokens
+        Get max tokens, 去除会话输入的TOKENS后，剩余的TOKENS
         """
         full_conversation = "".join(
             message["role"] + ": " + message["content"] + "\n"
@@ -112,10 +112,11 @@ class Chatbot:
         Ask a question
         """
         # Make conversation if it doesn't exist
-        if convo_id not in self.conversation:
+        if convo_id not in self.conversation:  # 重置会话，只保留role为system的会话
             self.reset(convo_id=convo_id, system_prompt=self.system_prompt)
-        self.add_to_conversation(prompt, "user", convo_id=convo_id)
-        self.__truncate_conversation(convo_id=convo_id)
+        self.add_to_conversation(prompt, "user", convo_id=convo_id)  # 添加用户输入到会话
+        self.__truncate_conversation(convo_id=convo_id)  # 根据max_tokens截断会话
+        print(self.conversation)
         # Get response
         response = self.session.post(
             "https://api.openai.com/v1/chat/completions",
@@ -178,7 +179,7 @@ class Chatbot:
 
     def rollback(self, n: int = 1, convo_id: str = "default") -> None:
         """
-        Rollback the conversation
+        Rollback the conversation，回滚conversation
         """
         for _ in range(n):
             self.conversation[convo_id].pop()
@@ -209,6 +210,7 @@ class Chatbot:
     def load(self, file: str, *convo_ids: str) -> bool:
         """
         Load the conversation from a JSON  file
+        :convo_ids: If specified, only load the specified conversations
         """
         try:
             with open(file, encoding="utf-8") as f:
