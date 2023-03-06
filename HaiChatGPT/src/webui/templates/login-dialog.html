@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="static/css/login-style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
+  </head>
+  <body>
+    <div id="login-form">
+      <form id="login-form">
+        <div class="title">
+          <img src="{{ url_for('static', filename='ai.png') }}" class="icon" />
+          <div class="title">HaiChatGPT</div>
+        </div>
+        <label for="username">用户名*:</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">密码*:</label>
+        <input type="password" id="password" name="password"><br>
+        <button type="submit">登录</button>
+        <button type="button" id="register-button" formnovalidate>注册</button> <!-- 添加注册按钮 -->
+        
+      </form>
+    </div>
+
+    <!-- 添加注册表单 -->
+    <div id="register-form-div" style="display: none">
+      <form id="register-form" style="display: block">
+        <div class="title">
+          <img src="{{ url_for('static', filename='ai.png') }}" class="icon" />
+          <div class="title">HaiChatGPT</div>
+        </div>
+        <label for="name">用户名:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="password">密码:</label>
+        <input type="password" id="reg_password" name="reg_password" required><br>
+        <label for="phone">手机号码:</label>
+        <input type="tel" id="phone" name="phone" required><br>
+        <!-- <button type="button" id="send-code-button">发送验证码</button>
+        <label for="code">验证码:</label>
+        <input type="text" id="code" name="code" required><br> -->
+        <button type="register" id="register-btn-in-form">注册</button>
+      </form>
+    </div>
+    
+    <script src="/static/js/login.js"></script>
+  </body>
+</html>

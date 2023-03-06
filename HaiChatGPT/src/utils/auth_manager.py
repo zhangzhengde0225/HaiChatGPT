@@ -64,6 +64,14 @@ class AuthManager:
             config = yaml.load(f, Loader=yaml.FullLoader)
         return config
 
+    @property
+    def access_token_url(self):
+        return "https://chat.openai.com/api/auth/session"
+    
+    @property
+    def api_key_url(self):
+        return "https://platform.openai.com/account/api-keys"
+    
     def save_config(self, config_path, config):
         comments = [
             "##\n# Authorized info format:",
@@ -141,7 +149,7 @@ class AuthManager:
         users_with_api_key = self.users_with_api_key
         api_keys = [self.get_api_key(user) for user in users_with_api_key]
         if len(api_keys) == 0:
-            print("\nPlease input your API Key: ")
+            print(f"\nPlease input your API Key (can be found here {self.api_key_url}): ")
             api_key = input()
             print("\nPlese input your username (can be any string):")
             username = input()
@@ -159,7 +167,9 @@ class AuthManager:
             print('Please select your API Key: ')
             for i, api_key in enumerate(api_keys):
                 user = users_with_api_key[i]
-                print(f"  ({i + 1:>2}) User: {user} API-KEY: {api_key[:5]}{'*' * (len(api_key) - 10)}{api_key[-5:]}")
+                idx_lenth = len(str(len(api_keys)))
+                lenth = max([len(xx) for xx in users_with_api_key])
+                print(f"  ({i+1:>{idx_lenth}}) {user:>{lenth}}'s API-KEY: {api_key[:5]}{'*' * (len(api_key) - 10)}{api_key[-5:]}")
             index = int(input())
             return api_keys[index - 1]
         
@@ -170,7 +180,7 @@ class AuthManager:
         users_with_access_token = self.users_with_access_token
         access_tokens = [self.get_access_token(user) for user in users_with_access_token]
         if len(access_tokens) == 0:
-            print("\nPlease input your Access Token: ")
+            print(f"\nPlease input your Access Token (can by found here: {self.access_token_url}): ")
             access_token = input()
             print("\nPlese input your username (can be any string):")
             username = input()
@@ -188,7 +198,9 @@ class AuthManager:
             print('Please select your Access Token: ')
             for i, access_token in enumerate(access_tokens):
                 user = users_with_access_token[i]
-                print(f"  ({i + 1:>2}) User: {user} Access Token: {access_token[:5]}{'*'*10}{access_token[-5:]}")
+                idx_lenth = len(str(len(access_tokens)))
+                lenth = max([len(xx) for xx in users_with_access_token])
+                print(f"  ({i+1:>{idx_lenth}}) {user:>{lenth}}'s Access Token: {access_token[:5]}{'*'*10}{access_token[-5:]}")
             index = int(input())
             return access_tokens[index - 1]
         

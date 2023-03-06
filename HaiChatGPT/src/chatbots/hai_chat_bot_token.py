@@ -66,6 +66,7 @@ class HTokenChatBot(Chatbot):
             generator = self._query_stream(query)
             return generator
         except Exception as e:
+            logger.debug(f'query_stream error: {e}')
             error_info = self.error_handler.handle(e)
             return error_info
         

@@ -5,10 +5,10 @@
 import os, sys
 from pathlib import Path
 import argparse
-
+import logging
 here = Path(__file__).parent
 
-from HaiChatGPT.src.runner import Runner, run
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -22,5 +22,13 @@ if __name__ == '__main__':
     parser.add_argument('--debug', action='store_true', help='Debug mode')
     opt = parser.parse_args()
 
+    
+    if opt.debug:
+        os.environ["LOGGING_LEVEL"] = str(logging.DEBUG)
+    else:
+        os.environ['LOGGING_LEVEL'] = str(logging.INFO)
+
+
+    from HaiChatGPT.src.runner import Runner
     runner = Runner(opt)
     runner.run_webui()

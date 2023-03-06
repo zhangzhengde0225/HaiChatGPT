@@ -90,11 +90,12 @@ class Runner(object):
             webo.uninstantiated_chatbot = HTokenChatBot
             config = {}
             config["access_token"] = self.auth_manager.current_access_token
+            user = self.auth_manager.get_user_by_access_token(config["access_token"])
             if opt.proxy is not None:
                 config["proxy"] = opt.proxy
-            config["paid"] = False  # whether this is a plus account
+            # config["paid"] = False  # whether this is a plus account
             config["paid"] = self.auth_manager.get_paid_by_access_token(config["access_token"])
-            
+            logger.debug(f"Run on HTokenChatBot with {user}'s Access Token, paid={config['paid']}.")
             webo.params_for_instantiation = {
                 "config": config,
                 'conversation_id': None,

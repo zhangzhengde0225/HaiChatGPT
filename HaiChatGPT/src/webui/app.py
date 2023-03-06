@@ -4,21 +4,30 @@ import openai
 import logging
 import damei as dm
 import traceback
-# import queue
 from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response, stream_with_context
-# os.environ['LOGGING_LEVEL'] = str(logging.DEBUG)
+from flask import session, jsonify
 
 logger = dm.get_logger('app')
 
 app = Flask(__name__)
-from .web_object import WebObject
+app.secret_key = 'my-secret-key'  # 设置Session密钥，用于加密Session数据
+
+from .utils.web_object import WebObject
 webo = WebObject()
+from .utils.user_manager import UserManager
+user_mgr = UserManager()
 
 
 @app.route("/", methods=("GET", "POST"))
 def index():
     print(f'收到index请求: {request}. method: {request.method}')
+    session_id = request.cookies.get('session')
+    print(f'session_id: {session_id}')
+    if session_id:
+        user_name = session.get('username')
+        print(f'已登录: {user_name}')
+    
     # ip = request.remote_addr
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     chatbot = webo.get_bot_by_ip(ip, create_new=False)
@@ -58,11 +67,10 @@ def index():
         return render_template("index.html", result=lastq, lasta=lasta)
     else:
         raise ValueError(f'unknown method: {request.method}')
-
-    result = request.args.get("result")
-    # result = None
-    # result = '你好'
-    return render_template("index.html", result=result)
+    
+@app.route('/login-dialog.html')
+def login_dialog():
+    return render_template('login-dialog.html')
 
 @app.route('/ip_addr')
 def ip_addr():
@@ -150,6 +158,42 @@ def clear():
     ret = f"data: <|im_end|>\n\n"
     print(f'返回clear响应: {ret}')
     return render_template("index.html", result=None, lastq=None)
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    logger.info(f'login请求的data为: {data}')
+    username = data.get('username')
+    password = data.get('password')
+    if user_mgr.verify_user(username, password):
+        session['username'] = username
+        return jsonify({'success': True, 'message': '登录成功', 'username': session['username']})
+    else:
+        return {'success': False, 'message': '用户名或密码错误'}
+        
+    
+@app.route('/logout', methods=['POST'])
+def logout():
+    user_name = request.get_json().get('username')
+    if user_name is None:
+        return {'success': False, 'message': '用户未登录'}
+    session['username'] = None
+    return {'success': True, 'message': f'{user_name} 登出成功'}
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    logger.info(f'register请求的data为: {data}')
+    username = data.get('username')
+    password = data.get('password')
+    phone = data.get('phone')
+
+    if user_mgr.is_exist(username):
+        return {'success': False, 'message': f'用户名{username}已存在'}
+    else:
+        user_mgr.add_user(username, password, phone=phone)
+        return jsonify({'success': True, 'message': '注册成功'})
+
 
 def run(**kwargs):
     # from gevent import pywsgi

@@ -5,9 +5,9 @@ import damei as dm
 from flask import Flask, redirect, render_template, request, url_for
 from flask import Response
 import requests
-from .app import app
-from ...version import __appname__
-from .fake_bot import FakeChatGPT
+from ..app import app
+from ....version import __appname__
+from ..fake_bot import FakeChatGPT
 
 import logging
 from pathlib import Path
@@ -18,7 +18,7 @@ if not os.path.exists(logg_dir):
     os.makedirs(logg_dir)
 save_path = f'{logg_dir}/webui.log'
 handler = logging.FileHandler(save_path)
-handler.setLevel(logging.DEBUG)
+# handler.setLevel(logging.DEBUG)
 # app.logger.addHandler(handler)
 
 # def getLogger(name=None, **kwargs):

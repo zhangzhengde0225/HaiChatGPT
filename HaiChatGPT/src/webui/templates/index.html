@@ -4,155 +4,14 @@
     <title>HaiChatGPT</title>
     <meta charset="utf-8">
     <link rel="shortcut icon" href="{{ url_for('static', filename='ai.png')}}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+    <link rel="stylesheet" href="static/css/main.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 
-    <script>
-      // 该脚本用来监听和显示历史聊天记录，即问答对
-      // 监听请求qa_pairs，显示在页面上
-      var qa_source = new EventSource("/qa_pairs");
-      qa_source.onmessage = function(event) {
-        if (event.data === "<|im_end|>") {
-          qa_source.close();
-          return
-          };
-        // 解析qa对，每对的换行符是<|im_br|>分隔符是<|im_sep|>
-        var qa_pairs = event.data.split("<|im_br|>");
-        for (var i = 0; i < qa_pairs.length; i++) {
-          var qa_pair = qa_pairs[i].split("<|im_sep|>");
-          var qustion_div = document.createElement("div");
-          var answer_div = document.createElement("div");
-          qustion_div.className = "question_div";
-          answer_div.className = "answer_div";
-          qustion_div.style.wordWrap = "break-word"; // 自动换行
-          answer_div.style.wordWrap = "break-word"; // 自动换行
-          // question_div.style.wordWrap = "break-word"; // 自动换行
-          // 添加图片
-          var img = document.createElement("img");
-          img.src = "{{ url_for('static', filename='user.png') }}";
-          img.className = "question_img";
-          qustion_div.appendChild(img); 
-          var ans_imge = document.createElement("img");
-          ans_imge.src = "{{ url_for('static', filename='ai.png') }}";
-          ans_imge.className = "answer_img";
-          answer_div.appendChild(ans_imge);
-          
-          // 添加问题和答案
-          // qustion_div.innerHTML = qa_pair[0];
-          // answer_div.innerHTML = qa_pair[1];
-          var question_text = document.createTextNode(qa_pair[0]);
-          var answer_text = document.createTextNode(qa_pair[1]);
-          qustion_div.appendChild(question_text);
-          answer_div.appendChild(answer_text);
-
-          document.getElementById("qa_pairs").appendChild(qustion_div);
-          // 最后一个答案不添加
-          // if (i != qa_pairs.length - 1) {
-          //   document.getElementById("qa_pairs").appendChild(answer_div);
-          // }
-          document.getElementById("qa_pairs").appendChild(answer_div);
-          
-        };
-      };
-    </script>
-
-    <script>
-      // 该脚本用来监听和显示最后一次的回答，并流式显示
-      var source = new EventSource("/stream");
-      const md = window.markdownit();
-      hljs.initHighlighting();  // 代码高亮的库
-      
-      source.onmessage = function(event) {
-        if (event.data === "<|im_end|>") {
-          source.close();
-          document.getElementById("send").disabled = false;  // 启用send按钮
-          return
-        }
-        document.getElementById("send").disabled = true;  // 禁用send按钮
-        const markdownContent = document.getElementById('markdown-content');
-        var html = event.data.replace(/<\|im_br\|>/g, '\n');
-        html = md.render(html);
-        // console.log(html);
-        markdownContent.innerHTML = html;
-
-        // 为每个代码块添加复制按钮
-        document.querySelectorAll('pre code').forEach((codeBlock) => {
-          const copyButton = document.createElement('button');  // 创建复制按钮
-          copyButton.className = 'copy-button';
-          copyButton.textContent = 'Copy';
-          // 添加点击事件处理程序
-          copyButton.addEventListener('click', () => {  // 复制代码块内容
-            const codeText = codeBlock.innerText;
-            const clipboard = new ClipboardJS(copyButton, {
-              text: function() {
-                return codeText;
-              }
-            });
-            // 在按钮上显示复制成功提示
-            clipboard.on('success', (e) => {
-              e.trigger.textContent = 'Copied!';
-              setTimeout(() => {
-                e.trigger.textContent = 'Copy';
-              }, 2000);
-              e.clearSelection();
-            });
-          });
-          // 添加代码块标题
-          var class_name = codeBlock.className;  // 来自markdown自动渲染，格式为language-python
-          var code_block_title = document.createElement("div");
-          code_block_title.className = "code_block_title";
-          if (class_name == "") {
-            class_name = "code";
-          }
-          class_name = class_name.replace("language-", "");
-          code_block_title.innerText = class_name;  
-          code_block_title.appendChild(copyButton);
-          copyButton.style.marginLeft = "auto";
-          // 设置<pre>的样式
-          codeBlock.parentNode.className = "code_block_pre";
-          
-          // 设置codeBlock的字体
-          codeBlock.style.fontFamily = "ColfaxAI";
-          // codeBlock.style.backgroundColor = "#303030";
-          // codeBlock.style.color = "#ffffff";
-          
-
-          // 将复制按钮插入到代码块前面
-          codeBlock.parentNode.insertBefore(code_block_title, codeBlock);
-          hljs.highlightBlock(codeBlock);
-        });
-
-        // 小代码块设置类名，便于css设置样式
-        document.querySelectorAll('code').forEach((codeBlock) => {
-          codeBlock.className = "small_code_block";
-          
-        });
-
-        
-        document.getElementById("output").scrollTop = document.getElementById("output").scrollHeight;
-      };
-    </script>
-
-    <script>
-      // 该脚本用来监听请求ip，显示在页面上，ip用于标识用户
-      var ip_source = new EventSource("/ip_addr");
-      ip_source.onmessage = function(event) {
-        document.getElementById("ip_addr").innerHTML = "Your ip: " + event.data;
-        ip_source.close();
-      };
-    </script>
-    <script>  // 没有用
-      document.getElementById("prompt").addEventListener("keyup", function(event) {
-        if (event.shiftKey && event.keyCode === 13) {
-          document.getElementById("prompt").value += "\n";
-        } else if (event.keyCode === 13) {
-          document.getElementById("send").click();
-        }
-      });
-    </script>
+    <script src="static/js/history.js"></script>
+    <script src="static/js/stream_answer.js"></script>
     
     </head>
 
@@ -165,9 +24,9 @@
           提示:
           <li>ChatGPT能回答问题、提供建议、计算数学问题、翻译文本、生成文本、写作、提供知识、提供解决方案、提供娱乐、聊天等
           <!-- <li>一个简单的例子, prompt: 我想让你担任Android开发工程师中文面试官。我将成为候选人，您将向我询问Android开发工程师职位的面试问题。我希望你只作为面试官回答。不要一次写出所有的问题。我希望你只对我进行采访。问我问题，等待我的回答。不要写解释。像面试官一样一个一个问我，等我回答。我的第一句话是“面试官你好” -->
-          
-          <li><a class='hyper_link' href="https://github.com/PlexPt/awesome-chatgpt-prompts-zh">ChatGPT中文调教指南</a>
-          <!-- </li><br></br> -->
+          <li>示例：请写一段快速排序的代码</li>
+          <!-- <li><a class='hyper_link' href="https://github.com/PlexPt/awesome-chatgpt-prompts-zh">ChatGPT中文调教指南</a> -->
+          <br></br>
           <!-- <li>这是使用作者的同一个Key的免费抢先体验版，仅供测试使用。</li> -->
           <li>2023.03.02性能升级！答案与官网的GPT3.5相同.</li>
           <li>由于OpenAI不对国内服务，注册官方需要科学上网、邮箱、国外的手机号(可用sms-activate代替)，奉上
@@ -175,13 +34,18 @@
             保姆级注册教程和临时梯子</a>。
         </div>
         <div class="settings">
-          Settings
+          <div id="user-form">  <!-- 左下角的用户表单 -->
+            <button id="login-button">Login</button>
+            <span id="username-label" style="display:none">Welcome, <span id="username"></span></span>
+            <button id="logout-button" style="display:none">Logout</button>
+          </div>
+          <script src="/static/js/sidebar.js"></script>
         </div>
         <div id="ip_addr">ip: </div>
     </div>
 
-    <div class="main">
 
+    <div class="main">
       <div class="title">
         <img src="{{ url_for('static', filename='ai.png') }}" class="icon" />
         <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
@@ -204,7 +68,7 @@
         <!-- 流式答案区域 -->
         <div class="last_answer" id="last_answer">
           <img src="{{ url_for('static', filename='ai.png') }}" class="answer_img" />
-          <div class="last_answer2" id="last_answer2"></div>
+          <!-- <div class="last_answer2" id="last_answer2"></div> -->
           <div id="markdown-content"></div>
         </div>
         {% endif %}

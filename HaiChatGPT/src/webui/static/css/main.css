@@ -175,12 +175,20 @@ background-color: #555555;
   border-radius: 5px; 
 }*/
 
+.markdown-content {
+  display: flex;
+  flex-direction: row;
+  background-color: #eafcf0;
+  padding: 10px;
+  margin: 10px;
+}
+
 .code_block_title {
   /* background-color: #6d717b; */
   background-color: #606060;
   color: #ffffff;
   border-radius: 5px;
-  padding: 5px 5px;
+  padding: 0px 5px;
   display: flex;
   align-items: center;
   font-family: "ColfaxAI";
@@ -190,12 +198,13 @@ background-color: #555555;
   /* background-color: #303030; */
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
-  padding: 5px 5px;
+  /* padding: 0px 5px; */
+  /* 横向填满窗口 */
 }
 
 .small_code_block {
   background-color: rgb(255, 255, 255);
-  /* color: #353740; */
+  /* color: #ffffff; */
   padding: 0px 2px;
   font-family: "ColfaxAI";
 }
