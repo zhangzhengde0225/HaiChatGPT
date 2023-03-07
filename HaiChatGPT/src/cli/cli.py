@@ -331,6 +331,8 @@ def cli_main_35(chatbot, proxy=None):
     # Start chat
     import requests
     import json
+
+
     while True:
         print()
         try:
@@ -375,5 +377,6 @@ def cli_main_35(chatbot, proxy=None):
             print(chatbot.ask(prompt, "user"))
         else:
             for query in chatbot.ask_stream(prompt):
+                # print(query)
                 print(query, end="", flush=True)
         print()

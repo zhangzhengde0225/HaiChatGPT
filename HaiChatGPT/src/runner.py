@@ -30,6 +30,7 @@ class Runner(object):
         elif self.opt.use_api_key:
             # from ..apis import API_ChatBot as Chatbot
             from ..apis import API_ChatBot_35 as Chatbot  # need proxy
+            from .utils.check_network import check_network
             api_key = self.auth_manager.current_api_key
             user = self.auth_manager.get_user_by_api_key(api_key)
             logger.debug(f"use {user}'s api_key: {api_key[:5]}{'*'*(len(api_key)-10)}{api_key[-5:]}")
@@ -40,7 +41,7 @@ class Runner(object):
                     max_tokens=3000,
                     temperature=0.5,
                     )
-            # cli_main(chatbot)
+            check_network(chatbot, timeout=5)
             cli_main_35(chatbot, proxy=self.opt.proxy)
         else:
             from ..apis import Token_ChatBot as Chatbot
@@ -77,14 +78,23 @@ class Runner(object):
                 'max_qa': 5,
             }
         elif opt.use_api_key:
-            from .chatbots.hai_chat_bot import HChatBot
+            # from .chatbots.hai_chat_bot import HChatBot  # deprecated at 20230307
+            from .chatbots.hai_chat_bot_35 import HChatBot
+            from .utils.check_network import check_network
             webo.uninstantiated_chatbot = HChatBot
+            api_key = self.auth_manager.current_api_key
+
             webo.params_for_instantiation = {
-                'api_key': self.current_api_key,
+                'api_key': api_key,
                 'engine': opt.engine,
                 'proxy': opt.proxy,
+                "max_tokens": 3000,
                 'temperature': opt.temperature,
                 }
+            
+            chatbot = HChatBot(**webo.params_for_instantiation)
+            check_network(chatbot, timeout=5)
+            del chatbot
         else:
             from .chatbots.hai_chat_bot_token import HTokenChatBot
             webo.uninstantiated_chatbot = HTokenChatBot
@@ -107,6 +117,8 @@ class Runner(object):
                 }
         
         from .webui.app import run as run_app
+        from .webui.app import user_mgr
+        user_mgr.use_sso_auth = opt.use_sso_auth
         
         run_app(
             host=self.opt.host,

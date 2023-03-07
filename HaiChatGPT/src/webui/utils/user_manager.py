@@ -4,13 +4,23 @@ import damei as dm
 import json
 from ....version import __appname__
 
+
 logger = dm.getLogger('user_manager')
 
 
 class UserManager(object):
-    def __init__(self) -> None:
+    def __init__(self, use_sso_auth=False) -> None:
         self._users_file = f'{Path.home()}/.{__appname__}/users.json'
         self._users = self.read_users_from_file()
+        self._sso_auth = None
+        self.use_sso_auth = use_sso_auth
+
+    @property
+    def sso_auth(self):
+        if self._sso_auth is None:
+            from ...utils.sso_oauth import SSOAuth
+            self._sso_auth = SSOAuth()
+        return self._sso_auth
 
     def read_users_from_file(self):
         if not os.path.exists(self._users_file):
@@ -41,12 +51,27 @@ class UserManager(object):
     def remove_user(self, user):
         del self._users[user]
 
-    def verify_user(self, user, password):
-        logger.info(f'all users: {self._users}')
+    def verify_user(self, user, password, **kwargs):
+        logger.info(f'Try local auth. all users: {self._users}')
         if user in self._users.keys():
-            return self._users[user]['password'] == password
+            is_ok = self._users[user]['password'] == password
+            if is_ok:
+                return True
+            else:
+                pass
         else:
-            return False
+            pass
+        
+        logger.info(f'Locak auth failed, try sso auth.')
+        use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
+        if use_sso_auth:
+            ret = self.sso_auth.verify_user(user, password)
+            if ret:
+                # logger.info(f'{user} ssoauth verify user success!')
+                return True
+            else:
+                # logger.info(f'{user} ssoauth verify user failed!')
+                return False
     
     def is_exist(self, user):
         return user in self._users.keys()

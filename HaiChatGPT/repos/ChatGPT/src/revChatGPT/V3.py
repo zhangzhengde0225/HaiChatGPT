@@ -118,7 +118,7 @@ class Chatbot:
             self.reset(convo_id=convo_id, system_prompt=self.system_prompt)
         self.add_to_conversation(prompt, "user", convo_id=convo_id)  # 添加用户输入到会话
         self.__truncate_conversation(convo_id=convo_id)  # 根据max_tokens截断会话
-        # print(self.conversation)
+        
         # Get response
         response = self.session.post(
             "https://api.openai.com/v1/chat/completions",
@@ -137,7 +137,7 @@ class Chatbot:
             },
             stream=True,
         )
-        # print(response)
+        print(response)
         if response.status_code != 200:
             raise Exception(
                 f"Error: {response.status_code} {response.reason} {response.text}",

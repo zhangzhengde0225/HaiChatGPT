@@ -16,20 +16,23 @@ logger = dm.get_logger('hai_chat_bot_35')
 class HChatBot(Chatbot):
 
     def __init__(self, 
-                api_key: str = None, 
-                buffer: int = None, 
-                engine: str = None, 
+                api_key: str,
+                engine: str = None,
                 proxy: str = None,
+                max_tokens: int = 3000,
                 temperature: float = 0.5,
+                top_p: float = 1.0,
+                reply_count: int = 1,
+                system_prompt: str = "You are ChatGPT, a large language model trained by OpenAI. Respond conversationally",
+                **kwargs,
                 ) -> None:
         api_key = api_key or os.getenv("OPENAI_API_KEY")
-        engine = ENGINE
 
-        super().__init__(api_key, buffer, engine, proxy)
+        super().__init__(api_key, engine, proxy, max_tokens, temperature, top_p, reply_count, system_prompt)
         self.temperature = temperature
 
         # 为对话增加的设置
-        self.max_qa = 5
+        self.max_qa = kwargs.pop('max_qa', 5)
         self.qa_pairs = []  # 保存历史的问答对qustion, answer
         self.show_history = False
 
@@ -54,105 +57,27 @@ class HChatBot(Chatbot):
     def set_temperature(self, temperature: float) -> None:
         self.temperature = temperature
 
-    def query(self, query) -> str:
-        """
-        :param query: 请求的文字，纯文本
-        """
-        temp = self.temperature
-        cvid = None  # conversation id
-        user = 'User'
-
-        if cvid is not None:
-            # 加载旧会话，主要功能是将旧的会话内容加入到prompt的chat_history属性中
-            self.load_conversation(cvid)
-
-        # 构建prompt, 包括base, chat_history, query，自动控制缓存大小
-        prompt = self.prompt.construct_prompt(
-                    new_prompt=query,
-                    custom_history=None,
-                    user=user,
-                    )
-
-        # 调用openai api，获取completion
-        completion = self._get_completion(
-                    prompt=prompt,
-                    temperature=temp,
-                    )
-        
-        # 后处理，如Choices报错，有时选取最优回答。将query和completion加入到chat_history中，如果指定cvid, 将历史同时保存到会话历史中
-        completion = self._process_completion(
-                    user_request=query,
-                    completion=completion,
-                    conversation_id=None,
-                    user=user,
-                    )
-
-        response = completion['choices'][0]['text']  # 选取最优回答
-
-        return response
-
-
     def _query_stream(self, query):
-        """
-        return a generator
-        无错误处理，新增query_stream里面的错误处理
-        """
-        temp = self.temperature
-        cvid = None  # conversation id
-        user = 'User'
 
-        if cvid is not None:
-            self.load_conversation(cvid)
-
-        prompt = self.prompt.construct_prompt(
-                    new_prompt=query,
-                    custom_history=None,
-                    user=user,
-                    )
+        ret = self.ask_stream(
+            prompt=query,
+            role="user",
+            convo_id='default',
+            )
         
-        completion = self._get_completion(
-                    prompt=prompt,
-                    temperature=temp,
-                    stream=True,
-                    )
-
-        generator = self._process_completion_stream(
-                    user_request=query,
-                    completion=completion,
-                    conversation_id=cvid,
-                    user=user,
-                    )
-
-        # self.last_question = query
         self.last_answer = ''
+        
         def convert_generator():
-            # str_need_del = "<|im_end|>"
-            str_need_del_list = ["<|im", "_", "end", "|", ">", ""]
-            idx = 0
-            next_skip = None
-            continuous = False
-            for x in generator:
-                if x in [" <|im", "<|im", "><|im"]:
-                    # idx = str_need_del_list.index(x)
-                    next_skip = str_need_del_list[idx + 1]
-                    # print(f'make next_skip: {next_skip}')
-                    continuous = True
-                    continue
-                elif x == next_skip and continuous:  # x: _ 
-                    idx += 1
-                    try:
-                        next_skip = str_need_del_list[idx + 1]
-                    except:
-                        next_skip = None
-                    continue
-                continuous = False
-                # print(f'data: {x} next_skip: {next_skip}')
-                yield f'data: {x}\n\n'
-                self.last_answer += x
-        converted_generator = convert_generator()
-        # self.new_question = query
-        return converted_generator
-
+            text = ''
+            for content in ret:
+                text += content
+                b = text.replace("\n", "<|im_br|>")
+                yield f'data: {b}\n\n'
+                # time.sleep(0.01)
+            self.last_answer = text
+        return convert_generator()
+        
+        
     def query_stream(self, query):
         """包含错误处理的query_stream"""
         try:
