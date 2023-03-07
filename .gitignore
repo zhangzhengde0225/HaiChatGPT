@@ -23,6 +23,9 @@ HaiChatGPT/repos/picoGPT/models/*
 # webui
 HaiChatGPT/src/webui/examples/*
 
+# secrets
+HaiChatGPT/examples/ihep_sso/*
+
 
 # #####################
 *~
