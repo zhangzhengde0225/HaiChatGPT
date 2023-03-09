@@ -52,7 +52,7 @@ def try_request(share_value, api_key, proxies=None):
         "https://www.google.com",
         proxies=proxies,
         # headers=headers,
-        try_count=3,
+        timeout=5,
     )
     if reponse.status_code == 200:
         share_value.value = reponse.status_code
