@@ -53,6 +53,14 @@ class Chatbot:
                     "role": "system",
                     "content": system_prompt,
                 },
+                # {
+                #     "role": "user",
+                #     "content": "Hello",
+                # },
+                # {
+                #     "role": "assistant",
+                #     "content": "Hi",
+                # }
             ],
         }
         self.system_prompt = system_prompt
@@ -137,9 +145,9 @@ class Chatbot:
             },
             stream=True,
         )
-        print(response)
+        # print(response)
         if response.status_code != 200:
-            raise Exception(
+            raise KeyError(
                 f"Error: {response.status_code} {response.reason} {response.text}",
             )
         response_role: str = None

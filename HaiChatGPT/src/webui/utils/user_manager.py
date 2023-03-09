@@ -3,6 +3,7 @@ from pathlib import Path
 import damei as dm
 import json
 from ....version import __appname__
+import time
 
 
 logger = dm.getLogger('user_manager')
@@ -11,8 +12,10 @@ logger = dm.getLogger('user_manager')
 class UserManager(object):
     def __init__(self, use_sso_auth=False) -> None:
         self._users_file = f'{Path.home()}/.{__appname__}/users.json'
+        self._users_cookie_file = f'{Path.home()}/.{__appname__}/users_cookie.json'
         self._users = self.read_users_from_file()
-        self._sso_auth = None
+        self._cookies = self.read_cookies_from_file()
+        self._sso_auth = None  # 初始化为None，只有在使用sso_auth时才会初始化
         self.use_sso_auth = use_sso_auth
 
     @property
@@ -32,17 +35,40 @@ class UserManager(object):
             with open(self._users_file, 'r') as f:
                 return json.load(f)
             
+    def read_cookies_from_file(self):
+        file_path = self._users_cookie_file
+        if not os.path.exists(file_path):   
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            empty_dict = dict()
+            self.save_file(file_path, empty_dict)
+            return empty_dict
+        else:
+            with open(file_path, 'r') as f:
+                return json.load(f)
+            
     def save_users_to_file(self, users):
         with open(self._users_file, 'w') as f:
             json.dump(users, f, indent=4)
+            
+    def save_file(self, file_path, data):
+        with open(file_path, 'w') as f:
+            json.dump(data, f, indent=4)
 
     @property
     def users(self):
         return self._users
     
-    def add_user(self, user, password, **kwargs):
+    @property
+    def cookies(self):
+        return self._cookies
+    
+    def get_user_info(self, user):
+        return self.users[user]
+    
+    def add_user(self, user, password=None, **kwargs):
         one_user = dict()
         one_user['password'] = password
+        one_user['auth_type'] = kwargs.get('auth_type', 'local')
         one_user.update(kwargs)
         self._users[user] = one_user
         # TODO: 保存到文件中
@@ -53,25 +79,69 @@ class UserManager(object):
 
     def verify_user(self, user, password, **kwargs):
         logger.info(f'Try local auth. all users: {self._users}')
+        use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
+
         if user in self._users.keys():
-            is_ok = self._users[user]['password'] == password
-            if is_ok:
-                return True
+            if self._users[user]['auth_type'] == 'sso' and use_sso_auth:
+                return self.sso_verify_user(user, password, **kwargs)
             else:
-                pass
+                is_ok = self._users[user]['password'] == password
+                if is_ok:
+                    return True
+                else:
+                    pass
         else:
             pass
-        
-        logger.info(f'Locak auth failed, try sso auth.')
-        use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
+
+        logger.info(f'Local auth failed, try sso auth.')
         if use_sso_auth:
-            ret = self.sso_auth.verify_user(user, password)
-            if ret:
-                # logger.info(f'{user} ssoauth verify user success!')
-                return True
-            else:
-                # logger.info(f'{user} ssoauth verify user failed!')
-                return False
+            return self.sso_verify_user(user, password, **kwargs)
+        return False
+
+    def sso_verify_user(self, user, password, **kwargs):
+        ret = self.sso_auth.verify_user(user, password)
+        logger.debug(f'SSO auth result: {ret}')
+        if ret:
+            # logger.info(f'{user} ssoauth verify user success!')
+            # 在本地保存用户信息，下次直接使用本地验证
+            if user not in self._users.keys():
+                self.add_user(user, password, auth_type='sso')
+            return True
+        else:
+            # logger.info(f'{user} ssoauth verify user failed!')
+            return False
     
     def is_exist(self, user):
         return user in self._users.keys()
+    
+    def get_cookie(self, user):
+        return self._cookies.get(user, None)
+    
+    def write_cookie(self, user, **kwargs):
+        if user not in self._users.keys():
+            raise Exception(f'User {user} not exist!')
+        if user not in self._cookies.keys():
+            self._cookies[user] = dict()
+        self._cookies[user].update(kwargs)
+        logger.debug(f'Write cookie for user {user}: {self._cookies[user]}')
+        self.save_file(self._users_cookie_file, self._cookies)
+
+    def save_history(self, user, convo_id, one_entry):
+        # logger.debug(f'Save history for user {user}: {one_entry}')
+        if user not in self._users.keys():
+            pass
+        if user not in self._cookies.keys():
+            self._cookies[user] = dict()
+        if 'history_convos' not in self._cookies[user].keys():
+            # print('history_convos not in cookies')
+            self._cookies[user]['history_convos'] = dict()
+        if convo_id not in self._cookies[user]['history_convos'].keys():
+            # print('convo_id not in cookies')
+            self._cookies[user]['history_convos'][convo_id] = list()
+        # self._cookies[user]['history'].append(one_entry)
+        # print(self._cookies[user]['history_convos'][convo_id])
+        one_entry['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        self._cookies[user]['history_convos'][convo_id].append(one_entry)
+        self.save_file(self._users_cookie_file, self._cookies)
+        
+        

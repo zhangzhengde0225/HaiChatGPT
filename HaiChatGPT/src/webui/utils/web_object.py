@@ -18,36 +18,6 @@ if not os.path.exists(logg_dir):
     os.makedirs(logg_dir)
 save_path = f'{logg_dir}/webui.log'
 handler = logging.FileHandler(save_path)
-# handler.setLevel(logging.DEBUG)
-# app.logger.addHandler(handler)
-
-# def getLogger(name=None, **kwargs):
-
-#     name = name if name else 'root'
-#     name_lenth = kwargs.get('name_lenth', 12)
-#     name = f'{name:<{name_lenth}}'
-#     logger = logging.getLogger(name)
-#     # level = kwargs.get('level', LOGGING_LEVEL)
-#     # level = kwargs.get('level', logging.DEBUG)
-#     level = kwargs.get('level', logging.INFO)
-#     format_str = f"\033[1;35m[%(asctime)s]\033[0m \033[1;32m[%(name)s]\033[0m " \
-#                  f"\033[1;36m[%(levelname)s]:\033[0m %(message)s"
-#     logging.basicConfig(level=level,
-#                         format=format_str,
-#                         # datefmt='%d %b %Y %H:%M:%S'
-#                         )
-#     logg_dir = f'{Path.home()}/.logs/haichatgpt/{Path(os.getcwd()).name}'
-#     if not os.path.exists(logg_dir):
-#         os.makedirs(logg_dir)
-#     fh = logging.FileHandler(f'{logg_dir}/{Path(os.getcwd()).name}.log')
-#     fh.setLevel(level=level)
-#     # ch = logging.StreamHandler()
-#     # ch.setLevel(level=level)
-#     fh.setFormatter(logging.Formatter(format_str))
-#     # ch.setFormatter(logging.Formatter(format_str))
-#     logger.addHandler(fh)
-#     # logger.addHandler(ch)
-#     return logger
 
 logger = dm.getLogger('web_object')
 
@@ -55,57 +25,53 @@ class WebObject(object):
     """
     与web对象交互，强绑定
     """
-    def __init__(self) -> None:
+    def __init__(self, **kwargs) -> None:
         self._stream = True
         """
-        为适应不同ip的请求，不同的ip需要不同的chatbot
+        为适应不同username的请求，不同的username需要不同的chatbot
         """
-        self.chatbots = {}  # key: ip, value: chatbot
+        self.chatbots = dict()  # key: username, value: chatbot
         self.query_count = 0
+        self.user_mgr = kwargs.get('user_mgr', None)
+        logger.debug(f'WebObject: user_mgr: {self.user_mgr}')
 
-        self.uninstantiated_chatbot = FakeChatGPT
+        self.uninstantiated_chatbot = FakeChatGPT  # default bot
         self.params_for_instantiation = {}
-
     
-    def get_bot_by_ip(self, ip, create_new=True):
-        if ip not in self.chatbots:
-            if create_new:
+    def get_bot_by_username(self, username, create_if_no_exist=True):
+        if username not in self.chatbots:
+            if create_if_no_exist:
                 chatbot = self.create_new_chatbot()
-                self.chatbots[ip] = chatbot
+                self.chatbots[username] = chatbot
                 return chatbot
             else:
                 return None
         else:
-            chatbot = self.chatbots[ip]
+            chatbot = self.chatbots[username]
             return chatbot
 
-    def delete_bot_by_ip(self, ip):
-        if ip in self.chatbots:
-            del self.chatbots[ip]
-
-    def has_new_pair(self, ip):
-        if ip not in self.chatbots:
-            # raise ValueError(f'ip: {ip} not in chatbots')
-            return False
+    def delete_convo_and_save(self, username, convo_id = 'default', **kwargs):
+        if username not in self.chatbots:
+            return
         else:
-            chatbot = self.chatbots[ip]
-            return chatbot.has_new_pair
+            chatbot = self.chatbots[username]
+            one_convo = chatbot.conversation.get(convo_id, None)
+            if one_convo is None:
+                return
+            else:
+                for i in range(len(one_convo)-1):
+                    entry = one_convo[i+1]  # 不要系统的第一句
+                    self.user_mgr.save_history(username, convo_id, entry)
+                chatbot.reset(convo_id=convo_id, **kwargs)
 
-    def get_generator(self, ip, question):
-        if ip not in self.chatbots:
-            # raise ValueError(f'ip: {ip} not in chatbots')
-            return []
-        else:
-            chatbot = self.chatbots[ip]
-            generator = chatbot.query_stream(question)
-            return generator
+            
 
-    def pop_qa_pairs(self, ip):
+    def pop_qa_pairs(self, username):
         """不清空，知识将has_new_pair设置为False"""
-        if ip not in self.chatbots:
+        if username not in self.chatbots:
             return []
         else:
-            chatbot = self.chatbots[ip]
+            chatbot = self.chatbots[username]
             qa_pairs = chatbot.qa_pairs
             chatbot.has_new_pair = False
             return qa_pairs
@@ -114,46 +80,62 @@ class WebObject(object):
         chatbot = self.uninstantiated_chatbot(
             **self.params_for_instantiation
         )
-        # chatbot = HChatBot()
-        # chatbot = FakeChatGPT()
         return chatbot
 
-    def query(self, ip, text):
+    def query(self, username, text):
         """
-        text: request txt.
+        根据用户名获取bot，然后query_stream, 返回就保存在bot.stream_buffer中
         """
-        chatbot = self.get_bot_by_ip(ip, create_new=True)
+        chatbot = self.get_bot_by_username(username, create_if_no_exist=True)
 
-        if not self._stream:
-            answer = chatbot.query(text)
-            chatbot.append_qa(text, answer)
-            chatbot.has_new_pair = True
-            return redirect(url_for("index", result=answer))
+        """
+        用户设置的缓存信息
+        """
+        user_cookie = self.user_mgr.get_cookie(username)
+        if user_cookie is not None:
+            # 修改chatbot的参数
+            self.set_bot_params(chatbot, **user_cookie)
+        
+        logger.debug(f'Username: {username}, user_cookie: {user_cookie}')
+
+        stream = chatbot.query_stream(text, user_mgr=self.user_mgr, user_name=username)
+        chatbot._stream_buffer = stream
+        return stream
+    
+    def set_bot_params(self, chatbot, **params):
+        for k, v in params.items():
+            if hasattr(chatbot, k):  # 存在
+                if chatbot.__getattribute__(k) != v:  # 不等于
+                    chatbot.__setattr__(k, v)
+
+    def get_stream_buffer(self, username):
+        chatbot = self.get_bot_by_username(username, create_if_no_exist=False)
+        if chatbot is None:
+            # logger.debug('exist bots:', self.chatbots)
+            logger.debug(f'username: {username} not in chatbots')
+            return None
+            # raise ValueError(f'username: {username} not in chatbots')
         else:
-            generator = chatbot.query_stream(text)
-            
-            return redirect(url_for("index", result='query_stream', lastq=text))
-            # sys.stdout.flush()
-            # full_answer = ''
-            # for data in generator:
-            #     # logger.info(f'result: {ret}')
-            #     print(data)
-            #     sys.stdout.flush()
-            #     # yield self.render(data)
-            #     full_answer += data
-            # chatbot.append_qa(text, full_answer)
-            # print('webo generator end.')
-            # # return Response(generator(), mimetype="text/event-stream")
-            # return redirect(url_for("index", result=full_answer))
+            return chatbot.stream_buffer
+        
+    def get_history(self, username, convo_id='default'):
+        chatbot = self.get_bot_by_username(username, create_if_no_exist=False)
+        if chatbot is None:
+            logger.debug(f'username: {username} not in chatbots')
+            return None
+            # raise ValueError(f'username: {username} not in chatbots')
+        else:
+            return chatbot.get_history(convo_id=convo_id, username=username, user_mgr=self.user_mgr)
+
 
     def render(self, ret, **kwargs):
         return redirect(url_for("index", result=ret))
 
-    def write_log(self, ip, text, query_once='query once', answer=''):
+    def write_log(self, username, text, query_once='query once', answer=''):
         self.query_count += 1
         timet = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         # query_once = 'query once' if query_once else ''
-        context = f'[{timet}] {query_once}. ip: {ip}, text: {text}, count: {self.query_count}'
+        context = f'[{timet}] {query_once}. username: {username}, text: {text}, count: {self.query_count}'
         context += f', answer: {answer}' if answer else ''
         logger.info(context)
         save_file = f'{logg_dir}/query.log'

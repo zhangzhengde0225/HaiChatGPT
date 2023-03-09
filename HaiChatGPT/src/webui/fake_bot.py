@@ -1,6 +1,8 @@
 
 import time
+import damei as dm
 
+logger = dm.get_logger('fake_bot')
 
 class FakeChatGPT(object):
     def __init__(self, **kwargs) -> None:
@@ -16,7 +18,13 @@ class FakeChatGPT(object):
         self.last_question = None
         self.last_answer = None
 
-        print('FakeChatGPT init', 'max_qa:', self.max_qa)   
+        self._stream_buffer = None
+
+        print('FakeChatGPT init', 'max_qa:', self.max_qa)  
+
+    @property
+    def stream_buffer(self):
+        return self._stream_buffer 
     
     def append_qa(self, text, answer):
         if len(self.qa_pairs) >= self.max_qa:
@@ -49,19 +57,22 @@ class FakeChatGPT(object):
 
     def query_stream(self, text):
         self.last_answer = ''
-        def generator():
-            data = self.get_answer(text)
-            for i, word in enumerate(data):
-                x = data[:i+1]
-                x = x.replace('\n', '<|im_br|>')
-                print(x)
-                yield f'data: {x}\n\n'
-                time.sleep(0.002)
-                self.last_answer += x
-                # yield f'data: {data}\n\n'
-        generator = generator()
+        logger.debug(f'query_stream: {text}')
+        text = self.get_answer(text)
         self.count += 1
-        return generator
+        return self.text2stream(text)
+        
+    def text2stream(self, text, time_interval=0.005):
+        """将text转为generator"""
+        for i, line in enumerate(text):
+            data = text[:i+1]
+            data = data.replace("\n", "<|im_br|>")
+            yield f'data: {data}\n\n'
+            time.sleep(time_interval)
+        yield f'data: <|im_end|>\n\n'
+        # print('Set stream_buffer to None.')
+        logger.debug('Set stream_buffer to None.')
+        self._stream_buffer = None  # 这段代码在generator被遍历后才会运行，清空缓冲区
     
     def ask(self, text):
         answer = self.get_answer(text)

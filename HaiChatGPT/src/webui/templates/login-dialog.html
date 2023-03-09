@@ -10,12 +10,12 @@
     <div id="login-form">
       <form id="login-form">
         <div class="title">
-          <img src="{{ url_for('static', filename='ai.png') }}" class="icon" />
+          <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
           <div class="title">HaiChatGPT</div>
         </div>
-        <label for="username">用户名*:</label>
+        <label for="username">用户名或IHEP统一认证帐号</label>
         <input type="text" id="username" name="username" required><br>
-        <label for="password">密码*:</label>
+        <label for="password">密码</label>
         <input type="password" id="password" name="password"><br>
         <button type="submit">登录</button>
         <button type="button" id="register-button" formnovalidate>注册</button> <!-- 添加注册按钮 -->
@@ -27,7 +27,7 @@
     <div id="register-form-div" style="display: none">
       <form id="register-form" style="display: block">
         <div class="title">
-          <img src="{{ url_for('static', filename='ai.png') }}" class="icon" />
+          <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
           <div class="title">HaiChatGPT</div>
         </div>
         <label for="name">用户名:</label>

@@ -28,7 +28,6 @@ if __name__ == '__main__':
     else:
         os.environ['LOGGING_LEVEL'] = str(logging.INFO)
 
-
     from HaiChatGPT.src.runner import Runner
     runner = Runner(opt)
     runner.run_webui()

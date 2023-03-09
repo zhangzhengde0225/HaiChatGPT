@@ -50,9 +50,11 @@ class SSOAuth(object):
 
     @property
     def ldap_server(self):
+        dlap_server = self.config['ldap_server']
+        print(f'ldap_server: {dlap_server}')
         if self.config['ldap_server'] in ['ldap://', '']:
             # 输入ldap服务器地址
-            server = input('ldap server: \nldap://')
+            server = input('Please input ldap server: \n  ldap://')
             self.config['ldap_server'] = f'ldap://{server}'
             self.save_config(self.config)
         return self.config['ldap_server']
@@ -61,7 +63,7 @@ class SSOAuth(object):
     def admin_name(self):
         if self.config['admin_name'] in ['',]:
             # 输入ldap管理员用户名
-            name = input('ldap admin name: \n')
+            name = input('Please input admin name: \n  ')
             self.config['admin_name'] = name
             self.save_config(self.config)
         return self.config['admin_name']
@@ -70,7 +72,7 @@ class SSOAuth(object):
     def admin_password(self):
         if self.config['admin_password'] in ['',]:
             # 输入ldap管理员密码
-            passwd = input('ldap admin password: \n')
+            passwd = input('Please Input admin password: \n  ')
             self.config['admin_password'] = passwd
             self.save_config(self.config)
         return self.config['admin_password']
@@ -78,18 +80,30 @@ class SSOAuth(object):
     def load_config(self):
         if not os.path.exists(self.config_file):
             os.makedirs(os.path.dirname(self.config_file), exist_ok=True)
-            empty_config = {
-                'ldap_server': 'ldap://',
-                'admin_name': '',
-                'admin_password': '',
-                },
+            empty_config = dict()
+            empty_config['ldap_server'] = 'ldap://'
+            empty_config['admin_name'] = ''
+            empty_config['admin_password'] = ''
             self.save_config(empty_config)
             self.load_config()
         with open(self.config_file, 'r', encoding='utf-8') as f:
             config = json.load(f)
+            
+        print(f'config: {config}')
         return config
     
     def save_config(self, config):
         with open(self.config_file, 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=4, ensure_ascii=False)
 
+
+if __name__ == '__main__':
+    ssoauth = SSOAuth()
+    # 快速解析参数
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', '--username', type=str, default='zhangxu')
+    parser.add_argument('-p', '--password', type=str, default='123456')
+    args = parser.parse_args()
+    ret = ssoauth.verify_user(args.username, args.password)
+    print(ret)

@@ -164,6 +164,7 @@ background-color: #555555;
   background-color: #eafcf0;
   padding: 10px;
   margin: 10px;
+  overflow: auto;
 }
 /* 
 .last_answer2 {
