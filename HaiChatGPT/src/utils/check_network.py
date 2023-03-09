@@ -56,6 +56,7 @@ def try_request(share_value, api_key, proxies=None):
         )
         if reponse.status_code == 200:
             share_value.value = reponse.status_code
+            break
         else:
             share_value.value = reponse.status_code
         # return reponse
