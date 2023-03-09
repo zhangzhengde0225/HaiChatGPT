@@ -47,6 +47,7 @@ def try_request(share_value, api_key, proxies=None):
     """尝试请求,如果失败则尝试使用代理"""
     # headers = {"Authorization": f"Bearer {api_key}"}
     for i in range(5):
+        logger.debug(f"try request {i}")
         reponse = requests.get(
             # "https://api.openai.com/v1/engines",
             "https://www.google.com",
