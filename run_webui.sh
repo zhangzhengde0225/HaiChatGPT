@@ -1,1 +1,1 @@
-python flask_run.py --use-api-key --proxy http://127.0.0.1:1095 --debug --use-sso-auth
+python flask_run.py --use-api-key --proxy http://127.0.0.1:1080 --debug --use-sso-auth --port 5005
