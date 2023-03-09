@@ -46,11 +46,13 @@ def check_network(chatbot, timeout: int = 5):
 def try_request(share_value, api_key, proxies=None):
     """尝试请求,如果失败则尝试使用代理"""
     # headers = {"Authorization": f"Bearer {api_key}"}
+    
     reponse = requests.get(
         # "https://api.openai.com/v1/engines",
         "https://www.google.com",
         proxies=proxies,
         # headers=headers,
+        try_count=3,
     )
     if reponse.status_code == 200:
         share_value.value = reponse.status_code
