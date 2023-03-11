@@ -62,31 +62,34 @@ class HChatBot(Chatbot):
     
     def get_history(self, convo_id: str = 'default', **kwargs):
         one_convo = self.conversation.get(convo_id, None)  # 读出来是一个list
-        self.truncate_convo_and_save(convo_id, **kwargs)
+        self.truncate_convo_and_save(convo_id, **kwargs)  # 根据max_history截断对话
         if one_convo is None:
             return None
         history = []
-        tmp = [None, None]
-        logger.debug(f'one_convo: {one_convo}')
+        tmp = [None, None]  # 用于存储user和assistant的内容
+        # logger.debug(f'one_convo: {one_convo}')
         for i, data in enumerate(one_convo):
             role = data['role']
             content = data['content']
-            logger.debug(f'role: {role}, content: {content}')
+            # logger.debug(f'role: {role}, content: {content}')
             if role == 'system':
                 continue
-            if role == 'user':
+            if role == 'user':  # 遍历到user，找到对应的assistant
                 """每个user找到对应的assistant，然后将user和assistant的内容拼接起来"""
                 try:
                     next_data = one_convo[i+1]
                 except:
-                    tmp[0] = content
-                    tmp[1] = 'Answer not saved'
+                    tmp[0] = content  # user的content，即问题
+                    tmp[1] = 'Answer not saved. without nextdata'
+                    history.append(copy.deepcopy(tmp))
+                    tmp = [None, None]
                     continue
                 next_role = next_data['role']
                 if next_role == 'user':
                     tmp[0] = content
-                    tmp[1] = 'Answer not saved'
+                    tmp[1] = 'Answer not saved. next role is user'
                     history.append(copy.deepcopy(tmp))
+                    tmp = [None, None]
                     continue
                 else:
                     tmp[0] = content
@@ -94,11 +97,17 @@ class HChatBot(Chatbot):
                     history.append(copy.deepcopy(tmp))
                     tmp = [None, None]
                     continue
-            else:
+            else:  # 便利到assistant的内容，直接跳过
                 continue
         if history == []:
             return None
-        history = '<|im_br|>'.join([f'{q}<|im_sep|>{a}' for q, a in history])
+        # 需要把所有的内容中的\n替换成<|im_br|>
+        for i, (q, a) in enumerate(history):
+            q = q.replace("\n", "<|im_br|>")
+            a = a.replace("\n", "<|im_br|>")
+            history[i] = (q, a)
+        # 再把所有的内容拼接起来，q和a用<|im_sep|>分割，两个对话之间用bbbr分割
+        history = '<|im_bbbr|>'.join([f'{q}<|im_sep|>{a}' for q, a in history])
         return history
 
     def set_api_key(self, api_key: str) -> None:
@@ -142,9 +151,10 @@ class HChatBot(Chatbot):
         """包含错误处理的query_stream"""
         try:
             if query.startswith('sysc') or query.startswith('SYSC'):
+                # logger.debug(f'command: {query}')
                 return self._handle_commands(query, **kwargs)
             else:
-                # raise KeyError('Rate limit reachedssss')
+                # raise KeyError('Rate lim one_convot reachedssss')
                 return self._query_stream(query, **kwargs)
         except Exception as e:
             error_info = self.error_handler.handle(e)

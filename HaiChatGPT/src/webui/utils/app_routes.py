@@ -37,6 +37,7 @@ def stream(**kwargs):  # 即获取流式的last_answer
     user = general.get_user_from_session()
     logger.debug(f'收到stream请求: Method: {request.method}. User: {user}. Kwargs: {kwargs}')
     stream_buffer = webo.get_stream_buffer(user)
+    # logger.debug(f'stream_buffer: {stream_buffer}')
     if stream_buffer is None:
         ret = f"data: <|im_end|>\n\n"
     else:
@@ -45,6 +46,9 @@ def stream(**kwargs):  # 即获取流式的last_answer
 
 @app.route('/qa_pairs')  # question and 
 def qa_pairs():
+    # 
+    # return Response(f"data: <|im_end|>\n\n", mimetype="text/event-stream")
+
     user = general.get_user_from_session()
     chatbot = webo.get_bot_by_username(user, create_if_no_exist=False)
     if chatbot is None:
@@ -64,5 +68,5 @@ def qa_pairs():
         chatbot.show_history = False
 
     ret = f"data: {data}\n\n"
-    logger.debug(f'返回qa_pairs响应: {ret}')
+    # logger.debug(f'返回qa_pairs响应: {ret}')
     return Response(ret, mimetype="text/event-stream")

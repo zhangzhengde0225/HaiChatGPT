@@ -52,20 +52,16 @@ def login_dialog():
 @app.route('/ip_addr')
 def ip_addr():
     # print(f'收到ip请求， {request}')
+    logger.debug(f'收到ip请求， {request}')
     ret = f"data: {request.remote_addr}\n\n"
-    # print(f'返回ip响应: {ret}')
+    print(f'返回ip响应: {ret}')
     return Response(ret, mimetype="text/event-stream")
 
 
 @app.route('/clear', methods=['GET', 'POST'])
 def clear():
-    # ip = request.remote_addr
-    # ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    # chatbot = webo.get_bot_by_ip(ip, create_new=False)
-    # print(f'收到clear请求， {request}, ip: {ip}')
     user = general.get_user_from_session()
-    # 删除chatbot
-    webo.delete_convo_and_save(user)
+    webo.delete_convo_and_save(user)  # 删除chatbot
     return jsonify({'success': True, 'message': '清空成功'})
 
 @app.route('/login', methods=['POST'])
@@ -74,20 +70,25 @@ def login():
     logger.debug(f'login请求的data为: {data}')
     username = data.get('username')
     password = data.get('password')
-    if user_mgr.verify_user(username, password):
+    ok, msg = user_mgr.verify_user(username, password)
+    if ok:
         session['username'] = username
         return jsonify({'success': True, 'message': '登录成功', 'username': session['username']})
     else:
-        return {'success': False, 'message': '用户名或密码错误'}
+        return {'success': False, 'message': msg}
         
     
 @app.route('/logout', methods=['POST'])
 def logout():
-    user_name = request.get_json().get('username')
+    # user_name = request.get_json().get('username')
+    user_name = general.get_user_from_session(msg='logout')
     if user_name is None:
-        return {'success': False, 'message': '用户未登录'}
-    session['username'] = None
-    return {'success': True, 'message': f'{user_name} 登出成功'}
+        return jsonify({'success': False, 'message': '用户未登录'})
+    # session['username'] = None
+    session.pop('username', None)
+    ret = {'success': True, 'message': f'{user_name} 登出成功'}
+    logger.debug(f'logout返回: {ret}')
+    return jsonify(ret)
 
 @app.route('/register', methods=['POST'])
 def register():

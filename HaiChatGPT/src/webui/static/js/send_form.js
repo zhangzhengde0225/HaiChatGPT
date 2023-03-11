@@ -3,6 +3,7 @@
 // 获取DOM元素
 
 const sendForm = document.getElementById('send-form');
+const prompt_text = document.getElementById('prompt');
 const clearButton = document.getElementById('clear-button');
 const last_question_div = document.getElementById('last_question');
 const last_question_content = document.getElementById('last_question_content');
@@ -10,20 +11,40 @@ const last_answer_div = document.getElementById('last_answer');
 const last_answer_content = document.getElementById('markdown_content');
 
 console.log('send_form.js loaded');
+prompt_text.focus();
+
+// 事件监听
+prompt_text.addEventListener('keydown', function(event) {
+    // 按下shift+enter键，输入换行
+    if (event.key === 'Enter' && event.shiftKey) {
+        event.preventDefault();
+        this.value += '\n';
+    };
+    // 按下ctrl+enter键，输入换行
+    if (event.key === 'Enter' && event.ctrlKey) {
+        event.preventDefault();
+        this.value += '\n';
+    };
+    // 按下enter键，发送消息
+    if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey) {
+        event.preventDefault();
+        document.getElementById('send-button').click();
+    };
+});
 
 
-// 处理发送表单提交事件
+// 按enter发送消息，按shift+enter换行
 sendForm.addEventListener('submit', (event) => {
     event.preventDefault(); // 阻止表单提交
     // 如果点击send按钮，就执行下面的函数
     if (event.submitter.id === 'send-button') {
         console.log('send pressed');
-        submit_promt_form(event);
+        submit_promt_form(event);  // 提交prmpt
     };
     // 如果点击enter键，就执行下面的函数
     if (event.key === 'Enter') {
         console.log('enter pressed');
-        submit_promt_form(event);
+        submit_promt_form(event);  // 也是提交prompt
     };
     // 点击clear按钮，就执行下面的函数
     if (event.submitter.id === 'clear-button') {
@@ -33,13 +54,6 @@ sendForm.addEventListener('submit', (event) => {
     };
 });
 
-// 按enter也可以发送  # 有问题
-// sendForm.addEventListener('keydown', (event) => {
-//     if (event.key === 'Enter') {
-//         console.log('enter pressed');
-//         submit_promt_form(event);
-//     }
-//     }); 
 
 function submit_promt_form(event) {
     const messageValue = event.target.elements.prompt.value;

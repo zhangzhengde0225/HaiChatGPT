@@ -96,7 +96,9 @@ class WebObject(object):
             # 修改chatbot的参数
             self.set_bot_params(chatbot, **user_cookie)
         
-        logger.debug(f'Username: {username}, user_cookie: {user_cookie}')
+        # logger.debug(f'Username: {username}, user_cookie: {user_cookie}')
+        logger.info(f'webo chatbots: {len(self.chatbots)} {self.chatbots.keys()}')
+
 
         stream = chatbot.query_stream(text, user_mgr=self.user_mgr, user_name=username)
         chatbot._stream_buffer = stream
@@ -126,8 +128,6 @@ class WebObject(object):
             # raise ValueError(f'username: {username} not in chatbots')
         else:
             return chatbot.get_history(convo_id=convo_id, username=username, user_mgr=self.user_mgr)
-
-
     def render(self, ret, **kwargs):
         return redirect(url_for("index", result=ret))
 
