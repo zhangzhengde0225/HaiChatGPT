@@ -151,6 +151,24 @@ background-color: #555555;
   margin: 10px;
 }
 
+
+.question_text {
+  display: flex;
+  flex-direction: row;
+  background-color: #6989cf;
+  padding: 0px;
+  margin: 0px;
+}
+
+.answer_text {
+  display: flex;
+  flex-direction: row;
+  background-color: #6dcf9c;
+  padding: 0px;
+  margin: 0px;
+}
+
+
 .last_question {
   display: flex;
   flex-direction: row;

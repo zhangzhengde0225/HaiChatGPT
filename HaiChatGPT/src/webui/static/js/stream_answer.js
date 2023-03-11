@@ -9,7 +9,7 @@ function open_a_stream() {
     const md = window.markdownit();
     // hljs.initHighlighting();  // 代码高亮的库
     hljs.highlightAll();  // 代码高亮的库
-
+    
     source.onmessage = function(event) {
     if (event.data === "<|im_end|>") {
         source.close();
@@ -28,11 +28,9 @@ function open_a_stream() {
     const parent_selector = document.getElementById('markdown_content');
     add_copy_button_to_pre_code(parent_selector);  // 为每个代码块添加复制按钮
     set_all_code_classname(parent_selector);  // 为每个代码块添加复制按钮
-
-    
-
     document.getElementById("output").scrollTop = document.getElementById("output").scrollHeight;
-};
+    };
+    
 };
 
 // 该脚本用来监听请求ip，显示在页面上，ip用于标识用户

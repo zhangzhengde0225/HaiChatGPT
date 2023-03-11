@@ -52,9 +52,9 @@ def login_dialog():
 @app.route('/ip_addr')
 def ip_addr():
     # print(f'收到ip请求， {request}')
-    logger.debug(f'收到ip请求， {request}')
+    # logger.debug(f'收到ip请求， {request}')
     ret = f"data: {request.remote_addr}\n\n"
-    print(f'返回ip响应: {ret}')
+    # print(f'返回ip响应: {ret}')
     return Response(ret, mimetype="text/event-stream")
 
 

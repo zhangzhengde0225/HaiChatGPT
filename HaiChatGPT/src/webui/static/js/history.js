@@ -44,6 +44,7 @@ function open_the_history() {
         // qustion_div.innerHTML = qa_pair[0];
         // answer_div.innerHTML = qa_pair[1];
         var q_html = qa_pair[0].replace(/<\|im_br\|>/g, '\n');
+        // 两个\n\n会被转换成一个\n
         q_html = md.render(q_html);
         var a_html = qa_pair[1].replace(/<\|im_br\|>/g, '\n');
         a_html = md.render(a_html);
