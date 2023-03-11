@@ -181,7 +181,7 @@ class HChatBot(Chatbot):
             self.reset(convo_id=convo_id)
             return self.t2s("对话已重置")
         elif command in ['config', '配置']:
-            return self.t2s(self.get_config())
+            return self.t2s(self.get_config(**kwargs))
         elif command in ['rollback', '回滚']:
             self.rollback(int(args[0]), convo_id=convo_id)
             info = f"Rolled back by {args[0]} messages"
@@ -277,8 +277,10 @@ class HChatBot(Chatbot):
         info += f"表示人造世界里神圣术指令的开头：`System Call`\n\n"
         return info
 
-    def get_config(self, convo_id='default'):
+    def get_config(self, convo_id='default', **kwargs):
         api_key = f'{self.api_key[:4]}****{self.api_key[-4:]}'
+        user_name = kwargs.pop('user_name', None)
+
         config = "HaiChatGPT Configuration:\n"
         config += f"""
     Messages:         {len(self.conversation[convo_id])} / {self.max_tokens}
@@ -288,8 +290,10 @@ class HChatBot(Chatbot):
     Top_p:            {self.top_p}
     Reply_count:      {self.reply_count}
     System_prompt:    {self.system_prompt}
-    Max_tokens:       {self.max_tokens}
-                        """
+    Max_tokens:       {self.max_tokens}"""
+        if user_name is not None:
+            config += f"""
+    Current_User:     {user_name}"""
     
         return config
         
