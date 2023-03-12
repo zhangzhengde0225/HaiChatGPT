@@ -7,21 +7,29 @@ const usernameLabel = document.getElementById('username-label');
 user_name = localStorage.getItem('username')
 // console.log(user_name); 
 
-if (localStorage.getItem('username') !== null) {
-  // 已登录
-  loginButton.style.display = 'none';
-  logoutButton.style.display = 'inline-block';
-  usernameLabel.style.display = 'inline-block';
-  usernameLabel.innerText = localStorage.getItem('username');
-} else {
-  // 未登录
-  loginButton.style.display = 'inline-block';
-  logoutButton.style.display = 'none';
-  usernameLabel.style.display = 'none';
-  usernameLabel.innerText = '';
+// 根据LocalStorage中的值显示是否登录
+function show_login_by_local_storage() {
+  local_user = localStorage.getItem('username');
+  if (local_user == 'public' || local_user == null || local_user == 'null') {
+    // 未登录
+    loginButton.style.display = 'inline-block';
+    logoutButton.style.display = 'none';
+    usernameLabel.style.display = 'none';
+    usernameLabel.innerText = '';
+  } else {
+    // 已登录
+    // console.log('sidebar.js 已登录', local_user);
+    usernameLabel.innerText = localStorage.getItem('username');
+    loginButton.style.display = 'none';
+    logoutButton.style.display = 'inline-block';
+    usernameLabel.style.display = 'inline-block';
+  }
 }
 
-// 监听 登录按钮 显示登录对话框
+show_login_by_local_storage();
+
+
+// 点击登录按钮 显示登录对话框
 loginButton.addEventListener('click', () => {
     window.location.href = 'login-dialog.html';
   });

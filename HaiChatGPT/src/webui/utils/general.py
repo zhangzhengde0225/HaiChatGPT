@@ -12,12 +12,12 @@ def get_user_from_session(**kwargs):
     msg = kwargs.get('msg', '')
     session_id = request.cookies.get('session', None)
     if session_id:
-        username = session.get('username', None)
-        logger.debug(f'Session_id: {session_id[:4]}**{session_id[-4::]}. session: {session}. {msg}')
+        username = session.get('username', None)  # 从服务器端读取
+        # logger.debug(f'Session_id: {session_id[:4]}**{session_id[-4::]}. session: {session}. {msg}')
     else:
         username = None
     username = 'public' if username is None else username
-    logger.debug(f'Username: {username}')
+    # logger.debug(f'Username: {username}')
     return username
 
 

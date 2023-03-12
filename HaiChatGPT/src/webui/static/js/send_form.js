@@ -13,7 +13,7 @@ const last_answer_content = document.getElementById('markdown_content');
 console.log('send_form.js loaded');
 prompt_text.focus();
 
-// 事件监听
+// 监听按下Enter键发送表单
 prompt_text.addEventListener('keydown', function(event) {
     // 按下shift+enter键，输入换行
     if (event.key === 'Enter' && event.shiftKey) {

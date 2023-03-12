@@ -1,61 +1,50 @@
 
-// var vh = window.innerHeight * 0.01;
-// document.documentElement.style.setProperty('--vh', vh + 'px');
+const username_label = document.getElementById('username-label');
 
+console.log('main.js loaded')
 
-// const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-// if (isMobile) {
-//   // 手机设备
-//   console.log('mobile device');
-//   // document.getElementById('sidebar').style.display = 'none';
-// } else {
-//   // 电脑设备
-//   console.log('pc device');
-//   // document.getElementById('sidebar').style.display = 'flex';
-// }
+window.onload = function() {
+    console.log('window.onload')
 
-// var element = document.getElementById("sidebar");
-// var elementHeight = element.getBoundingClientRect().height;
-// console.log('sidebar height', elementHeight);
+    // 从服务器获取当前用户
+    fetch('/get_username', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 获取当前用户成功
+            const username = data.username;
+            // localStorage.setItem('username', username);
+            // alert(`登录成功，欢迎您，${username}！`);
+            console.log('欢迎回来', username);
+            // 如果用户为public或者Null, 则显示登录按钮
+            local_user = localStorage.getItem('username');
+            if (username == 'public' || username == null) {
+                localStorage.setItem('username', null);
+            } else if (username !== local_user) {
+                // alert(`本地用户${local_user}切换为服务器用户${username}！`);
+                // console.log(`本地用户${local_user}切换为服务器用户${username}！`)
+                localStorage.setItem('username', username);
+            } else {
+                // console.log(`本地用户${local_user}与服务器用户${username}一致！`)
+            };
+            username_label.innerText = username;
+            show_login_by_local_storage();
+        } else {
+            // 获取当前用户失败，显示错误消息
+            const message = data.message;
+            alert(message);
+        }
+    }
+    )
+    .catch(error => {
+        console.error(error);
+    }
+    );
 
-// // 适应窗口尺寸
-// var screenWidth = window.innerWidth;
-// var screenHeight = window.innerHeight;
-// // var screenHeight = 
-// var viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-// var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+}
 
-// console.log('screenWidth', screenWidth);
-// console.log('screenHeight', screenHeight);
-// console.log('viewportWidth', viewportWidth);
-// console.log('viewportHeight', viewportHeight);
-
-
-// // document.getElementById('sidebar').style.height = viewportHeight + 'px';
-// // document.getElementById('sidebar').style.width = viewportWidth * 0.2 + 'px';
-// // document.getElementById('main').style.height = viewportHeight + 'px';
-// // document.getElementById('main').style.width = viewportHeight * 0.8 + 'px';
-
-
-// function toggleSidebar() {
-//     var screenWidth = window.innerWidth;
-//     var screenHeight = window.innerHeight;
-//     console.log(screenWidth, screenHeight);
-//     if (screenWidth < 600) {
-//       // 隐藏左侧栏
-//       // document.getElementById('sidebar').style.display = 'none';
-//       console.log('hide sidebar');
-      
-//     } else {
-//       // 显示左侧栏
-//       // document.getElementById('sidebar').style.display = 'flex';
-//       console.log('show sidebar');
-//     }
-//   }
-  
-//   // 页面加载时检测屏幕宽度并根据需要隐藏左侧栏
-//   // toggleSidebar();
-  
-//   // // 监听窗口大小改变事件，并重新检测屏幕宽度并根据需要切换左侧栏的状态
-//   // window.addEventListener('resize', toggleSidebar);
-  

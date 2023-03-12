@@ -119,6 +119,18 @@ class UserManager(object):
     def is_exist(self, user):
         return user in self._users.keys()
     
+    def is_admin(self, user):
+        if user not in self._users.keys():
+            return False
+        return self._users[user].get('is_admin', False)
+    
+    def is_plus(self, user):
+        if user not in self._users.keys():
+            return False
+        if self.is_admin(user):  # admin一定是plus
+            return True
+        return self._users[user].get('is_plus', False)
+    
     def get_cookie(self, user):
         return self._cookies.get(user, None)
     

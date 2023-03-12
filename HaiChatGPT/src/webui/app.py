@@ -8,17 +8,17 @@ from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response, stream_with_context
 from flask import session, jsonify
 
-
-
 logger = dm.get_logger('app')
 
 app = Flask(__name__)
-app.secret_key = 'my-secret-key'  # 设置Session密钥，用于加密Session数据
+app.secret_key = 'this_is_bxx_session_key'  # 设置Session密钥，用于加密Session数据
+
 
 from .utils.user_manager import UserManager
 user_mgr = UserManager()
 from .utils.web_object import WebObject
 webo = WebObject(user_mgr=user_mgr)
+
 
 
 from .utils.app_routes import *
@@ -32,7 +32,7 @@ def index():
     chatbot = webo.get_bot_by_username(user, create_if_no_exist=False)
 
     if request.method == "POST":
-        return render_template("index.html")
+        return render_template("index.html", username=user)
 
     elif request.method == "GET":
         if chatbot is not None:
@@ -40,7 +40,7 @@ def index():
             chatbot.show_history = True
             chatbot.show_last_question = True
 
-        return render_template("index.html")
+        return render_template("index.html", username=user)
     else:
         raise ValueError(f'unknown method: {request.method}')
     
@@ -73,6 +73,7 @@ def login():
     ok, msg = user_mgr.verify_user(username, password)
     if ok:
         session['username'] = username
+        # session['logged_users'] = session.get('logged_users', []) + [username]
         return jsonify({'success': True, 'message': '登录成功', 'username': session['username']})
     else:
         return {'success': False, 'message': msg}
@@ -105,6 +106,7 @@ def register():
         return jsonify({'success': True, 'message': '注册成功'})
 
 
+
 def run(**kwargs):
     # from gevent import pywsgi
     # from geventwebsocket.handler import WebSocketHandler
@@ -121,6 +123,7 @@ def run(**kwargs):
     port = kwargs.get('port', 5000)
     debug = kwargs.get('debug', False)
     app.run(host=host, port=port, debug=debug)
+    # socketio.run(app, host=host, port=port, debug=debug)
 
     os.chdir(work_dir)
 

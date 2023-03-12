@@ -74,7 +74,14 @@ def qa_pairs():
     return Response(ret, mimetype="text/event-stream")
 
 
+@app.route('/get_username', methods=['GET'])
+def get_username():
+    user = general.get_user_from_session()
+    # logger.debug(f'收到get_username请求: user: {user}')
+    return jsonify({'success': True, 'username': user})
+
 @app.route('/testxx', methods=['POST'])
 def testxx():
     data = request.get_json()
     logger.debug(f'收到test请求: {data}')
+
