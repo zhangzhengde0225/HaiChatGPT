@@ -64,8 +64,6 @@ class WebObject(object):
                     self.user_mgr.save_history(username, convo_id, entry)
                 chatbot.reset(convo_id=convo_id, **kwargs)
 
-            
-
     def pop_qa_pairs(self, username):
         """不清空，知识将has_new_pair设置为False"""
         if username not in self.chatbots:

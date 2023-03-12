@@ -9,14 +9,19 @@ function open_a_stream() {
     const md = window.markdownit();
     // hljs.initHighlighting();  // 代码高亮的库
     hljs.highlightAll();  // 代码高亮的库
-    
+    console.log('open_a_stream');
+
     source.onmessage = function(event) {
+    console.log(event);
+
     if (event.data === "<|im_end|>") {
         source.close();
         document.getElementById("send-button").disabled = false;  // 启用send按钮
         document.getElementById('prompt').focus();
         return
     }
+    console.log(event.data);
+
     document.getElementById("send-button").disabled = true;  // 禁用send按钮
     const markdownContent = document.getElementById('markdown_content');
     

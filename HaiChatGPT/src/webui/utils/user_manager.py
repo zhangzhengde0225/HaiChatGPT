@@ -83,14 +83,16 @@ class UserManager(object):
 
         if user in self._users.keys():
             auth_type = self._users[user].get('auth_type', 'local')
-            if auth_type == 'sso' and use_sso_auth:
-                return self.sso_verify_user(user, password, **kwargs)
+            is_ok = self._users[user]['password'] == password
+            if is_ok:
+                return True, ''
             else:
-                is_ok = self._users[user]['password'] == password
-                if is_ok:
-                    return True, ''
-                else:
-                    return False, '密码错误'
+                pass
+                # return False, '密码错误'
+                # if auth_type == 'sso' and use_sso_auth:
+                #     return self.sso_verify_user(user, password, **kwargs)
+        else:
+            pass
 
         logger.info(f'Local auth failed, try sso auth.')
         if use_sso_auth:

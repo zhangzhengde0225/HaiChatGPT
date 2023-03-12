@@ -87,6 +87,9 @@ function submit_promt_form(event) {
         last_answer_content.innerHTML = "正在等待...";
 
         open_the_history();
+        // 等待1秒，再执行后面的函数
+        // setTimeout(function() {
+        // }, 1000);
         open_a_stream();
         sendButton.disabled = false;  // 启用发送按钮
         } else {

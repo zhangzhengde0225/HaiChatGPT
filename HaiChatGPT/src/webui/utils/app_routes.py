@@ -42,6 +42,8 @@ def stream(**kwargs):  # 即获取流式的last_answer
         ret = f"data: <|im_end|>\n\n"
     else:
         ret = stream_buffer
+    logger.debug(f'ret: {ret}')
+    return Response(ret, mimetype="text/event-stream")
     return Response(stream_with_context(ret), mimetype="text/event-stream")
 
 @app.route('/qa_pairs')  # question and 
@@ -70,3 +72,9 @@ def qa_pairs():
     ret = f"data: {data}\n\n"
     # logger.debug(f'返回qa_pairs响应: {ret}')
     return Response(ret, mimetype="text/event-stream")
+
+
+@app.route('/testxx', methods=['POST'])
+def testxx():
+    data = request.get_json()
+    logger.debug(f'收到test请求: {data}')

@@ -10,10 +10,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
     <script src="static/js/history.js"></script>
+    
     </head>
 
 <body>
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="new-chat">
           New Chat
         </div>
@@ -50,7 +51,7 @@
     </div>
 
 
-    <div class="main">
+    <div class="main" id="main">
       <div class="title">
         <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
         <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
@@ -81,6 +82,7 @@
       
     </div>
     <!-- 添加脚本 -->
+    <script src="static/js/main.js"></script>
     <script src="/static/js/send_form.js"></script>
     <script src="/static/js/stream_answer.js"></script>
   </body>

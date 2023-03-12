@@ -30,11 +30,15 @@ font-size: 14px;
 font-family: "ColfaxAI", Helvetica, sans-serif;
 }
 
+p {
+  margin: 0px 0px 0px 0px;
+}
+
 .sidebar {
   display: flex;
   flex-direction: column;
   width: 200px;
-  height: calc(100vh - 50px);
+  /* height: calc(100vh - 50px); */
   /* border: 1px solid #353740; */
   margin-right: 10px;
   background-color: #353740;
@@ -74,8 +78,10 @@ align-items: flex-end;
 display: flex;
 flex-direction: column;
 float: right;
-width: calc(100% - 200px);
-height: calc(100vh - 50px);
+/* width: calc(100vw - 200px); */
+/* height: calc(100vh - 50px); */
+width: calc((100 * var(--vw, 1vw)) - 200px);
+height: calc((100 * var(--vh, 1vh)) - 50px);
 }
 
 .title {
