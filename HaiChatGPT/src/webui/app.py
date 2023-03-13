@@ -103,9 +103,9 @@ def register():
     password = data.get('password')
     phone = data.get('phone')
 
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
+    #with app.app_context():
+    #    db.drop_all()
+    #    db.create_all()
 
     if not UserData.query.filter_by(name=username).first():
         user = UserData(name=username, password=password, phone=phone, auth_type='local')
