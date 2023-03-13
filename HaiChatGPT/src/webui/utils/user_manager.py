@@ -31,6 +31,7 @@ class UserData(db.Model):
     def __repr__(self):
         return '<User %r>' % self.name
 
+# TODO 用户-设置
 class UserConfig(db.Model):
     __tablename__ = 'configs'
 
@@ -58,7 +59,9 @@ class UserHistory(db.Model):
     text = db.Column(db.Text)
     status = db.Column(db.String(80), default='default')
 
-# TODO 也许将历史记录和会话分开保存比较好
+# 将历史记录和会话分开保存
+# 用户-会话-信息
+# 用户-历史记录
 class UserChat(db.Model):
     __tablename__ = 'chats'
 
@@ -166,7 +169,7 @@ class UserManager(object):
         
         # 寻找本地的数据库
         # 如果没有，尝试用sso验证,
-        # 如果有，用本地验证, 在尝试用sso验证
+        # 如果有，用本地验证, 再尝试用sso验证
         # TODO 还没有修改密码功能
         user_data = UserData.query.filter_by(name=user).first()
         if user_data is None and use_sso_auth:
