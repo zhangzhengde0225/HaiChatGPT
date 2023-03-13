@@ -17,7 +17,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。�
 + [2023.02.08] 初始版本，可通过命令行运行。
 
 # MySQL
-安装好MySQL并创建数据库后，在 app.py 中加入
+安装好MySQL并创建数据库后，在 src/webui/app.py 中加入
 ```python
 from flask_sqlalchemy import SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@host/datebasename'
