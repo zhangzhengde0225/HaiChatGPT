@@ -31,7 +31,13 @@ from flask_sqlalchemy import SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@host/mydatabase'
 db = SQLAlchemy(app)
 ```
-4. flask 中也可以重建数据库
+4. 可以使用 query.filter_by 搜索数据库，例如搜索用户，会话，和信息
+```python
+user = UserData.query.filter_by(name=user).first()
+chat = UserChat.query.filter_by(user_id=user.id, chat=chat_name).first()
+messages = UserMessage.query.filter_by(chat_id=chat.id).all()
+```
+5. flask 中也可以重建数据库
 ```python
 with app.app_context():
     db.drop_all()
