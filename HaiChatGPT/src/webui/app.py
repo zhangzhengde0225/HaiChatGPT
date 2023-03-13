@@ -8,12 +8,17 @@ from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response, stream_with_context
 from flask import session, jsonify
 
-
-
 logger = dm.get_logger('app')
 
 app = Flask(__name__)
 app.secret_key = 'my-secret-key'  # 设置Session密钥，用于加密Session数据
+
+# 连接到MySQL数据库
+from flask_sqlalchemy import SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123qwe@localhost/user_data'
+db = SQLAlchemy(app)
+
+from .utils.user_manager import UserData, UserHistory
 
 from .utils.user_manager import UserManager
 user_mgr = UserManager()
@@ -74,8 +79,9 @@ def login():
     logger.debug(f'login请求的data为: {data}')
     username = data.get('username')
     password = data.get('password')
+
     if user_mgr.verify_user(username, password):
-        session['username'] = username
+        session['username'] = username        
         return jsonify({'success': True, 'message': '登录成功', 'username': session['username']})
     else:
         return {'success': False, 'message': '用户名或密码错误'}
@@ -97,11 +103,24 @@ def register():
     password = data.get('password')
     phone = data.get('phone')
 
-    if user_mgr.is_exist(username):
-        return {'success': False, 'message': f'用户名{username}已存在'}
-    else:
-        user_mgr.add_user(username, password, phone=phone)
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+
+    if not UserData.query.filter_by(name=username).first():
+        user = UserData(name=username, password=password, phone=phone, auth_type='local')
+        db.session.add(user)
+        db.session.commit()
+        print('success')
         return jsonify({'success': True, 'message': '注册成功'})
+    else:
+        return {'success': False, 'message': f'用户名{username}已存在'}
+
+    #if user_mgr.is_exist(username):
+    #    return {'success': False, 'message': f'用户名{username}已存在'}
+    #else:
+    #    user_mgr.add_user(username, password, phone=phone)
+    #    return jsonify({'success': True, 'message': '注册成功'})
 
 
 def run(**kwargs):
