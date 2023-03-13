@@ -62,7 +62,7 @@ def stream(**kwargs):  # 即获取流式的last_answer
             db.session.add(user)
             db.session.commit()
         
-        # TODO 测试 保存 chat
+        # 保存 chat
         chat = UserChat.query.filter_by(
                 user_id=user.id, chat_id=chat_id).first()
         if not chat:
@@ -70,7 +70,7 @@ def stream(**kwargs):  # 即获取流式的last_answer
             db.session.add(chat)
             db.session.commit()
 
-        # TODO 测试 保存 Message
+        # 保存 Message
         message = UserMessage(
             chat_id=chat.id, query=query, text=text, status=status)
         db.session.add(message)
@@ -115,8 +115,6 @@ def qa_pairs():
     # logger.debug(f'收到qa_pairs请求: Method: {request.method}. User: {user}. chatbot: {chatbot}')
     # logger.debug(f'chatbot.show_history: {chatbot.show_history}')
     
-    
-
     # TODO 处理history
     history = webo.get_history(user)
     if history == [] or history is None:
