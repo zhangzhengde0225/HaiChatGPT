@@ -41,7 +41,7 @@ def stream(**kwargs):  # 即获取流式的last_answer
     
     # 保存 qa 到数据库
     convo_id = 'default'
-    chat_id = convo_id
+    chat_name = convo_id
 
     # TODO status 标识 history 代表不显示在会话中，defult表示显示在会话中
     status = 'default'
@@ -64,9 +64,9 @@ def stream(**kwargs):  # 即获取流式的last_answer
         
         # 保存 chat
         chat = UserChat.query.filter_by(
-                user_id=user.id, chat_id=chat_id).first()
+            user_id=user.id, chat=chat_name).first()
         if not chat:
-            chat = UserChat(user_id=user.id, chat_id=chat_id)
+            chat = UserChat(user_id=user.id, chat=chat_name)
             db.session.add(chat)
             db.session.commit()
 
@@ -77,7 +77,7 @@ def stream(**kwargs):  # 即获取流式的last_answer
         db.session.commit()
         '''
         读取Message示例：
-        messages = Message.query.filter_by(chat_id=chat.id).all()
+        messages = UserMessage.query.filter_by(chat_id=chat.id).all()
         result = []
         for message in messages:
             result.append({'sender': message.sender, 'message': message.message})
