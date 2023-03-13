@@ -38,6 +38,9 @@ class HChatBot(Chatbot):
         # 定义一个缓冲区，用于存储stream的结果
         self._stream_buffer = None
 
+        # 定义一个缓冲区，用于存储 
+        self.last_conversation = None
+
         self.error_handler = ErrorHandler()
 
     @property
@@ -111,16 +114,17 @@ class HChatBot(Chatbot):
         self.temperature = temperature
 
     def _query_stream(self, query, **kwargs):
-
+        role = "user"
+        convo_id = 'default'
         ret = self.ask_stream(
             prompt=query,
-            role="user",
-            convo_id='default',
+            role=role,
+            convo_id=convo_id,
             **kwargs,
             )
         
         self.last_answer = ''
-        
+    
         def convert_generator():
             try:
                 text = ''
@@ -130,6 +134,7 @@ class HChatBot(Chatbot):
                     yield f'data: {b}\n\n'
                     # logger.debug(f'content: {content}')
                 self.last_answer = text
+                self.last_conversation = [role, convo_id, query, text]
                 self._stream_buffer = None
             except Exception as e:
                 error_info = self.error_handler.handle(e)
