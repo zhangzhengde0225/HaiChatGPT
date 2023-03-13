@@ -4,10 +4,79 @@ import damei as dm
 import json
 from ....version import __appname__
 import time
-
+from datetime import datetime
 
 logger = dm.getLogger('user_manager')
 
+from ..app import db
+
+# 定义用户模型
+class UserData(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(80), default='guest', unique=True, nullable=True)
+    password = db.Column(db.String(80))
+    phone = db.Column(db.Integer)
+    email = db.Column(db.String(80))
+    auth_type = db.Column(db.String(80))
+    api_key = db.Column(db.String(80))
+    cookies = db.Column(db.String(200))
+    
+    chats = db.relationship('UserChat', backref='name', lazy=True)
+    histories = db.relationship('UserHistory', backref='name', lazy=True)
+    config = db.relationship('UserConfig', backref='name', lazy=True)
+
+    def __repr__(self):
+        return '<User %r>' % self.name
+
+class UserConfig(db.Model):
+    __tablename__ = 'configs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    temperature = db.Column(db.Float)
+    engine = db.Column(db.String(80))
+    api_key = db.Column(db.String(80))
+    proxy = db.Column(db.String(80))
+    max_tokens = db.Column(db.Float)
+
+# 定义历史记录模型
+class UserHistory(db.Model):
+    __tablename__ = 'histories'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    role = db.Column(db.String(200), default='user')
+    convo_id = db.Column(db.String(200), default='default')   
+    query = db.Column(db.Text)
+    text = db.Column(db.Text)
+    status = db.Column(db.String(80), default='default')
+
+# TODO 也许将历史记录和会话分开保存比较好
+class UserChat(db.Model):
+    __tablename__ = 'chats'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    chat = db.Column(db.String(80), default='default', nullable=False)
+    messages = db.relationship('UserMessage', backref='chat', lazy=True)
+
+class UserMessage(db.Model):
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    chat_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
+
+    query = db.Column(db.Text, nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(80), default='default')
 
 class UserManager(object):
     def __init__(self, use_sso_auth=False) -> None:
@@ -72,7 +141,7 @@ class UserManager(object):
         one_user.update(kwargs)
         self._users[user] = one_user
         # TODO: 保存到文件中
-        self.save_users_to_file(self._users)
+        # self.save_users_to_file(self._users)
 
     def remove_user(self, user):
         del self._users[user]
@@ -81,6 +150,7 @@ class UserManager(object):
         logger.info(f'Try local auth. all users: {self._users}')
         use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
 
+        '''
         if user in self._users.keys():
             if self._users[user]['auth_type'] == 'sso' and use_sso_auth:
                 return self.sso_verify_user(user, password, **kwargs)
@@ -92,10 +162,39 @@ class UserManager(object):
                     pass
         else:
             pass
+        '''
+        
+        # 寻找本地的数据库
+        # 如果没有，尝试用sso验证,
+        # 如果有，用本地验证, 在尝试用sso验证
+        # TODO 还没有修改密码功能
+        user_data = UserData.query.filter_by(name=user).first()
+        if user_data is None and use_sso_auth:
+            logger.info(f'Local auth failed, try sso auth.')
+            if self.sso_verify_user(user, password, **kwargs):
+                user_data = UserData(name=user, password=password, auth_type='sso')
+                db.session.add(user_data)
+                db.session.commit()
+                return True
+            else:
+                pass
+        else:
+            if user_data.auth_type == 'sso' and use_sso_auth:
+                if self.sso_verify_user(user, password, **kwargs):
+                    user_data.password = password
+                    db.session.commit()
+                    return True
+                else:
+                    pass
+            else:
+                if user_data.password == password:
+                    return True
+                else:
+                    pass
 
-        logger.info(f'Local auth failed, try sso auth.')
-        if use_sso_auth:
-            return self.sso_verify_user(user, password, **kwargs)
+        #logger.info(f'Local auth failed, try sso auth.')
+        #if use_sso_auth:
+        #    return self.sso_verify_user(user, password, **kwargs)
         return False
 
     def sso_verify_user(self, user, password, **kwargs):
@@ -112,8 +211,9 @@ class UserManager(object):
             return False
     
     def is_exist(self, user):
-        return user in self._users.keys()
-    
+        #return user in self._users.keys()
+        return bool(UserData.query.filter_by(name=user).first())
+
     def get_cookie(self, user):
         return self._cookies.get(user, None)
     
