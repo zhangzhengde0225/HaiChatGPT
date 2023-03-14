@@ -27,6 +27,9 @@ class HChatBot(Chatbot):
                 **kwargs,
                 ) -> None:
         api_key = api_key or os.getenv("OPENAI_API_KEY")
+        system_prompt = f"HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。由高能所张正德副研开发。\
+            \nHaiGF(HAI GUI Framework)是可扩展、轻量化的用于开发人工智能应用的界面框架。\
+            \nHEPS(High Energy Photon Source)是高能同步辐射光源，中国科学院高能物理研究所（简称“高能所”）负责建设，将于2025年建成世界上发射度最低、亮度最高的第四代同步辐射光源。"
 
         super().__init__(api_key, engine, proxy, max_tokens, temperature, top_p, reply_count, system_prompt)
         self.temperature = temperature
@@ -65,31 +68,34 @@ class HChatBot(Chatbot):
     
     def get_history(self, convo_id: str = 'default', **kwargs):
         one_convo = self.conversation.get(convo_id, None)  # 读出来是一个list
-        self.truncate_convo_and_save(convo_id, **kwargs)
+        self.truncate_convo_and_save(convo_id, **kwargs)  # 根据max_history截断对话
         if one_convo is None:
             return None
         history = []
-        tmp = [None, None]
-        logger.debug(f'one_convo: {one_convo}')
+        tmp = [None, None]  # 用于存储user和assistant的内容
+        # logger.debug(f'one_convo: {one_convo}')
         for i, data in enumerate(one_convo):
             role = data['role']
             content = data['content']
-            logger.debug(f'role: {role}, content: {content}')
+            # logger.debug(f'role: {role}, content: {content}')
             if role == 'system':
                 continue
-            if role == 'user':
+            if role == 'user':  # 遍历到user，找到对应的assistant
                 """每个user找到对应的assistant，然后将user和assistant的内容拼接起来"""
                 try:
                     next_data = one_convo[i+1]
                 except:
-                    tmp[0] = content
-                    tmp[1] = 'Answer not saved'
+                    tmp[0] = content  # user的content，即问题
+                    tmp[1] = 'Answer not saved. without nextdata'
+                    history.append(copy.deepcopy(tmp))
+                    tmp = [None, None]
                     continue
                 next_role = next_data['role']
                 if next_role == 'user':
                     tmp[0] = content
-                    tmp[1] = 'Answer not saved'
+                    tmp[1] = 'Answer not saved. next role is user'
                     history.append(copy.deepcopy(tmp))
+                    tmp = [None, None]
                     continue
                 else:
                     tmp[0] = content
@@ -97,11 +103,17 @@ class HChatBot(Chatbot):
                     history.append(copy.deepcopy(tmp))
                     tmp = [None, None]
                     continue
-            else:
+            else:  # 便利到assistant的内容，直接跳过
                 continue
         if history == []:
             return None
-        history = '<|im_br|>'.join([f'{q}<|im_sep|>{a}' for q, a in history])
+        # 需要把所有的内容中的\n替换成<|im_br|>
+        for i, (q, a) in enumerate(history):
+            q = q.replace("\n", "<|im_br|>")
+            a = a.replace("\n", "<|im_br|>")
+            history[i] = (q, a)
+        # 再把所有的内容拼接起来，q和a用<|im_sep|>分割，两个对话之间用bbbr分割
+        history = '<|im_bbbr|>'.join([f'{q}<|im_sep|>{a}' for q, a in history])
         return history
 
     def set_api_key(self, api_key: str) -> None:
@@ -147,9 +159,10 @@ class HChatBot(Chatbot):
         """包含错误处理的query_stream"""
         try:
             if query.startswith('sysc') or query.startswith('SYSC'):
+                # logger.debug(f'command: {query}')
                 return self._handle_commands(query, **kwargs)
             else:
-                # raise KeyError('Rate limit reachedssss')
+                # raise KeyError('Rate lim one_convot reachedssss')
                 return self._query_stream(query, **kwargs)
         except Exception as e:
             error_info = self.error_handler.handle(e)
@@ -176,7 +189,7 @@ class HChatBot(Chatbot):
             self.reset(convo_id=convo_id)
             return self.t2s("对话已重置")
         elif command in ['config', '配置']:
-            return self.t2s(self.get_config())
+            return self.t2s(self.get_config(**kwargs))
         elif command in ['rollback', '回滚']:
             self.rollback(int(args[0]), convo_id=convo_id)
             info = f"Rolled back by {args[0]} messages"
@@ -214,13 +227,32 @@ class HChatBot(Chatbot):
         elif command in ['more', '更多']:
             info = self.get_more()
             return self.t2s(info)
+        # plus指令
+        elif command in ['messages', '消息', '最大消息']:
+            return self.t2s(self.set_max_messages(*args, **kwargs))
+        # 管理员命令
+        elif command in ['admin', '管理员']:
+            info = self.handle_admin_command(*args, **kwargs)
+            return self.t2s(info)
+        elif command in ['sys_prompt', '系统指令']:
+            ok, msg = self.auth_admin(**kwargs)
+            if not ok:
+                return self.t2s(msg)
+            else:
+                sys_prompt = ' '.join(args)
+                self.system_prompt = sys_prompt
+                self.set_user_cookie(system_prompt=sys_prompt, **kwargs)
+                info = f"系统指令已经设置为`{sys_prompt}`，输入sysc config查看"
+                return self.t2s(info)
+
         else:
             raise ValueError(f'未知的命令: `{command}`，输入`sysc help`查看帮助')
     
     def set_user_cookie(self, **kwargs):
+        webo = kwargs.pop('webo', None)  # 对象得拿出来，不然无法保存
         user_mgr = kwargs.pop('user_mgr', None)
         if user_mgr is None:
-            return
+            return 
         user_name = kwargs.pop('user_name', None)
         if user_name is None:
             raise ValueError('Cannot save user cookie when you are not logged in.')
@@ -262,6 +294,7 @@ class HChatBot(Chatbot):
         
         return help_info
     
+    
     def get_more(self):
         info = f"### 联系我们：\n\n"
         info += f"+ 1. 加入wx交流群请添加：**AI4HEP**\n\n"
@@ -272,21 +305,82 @@ class HChatBot(Chatbot):
         info += f"表示人造世界里神圣术指令的开头：`System Call`\n\n"
         return info
 
-    def get_config(self, convo_id='default'):
+    def get_config(self, convo_id='default', **kwargs):
         api_key = f'{self.api_key[:4]}****{self.api_key[-4:]}'
+        user_name = kwargs.pop('user_name', None)
+        user_mjr = kwargs.pop('user_mgr', None)
+        webo = kwargs.pop('webo', None)
+
         config = "HaiChatGPT Configuration:\n"
         config += f"""
-    Messages:         {len(self.conversation[convo_id])} / {self.max_tokens}
-    Engine:           {self.engine}
+    Messages:         {len(self.conversation[convo_id])} / {self.max_history}  # maximum messages
+    Engine:           {self.engine}  # engine model
     API_Key:          {api_key}
     Temperature:      {self.temperature}
     Top_p:            {self.top_p}
     Reply_count:      {self.reply_count}
+    Max_tokens:       {self.max_tokens}"""
+        if user_name is not None:
+            config += f"""
+    Current_User:     {user_name}"""
+        if user_mjr is not None:
+            is_admin = user_mjr.is_admin(user_name)
+            if is_admin:
+                config += f"""
+    Admin:            True
     System_prompt:    {self.system_prompt}
-    Max_tokens:       {self.max_tokens}
-                        """
-    
+    """
+            webo = kwargs.pop('webo', None)
+            if is_admin and webo is not None:
+                config += f"""
+    ChatBots:         {len(webo.chatbots)}: {', '.join(webo.chatbots.keys())}"""
         return config
+    
+    def auth_plus(self, *args, **kwargs):
+        user_name = kwargs.pop('user_name', None)
+        user_mgr = kwargs.pop('user_mgr', None)
+        if user_mgr is None or user_name is None:
+            return False, 'No user manager or user name provided.'
+        if not user_mgr.is_plus(user_name):
+            return False, 'You are not a plus member.'
+        return True, None
+    
+    def auth_admin(self, *args, **kwargs):
+        user_name = kwargs.pop('user_name', None)
+        user_mgr = kwargs.pop('user_mgr', None)
+        if user_mgr is None or user_name is None:
+            return False, 'No user manager or user name provided.'
+        if not user_mgr.is_admin(user_name):
+            return False, 'You are not admin.'
+        return True, None
+    
+    def set_max_messages(self, *args, **kwargs):
+        ok, msg = self.auth_plus(*args, **kwargs)
+        if not ok:
+            return msg
+        try:
+            self.max_history = int(args[1])
+            self.set_user_cookie('max_history', self.max_history)
+        except:
+            return 'Invalid max messages.'
+        return f'Max messages set to `{self.max_history}`.'
+
+    def handle_admin_command(self, *args, **kwargs):
+        ok, msg = self.auth_admin(*args, **kwargs)
+        if not ok:
+            return msg
+        
+        cmd, *args = args
+        if cmd in ['', 'help', '帮助']:
+            return self.get_admin_help()
+
+    def get_admin_help(self):
+        info = f"## 管理员帮助\n\n"
+        info += f"""
+    S
+        """
+        return info
+
         
 
 class ErrorHandler:

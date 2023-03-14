@@ -11,7 +11,8 @@ from flask import session, jsonify
 logger = dm.get_logger('app')
 
 app = Flask(__name__)
-app.secret_key = 'my-secret-key'  # 设置Session密钥，用于加密Session数据
+app.secret_key = 'this_is_bxx_session_key'  # 设置Session密钥，用于加密Session数据
+
 
 # 连接到MySQL数据库
 from flask_sqlalchemy import SQLAlchemy
@@ -26,6 +27,7 @@ from .utils.web_object import WebObject
 webo = WebObject(user_mgr=user_mgr)
 
 
+
 from .utils.app_routes import *
 from .utils import general
 
@@ -37,7 +39,7 @@ def index():
     chatbot = webo.get_bot_by_username(user, create_if_no_exist=False)
 
     if request.method == "POST":
-        return render_template("index.html")
+        return render_template("index.html", username=user)
 
     elif request.method == "GET":
         if chatbot is not None:
@@ -45,7 +47,7 @@ def index():
             chatbot.show_history = True
             chatbot.show_last_question = True
 
-        return render_template("index.html")
+        return render_template("index.html", username=user)
     else:
         raise ValueError(f'unknown method: {request.method}')
     
@@ -57,6 +59,7 @@ def login_dialog():
 @app.route('/ip_addr')
 def ip_addr():
     # print(f'收到ip请求， {request}')
+    # logger.debug(f'收到ip请求， {request}')
     ret = f"data: {request.remote_addr}\n\n"
     # print(f'返回ip响应: {ret}')
     return Response(ret, mimetype="text/event-stream")
@@ -64,13 +67,8 @@ def ip_addr():
 
 @app.route('/clear', methods=['GET', 'POST'])
 def clear():
-    # ip = request.remote_addr
-    # ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    # chatbot = webo.get_bot_by_ip(ip, create_new=False)
-    # print(f'收到clear请求， {request}, ip: {ip}')
     user = general.get_user_from_session()
-    # 删除chatbot
-    webo.delete_convo_and_save(user)
+    webo.delete_convo_and_save(user)  # 删除chatbot
     return jsonify({'success': True, 'message': '清空成功'})
 
 @app.route('/login', methods=['POST'])
@@ -79,21 +77,26 @@ def login():
     logger.debug(f'login请求的data为: {data}')
     username = data.get('username')
     password = data.get('password')
-
-    if user_mgr.verify_user(username, password):
-        session['username'] = username        
+    ok, msg = user_mgr.verify_user(username, password)
+    if ok:
+        session['username'] = username
+        # session['logged_users'] = session.get('logged_users', []) + [username]
         return jsonify({'success': True, 'message': '登录成功', 'username': session['username']})
     else:
-        return {'success': False, 'message': '用户名或密码错误'}
+        return {'success': False, 'message': msg}
         
     
 @app.route('/logout', methods=['POST'])
 def logout():
-    user_name = request.get_json().get('username')
+    # user_name = request.get_json().get('username')
+    user_name = general.get_user_from_session(msg='logout')
     if user_name is None:
-        return {'success': False, 'message': '用户未登录'}
-    session['username'] = None
-    return {'success': True, 'message': f'{user_name} 登出成功'}
+        return jsonify({'success': False, 'message': '用户未登录'})
+    # session['username'] = None
+    session.pop('username', None)
+    ret = {'success': True, 'message': f'{user_name} 登出成功'}
+    logger.debug(f'logout返回: {ret}')
+    return jsonify(ret)
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -123,6 +126,7 @@ def register():
     #    return jsonify({'success': True, 'message': '注册成功'})
 
 
+
 def run(**kwargs):
     # from gevent import pywsgi
     # from geventwebsocket.handler import WebSocketHandler
@@ -139,6 +143,7 @@ def run(**kwargs):
     port = kwargs.get('port', 5000)
     debug = kwargs.get('debug', False)
     app.run(host=host, port=port, debug=debug)
+    # socketio.run(app, host=host, port=port, debug=debug)
 
     os.chdir(work_dir)
 

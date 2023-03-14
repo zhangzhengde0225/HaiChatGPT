@@ -4,6 +4,7 @@ from pathlib import Path
 import shutil
 import json
 import ldap
+import traceback
 
 SEARCH_BASE = "ou=users,dc=ihep,dc=ac,dc=cn"
 
@@ -27,15 +28,22 @@ class SSOAuth(object):
         """
         searchScope = ldap.SCOPE_SUBTREE    #查找范围，不用管系统定义
         searchFilter = "(cn=%s)" % username   #用户邮箱设定
-        ldap_result = self.ldapconn.search_s(SEARCH_BASE, searchScope, searchFilter, None)  #查找语句
+        try:
+            ldap_result = self.ldapconn.search_s(SEARCH_BASE, searchScope, searchFilter, None)  #查找语句
+        except ldap.LDAPError as e:
+            # print(type(e), e, traceback.format_exc())
+            return False, f'ldap error: {type(e)} {e}'
+            raise NameError('ldap error')
         if ldap_result:
             user_dn = ldap_result[0][0]
             try:
                 self.ldapconn.simple_bind_s(user_dn, passwd)
-                return True
+                return True, ''
             except ldap.LDAPError as e:
-                return False
+                return False, f'ldap error: {type(e)} {e} {traceback.format_exc()}'
         else:
+            print(f'ldap_result: {ldap_result}, 用户不存在')
+            return False, f"未查询到用户"
             raise NameError('unkown ldap error')
 
     @property

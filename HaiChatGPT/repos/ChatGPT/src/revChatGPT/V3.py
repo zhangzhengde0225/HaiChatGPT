@@ -124,9 +124,18 @@ class Chatbot:
         # Make conversation if it doesn't exist
         if convo_id not in self.conversation:  # 重置会话，只保留role为system的会话
             self.reset(convo_id=convo_id, system_prompt=self.system_prompt)
+        
+        ### zzd 读取和更新system_prompt
+        system_prompt = kwargs.get("system_prompt", self.system_prompt)
+        current_prompt = self.conversation[convo_id][0]["content"]
+        if current_prompt != system_prompt:
+            self.conversation[convo_id][0]["content"] = system_prompt
+        ### end
+        
         self.add_to_conversation(prompt, "user", convo_id=convo_id)  # 添加用户输入到会话
         self.__truncate_conversation(convo_id=convo_id)  # 根据max_tokens截断会话
-        
+        # print(self.conversation[convo_id])
+
         # Get response
         response = self.session.post(
             "https://api.openai.com/v1/chat/completions",

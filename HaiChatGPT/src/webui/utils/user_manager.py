@@ -150,22 +150,8 @@ class UserManager(object):
         del self._users[user]
 
     def verify_user(self, user, password, **kwargs):
-        logger.info(f'Try local auth. all users: {self._users}')
+        # logger.info(f'Try local auth. all users: {self._users}')
         use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
-
-        '''
-        if user in self._users.keys():
-            if self._users[user]['auth_type'] == 'sso' and use_sso_auth:
-                return self.sso_verify_user(user, password, **kwargs)
-            else:
-                is_ok = self._users[user]['password'] == password
-                if is_ok:
-                    return True
-                else:
-                    pass
-        else:
-            pass
-        '''
         
         # 寻找本地的数据库
         # 如果没有，尝试用sso验证,
@@ -174,49 +160,68 @@ class UserManager(object):
         user_data = UserData.query.filter_by(name=user).first()
         if user_data is None and use_sso_auth:
             logger.info(f'Local auth failed, try sso auth.')
-            if self.sso_verify_user(user, password, **kwargs):
+            ok, msg = self.sso_verify_user(user, password, **kwargs)
+            if ok:
                 user_data = UserData(name=user, password=password, auth_type='sso')
                 db.session.add(user_data)
                 db.session.commit()
-                return True
+                return True, ''
             else:
-                pass
+                return False, f'本地用户不存在，统一认证用户验证失败，请尝试注册。msg: {msg}'
         else:
             if user_data.auth_type == 'sso' and use_sso_auth:
-                if self.sso_verify_user(user, password, **kwargs):
+                ok, msg = self.sso_verify_user(user, password, **kwargs)
+                if ok:
                     user_data.password = password
                     db.session.commit()
-                    return True
+                    return True, ''
                 else:
-                    pass
+                    return False, f'统一认证用户失败'
             else:
                 if user_data.password == password:
-                    return True
+                    return True, ''
                 else:
-                    pass
+                    return False, '本地用户密码错误'
 
-        #logger.info(f'Local auth failed, try sso auth.')
-        #if use_sso_auth:
-        #    return self.sso_verify_user(user, password, **kwargs)
-        return False
+        '''
+        logger.info(f'Local auth failed, try sso auth.')
+        if use_sso_auth:
+            ok, msg = self.sso_verify_user(user, password, **kwargs)
+            if ok:
+                return True, ''
+            else:
+                return False, f'本地和统一认证用户均失败，请尝试注册。msg: {msg}'
+        return False, '本地用户不存在'
+        '''
 
     def sso_verify_user(self, user, password, **kwargs):
-        ret = self.sso_auth.verify_user(user, password)
-        logger.debug(f'SSO auth result: {ret}')
-        if ret:
+        ok, msg = self.sso_auth.verify_user(user, password)
+        logger.debug(f'SSO auth result: {ok}, {msg}')
+        if ok:
             # logger.info(f'{user} ssoauth verify user success!')
             # 在本地保存用户信息，下次直接使用本地验证
             if user not in self._users.keys():
                 self.add_user(user, password, auth_type='sso')
-            return True
+            return True, ''
         else:
             # logger.info(f'{user} ssoauth verify user failed!')
-            return False
+            return False, msg
     
     def is_exist(self, user):
-        #return user in self._users.keys()
-        return bool(UserData.query.filter_by(name=user).first())
-
+        return user in self._users.keys()
+    
+    def is_admin(self, user):
+        if user not in self._users.keys():
+            return False
+        return self._users[user].get('is_admin', False)
+    
+    def is_plus(self, user):
+        if user not in self._users.keys():
+            return False
+        if self.is_admin(user):  # admin一定是plus
+            return True
+        return self._users[user].get('is_plus', False)
+    
     def get_cookie(self, user):
         return self._cookies.get(user, None)
     

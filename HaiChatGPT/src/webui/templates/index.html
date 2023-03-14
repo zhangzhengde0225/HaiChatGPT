@@ -10,10 +10,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
     <script src="static/js/history.js"></script>
+    
     </head>
 
 <body>
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="new-chat">
           New Chat
         </div>
@@ -25,9 +26,15 @@
           <!-- <li><a class='hyper_link' href="https://github.com/PlexPt/awesome-chatgpt-prompts-zh">ChatGPT中文调教指南</a> -->
           <br></br>
           <!-- <li>这是使用作者的同一个Key的免费抢先体验版，仅供测试使用。</li> -->
+          <div>重要更新：</div>
+          <li>2023.03.12登录用户独享bot，修复历史消息显示。</li>
           <li>2023.03.08基于GPT-3.5的性能升级版上线！同时支持所邮箱登录了！</li>
+          <li>2023.02.12体验版</li>
           <br></br>
-          <li>报告错误请点击：<a class='hyper_link' href="https://github.com/zhangzhengde0225/HaiChatGPT/issues">issue</a></li>
+          <div>报告错误请点击：
+            <a class='hyper_link' href="https://github.com/zhangzhengde0225/HaiChatGPT/issues">issue</a>
+            <div>或邮件zdzhang@ihep.ac.cn</div>
+          </div>
           <!-- <li>由于OpenAI不对国内服务，注册官方需要科学上网、邮箱、国外的手机号(可用sms-activate代替)，奉上
             <a class='hyper_link' href="https://code.ihep.ac.cn/zdzhang/haichatgpt/-/blob/main/docs/reg_tutorial.md">
             保姆级注册教程和临时梯子</a>。 -->
@@ -44,7 +51,7 @@
     </div>
 
 
-    <div class="main">
+    <div class="main" id="main">
       <div class="title">
         <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
         <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
@@ -75,6 +82,7 @@
       
     </div>
     <!-- 添加脚本 -->
+    <script src="static/js/main.js"></script>
     <script src="/static/js/send_form.js"></script>
     <script src="/static/js/stream_answer.js"></script>
   </body>

@@ -64,10 +64,8 @@ class WebObject(object):
                     self.user_mgr.save_history(username, convo_id, entry)
                 chatbot.reset(convo_id=convo_id, **kwargs)
 
-            
-
     def pop_qa_pairs(self, username):
-        """不清空，知识将has_new_pair设置为False"""
+        """不清空，只是将has_new_pair设置为False"""
         if username not in self.chatbots:
             return []
         else:
@@ -94,11 +92,17 @@ class WebObject(object):
         user_cookie = self.user_mgr.get_cookie(username)
         if user_cookie is not None:
             # 修改chatbot的参数
-            self.set_bot_params(chatbot, **user_cookie)
+            self.set_bot_params(chatbot, **user_cookie)  # 根据cookie设置chatbot的参数
         
-        logger.debug(f'Username: {username}, user_cookie: {user_cookie}')
+        # logger.debug(f'Username: {username}, user_cookie: {user_cookie}')
+        logger.info(f'webo chatbots: {len(self.chatbots)} {self.chatbots.keys()}')
 
-        stream = chatbot.query_stream(text, user_mgr=self.user_mgr, user_name=username)
+        stream = chatbot.query_stream(
+            text, 
+            user_mgr=self.user_mgr, 
+            user_name=username,
+            webo = self,
+            )
         chatbot._stream_buffer = stream
         return stream
     
@@ -126,8 +130,6 @@ class WebObject(object):
             # raise ValueError(f'username: {username} not in chatbots')
         else:
             return chatbot.get_history(convo_id=convo_id, username=username, user_mgr=self.user_mgr)
-
-
     def render(self, ret, **kwargs):
         return redirect(url_for("index", result=ret))
 
