@@ -13,6 +13,7 @@ haichatgpt.egg-info/*
 
 *.venv
 nohup.out
+nohup.out*
 .vscode
 
 *__pycache__/*

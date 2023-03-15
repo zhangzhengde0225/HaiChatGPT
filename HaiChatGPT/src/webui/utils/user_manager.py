@@ -160,5 +160,17 @@ class UserManager(object):
         one_entry['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         self._cookies[user]['history_convos'][convo_id].append(one_entry)
         self.save_file(self._users_cookie_file, self._cookies)
-        
+
+    def get_permission_level(self, user):
+        if user not in self._users.keys():  # 未登录
+            return 0
+        elif user == 'public':  # public
+            return 1
+        else:
+            if self.is_admin(user):  # admin
+                return 4
+            elif self.is_plus(user):  # plus
+                return 3
+            else:
+                return 2  # 登录
         

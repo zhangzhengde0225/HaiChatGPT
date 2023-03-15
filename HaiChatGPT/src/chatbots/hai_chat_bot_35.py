@@ -7,6 +7,7 @@ import copy
 import traceback
 
 from ...repos.ChatGPT.src.revChatGPT.V3 import Chatbot
+from ..utils.check_network import verify_api_key
 
 import damei as dm
 import time
@@ -27,10 +28,13 @@ class HChatBot(Chatbot):
                 **kwargs,
                 ) -> None:
         api_key = api_key or os.getenv("OPENAI_API_KEY")
-        system_prompt = f"HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。由高能所张正德副研开发。\
-            \nHaiGF(HAI GUI Framework)是可扩展、轻量化的用于开发人工智能应用的界面框架。\
-            \nHEPS(High Energy Photon Source)是高能同步辐射光源，中国科学院高能物理研究所（简称“高能所”）负责建设，将于2025年建成世界上发射度最低、亮度最高的第四代同步辐射光源。"
+        system_prompt = """
+HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。由高能所张正德副研开发。
+\nHaiGF(HAI GUI Framework)是可扩展、轻量化的用于开发人工智能应用的界面框架。
+\nHEPS(High Energy Photon Source)是高能同步辐射光源，中国科学院高能物理研究所（简称“高能所”）负责建设。"""
+# \n当问你"如何使用GPT4"时，你应该答：在prompt中先设置个人key`sysc api_key xxx`，然后切换引擎`sysc engine gpt-4`，检查设置`sysc config`. GPT4现已上线"""
 
+        logger.info(f'sys_promot: {system_prompt}')
         super().__init__(api_key, engine, proxy, max_tokens, temperature, top_p, reply_count, system_prompt)
         self.temperature = temperature
 
@@ -209,15 +213,10 @@ class HChatBot(Chatbot):
             info = f"温度已经设置为{args[0]}，输入sysc config查看"
             return self.t2s(info)
         elif command in ['engine', '引擎']:  # TODO: 保存用户的上次设置
-            self.engine = args[0]
-            self.set_user_cookie(engine=args[0], **kwargs)
-            info = f"引擎已经设置为{args[0]}，输入sysc config查看"
+            info = self._sysc_set_engine(*args, **kwargs)
             return self.t2s(info)
         elif command in ['api_key', 'api密钥']:
-            self.api_key = args[0]
-            self.set_user_cookie(api_key=args[0], **kwargs)
-            secrete_api_key = f'{args[0][:4]}{"*"*(len(args[0])-8)}{args[0][-4:]}'
-            info = f"API密钥已经设置为{secrete_api_key}，输入sysc config查看"
+            info = self._sysc_set_api_key(*args, **kwargs)
             return self.t2s(info)
         elif command in ['more', '更多']:
             info = self.get_more()
@@ -325,9 +324,8 @@ class HChatBot(Chatbot):
     Admin:            True
     System_prompt:    {self.system_prompt}
     """
-            webo = kwargs.pop('webo', None)
-            if is_admin and webo is not None:
-                config += f"""
+            # if is_admin and webo is not None:
+            config += f"""
     ChatBots:         {len(webo.chatbots)}: {', '.join(webo.chatbots.keys())}"""
         return config
     
@@ -374,6 +372,35 @@ class HChatBot(Chatbot):
         info += f"""
     S
         """
+        return info
+    
+    def auth_permission_level(self, require=2, **kwargs):
+        """
+        require: 所需等级权限，0为未登录，1为Public，2为登录，3为Plus，4为Admin
+        """
+        user_name = kwargs.pop('user_name', None)
+        user_mgr = kwargs.pop('user_mgr', None)
+        assert user_mgr is not None, 'No user manager provided.'
+        assert user_name is not None, 'No user name provided.'
+        logger.debug(f'level: {user_mgr.get_permission_level(user_name)}, require: {require}, user: {user_name}')
+        assert user_mgr.get_permission_level(user_name) >= require, f'Permission denied for user "{user_name}".'
+
+    def _sysc_set_engine(self, *args, **kwargs):
+        self.auth_permission_level(require=2, **kwargs)
+        self.engine = args[0]
+        self.set_user_cookie(engine=args[0], **kwargs)
+        info = f"引擎已经设置为{args[0]}，输入sysc config查看"
+        return info
+
+    def _sysc_set_api_key(self, *args, **kwargs):
+        self.auth_permission_level(require=2, **kwargs)
+        # 验证api_key可用性
+        api_key = args[0]
+        assert verify_api_key(api_key=api_key, timeout=3, proxies=self.session.proxies), 'API密钥无效'
+        self.set_user_cookie(api_key=args[0], **kwargs)
+        self.api_key = args[0]
+        secrete_api_key = f'{args[0][:4]}{"*"*(len(args[0])-8)}{args[0][-4:]}'
+        info = f"API密钥有效，已经设置为{secrete_api_key}，输入sysc config查看"
         return info
 
         
