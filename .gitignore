@@ -99,3 +99,7 @@ CMakeLists.txt.user*
 # --------
 *.dll
 *.exe
+HaiChatGPT/__pycache__/*
+HaiChatGPT/apis/__pycache__/*
+HaiChatGPT/repos/__pycache__/*
+HaiChatGPT/src/__pycache__/*
