@@ -325,7 +325,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
     System_prompt:    {self.system_prompt}
     """
             # if is_admin and webo is not None:
-            config += f"""
+                config += f"""
     ChatBots:         {len(webo.chatbots)}: {', '.join(webo.chatbots.keys())}"""
         return config
     
