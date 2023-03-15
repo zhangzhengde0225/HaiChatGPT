@@ -10,6 +10,7 @@ import traceback
 from ..app import app, webo
 from . import general
 from .user_manager import UserData, UserHistory, UserMessage, UserChat
+from .user_manager import get_chat_and_message
 from ..app import db
 
 logger = dm.get_logger('app_routes')
@@ -75,15 +76,7 @@ def stream(**kwargs):  # 即获取流式的last_answer
             chat_id=chat.id, query=query, text=text, status=status)
         db.session.add(message)
         db.session.commit()
-        '''
-        读取Message示例：
-        messages = UserMessage.query.filter_by(chat_id=chat.id).all()
-        result = []
-        for message in messages:
-            result.append({'sender': message.sender, 'message': message.message})
-        return jsonify(result)
-        '''
-
+        
         # 保存历史记录
         user_history = UserHistory(
             role=role, convo_id=convo_id, query=query, text=text, status=status, user_id=user.id)
@@ -93,6 +86,10 @@ def stream(**kwargs):  # 即获取流式的last_answer
     # 必须清楚缓存，不然会保存两遍，原因可能是 route('/stream') 会在显示聊天时调用两次
     chatbot.last_conversation = None
 
+    #读取Message示例：
+    #result = get_chat_and_message(user, chat_name)
+    #print(result)
+    
     logger.debug(f'收到stream请求: Method: {request.method}. User: {user}. Kwargs: {kwargs}')
     stream_buffer = webo.get_stream_buffer(user)
     # logger.debug(f'stream_buffer: {stream_buffer}')

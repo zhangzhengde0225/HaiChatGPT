@@ -28,9 +28,6 @@ class UserData(db.Model):
     histories = db.relationship('UserHistory', backref='name', lazy=True)
     config = db.relationship('UserConfig', backref='name', lazy=True)
 
-    def __repr__(self):
-        return '<User %r>' % self.name
-
 # TODO 用户-设置
 class UserConfig(db.Model):
     __tablename__ = 'configs'
@@ -80,6 +77,29 @@ class UserMessage(db.Model):
     query = db.Column(db.Text, nullable=False)
     text = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(80), default='default')
+
+
+def get_chat_and_message(user_name: str, chat_name='default'):
+    user = UserData.query.filter_by(name=user_name).first()
+    if not user:
+        logger.info(f"用户 {user_name} 不存在")
+
+    chat = UserChat.query.filter_by(
+        user_id=user.id, chat=chat_name).first()
+    if not chat:
+        logger.info(f"会话 {chat_name} 不存在")
+
+    # 读取Message
+    # messages = UserMessage.query.filter_by(chat_id=chat.id).all()
+    # messages = UserMessage.query.filter(UserMessage.chat_id == chat.id).all()
+    # 这两个语句会报错，未知原因
+    messages = db.session.query(UserMessage).filter_by(chat_id=chat.id).all()
+
+    result = []
+    for message in messages:
+        result.append({'query': message.query, 'text': message.text})
+    return result
+
 
 class UserManager(object):
     def __init__(self, use_sso_auth=False) -> None:
