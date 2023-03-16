@@ -47,9 +47,8 @@ HaiChatGPT # 使用命令行运行
 ## 致谢
 该项目基于[OpenAI](www.OpenAI.com)和acheong08的[ChatGPT](https://github.com/acheong08/ChatGPT)项目。
 
+## 联系我们
 
-<!-- 一个表格 -->
-| 姓名 | 年龄 | 性别 |
-| ---- | ---- | ---- |
-| 张三 | 18 | 男 |
-| 李四 | 19 | 女 |
+zdzhang@ihep.ac.cn
+技术交流群：
+![wechat](https://zhangzhengde0225.github.io/images/blog/hai-chatgpt-wechat-group-small.png)
