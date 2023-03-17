@@ -62,4 +62,47 @@ def try_request(share_value, api_key, proxies=None):
             share_value.value = reponse.status_code
         # return reponse
         time.sleep(1)
+
+def verify_api_key(api_key, timeout: int = 5, proxies=None):
+    share_value = mp.Value('i', 0)  # 整形
+    p = mp.Process(target=try_openai_request, args=(share_value, api_key, proxies, timeout))
+    p.start()
+
+    t = time.time()
+    while True:
+        delta = math.floor(time.time() - t)
+        print(f'\rVerifying api_key...{"."*delta} ', end='')
+        if share_value.value == 200:  # success
+            p.terminate()
+            break
+        if delta > timeout:
+            p.terminate()
+            break
+        time.sleep(1)
+    p.join()
+    if share_value.value == 200:
+        print(" Success.")
+        return True
+    else:
+        print(" Failed.")
+        return False
+        # raise ValueError("Can't connect to OpenAI API, try to set a proxy like `--proxy http://127.0.0.1:1086`.")
+
+def try_openai_request(share_value, api_key, proxies=None, timeout=5):
+    headers = {"Authorization": f"Bearer {api_key}"}
+    for i in range(timeout):
+        logger.debug(f"try request {i}")
+        reponse = requests.get(
+            "https://api.openai.com/v1/engines",
+            proxies=proxies,
+            headers=headers,
+            timeout=timeout,
+        )
+        if reponse.status_code == 200:
+            share_value.value = reponse.status_code
+            # logger.debug(reponse.text)
+            break
+        else:
+            share_value.value = reponse.status_code
+        time.sleep(1)
     

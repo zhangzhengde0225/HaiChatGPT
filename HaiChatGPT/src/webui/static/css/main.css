@@ -259,3 +259,9 @@ textarea {
   height: 50px;
 } 
 
+.qr_code {
+  width: 80px;
+  height: 80px;
+  margin: 10px;
+  align-self: center;
+}
