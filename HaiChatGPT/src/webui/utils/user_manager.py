@@ -8,7 +8,9 @@ from datetime import datetime
 
 logger = dm.getLogger('user_manager')
 
-from ..app import db
+#from ..app import db
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 # 定义用户模型
 class UserData(db.Model):
@@ -166,8 +168,31 @@ class UserManager(object):
         # TODO: 保存到文件中
         # self.save_users_to_file(self._users)
 
+        # 添加用户到数据库中
+        if not UserData.query.filter_by(name=user).first():
+            user_data = UserData(name=user)
+            for key, value in one_user.items():
+                try:
+                    setattr(user_data, key, value)
+                except KeyError:
+                    print(f"KeyError: {user_data},{key},{value}")
+            db.session.add(user_data)
+            db.session.commit()
+        else:
+            logger.info(f"User {user} 存在.")
+
+
     def remove_user(self, user):
         del self._users[user]
+
+        # 从数据库中删除用户
+        user_data = UserData.query.filter_by(name=user).first()
+        if user_data:
+            db.session.delete(user_data)
+            db.session.commit()
+            logger.info(f"User {user} 已被删除.")
+        else:
+            logger.info(f"User {user} 不存在.")
 
     def verify_user(self, user, password, **kwargs):
         # logger.info(f'Try local auth. all users: {self._users}')
@@ -178,16 +203,19 @@ class UserManager(object):
         # 如果有，用本地验证, 再尝试用sso验证
         # TODO 还没有修改密码功能
         user_data = UserData.query.filter_by(name=user).first()
-        if user_data is None and use_sso_auth:
-            logger.info(f'Local auth failed, try sso auth.')
-            ok, msg = self.sso_verify_user(user, password, **kwargs)
-            if ok:
-                user_data = UserData(name=user, password=password, auth_type='sso')
-                db.session.add(user_data)
-                db.session.commit()
-                return True, ''
+        if user_data is None:
+            if  use_sso_auth:
+                logger.info(f'Local auth failed, try sso auth.')
+                ok, msg = self.sso_verify_user(user, password, **kwargs)
+                if ok:
+                    user_data = UserData(name=user, password=password, auth_type='sso')
+                    db.session.add(user_data)
+                    db.session.commit()
+                    return True, ''
+                else:
+                    return False, f'本地用户不存在，统一认证用户验证失败，请尝试注册。msg: {msg}'
             else:
-                return False, f'本地用户不存在，统一认证用户验证失败，请尝试注册。msg: {msg}'
+                return False, f'本地用户不存在，请尝试注册。msg: {msg}'
         else:
             if user_data.auth_type == 'sso' and use_sso_auth:
                 ok, msg = self.sso_verify_user(user, password, **kwargs)
@@ -269,7 +297,7 @@ class UserManager(object):
         # self._cookies[user]['history'].append(one_entry)
         # print(self._cookies[user]['history_convos'][convo_id])
         one_entry['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        self._cookies[user]['history_convos'][convo_id].append(one_entry)
+        self._cookies[user]['history_convos'][convo_id].append(one_entry)        
         self.save_file(self._users_cookie_file, self._cookies)
 
     def get_permission_level(self, user):
