@@ -52,8 +52,7 @@ def stream(**kwargs):  # 即获取流式的last_answer
         pass
     else:
         role, convo_id, query, text = one_convo
-        print("send_prompt: one_convo")
-        print(one_convo)
+        logger.debug(f"send_prompt: {convo_id}, {one_convo}")
         
         # 搜索用户
         user = UserData.query.filter_by(name=user).first()
