@@ -104,3 +104,4 @@ HaiChatGPT/__pycache__/*
 HaiChatGPT/apis/__pycache__/*
 HaiChatGPT/repos/__pycache__/*
 HaiChatGPT/src/__pycache__/*
+HaiChatGPT/src/webui/app_config.py
