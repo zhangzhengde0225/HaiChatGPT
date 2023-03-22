@@ -16,8 +16,10 @@ app.secret_key = 'this_is_bxx_session_key'  # 设置Session密钥，用于加密
 
 # 连接到MySQL数据库
 from flask_sqlalchemy import SQLAlchemy
+from .utils.user_manager import db as db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123qwe@localhost/user_data'
-db = SQLAlchemy(app)
+db.app = app
+db.init_app(app)
 
 from .utils.user_manager import UserData, UserHistory
 
@@ -111,10 +113,7 @@ def register():
     #    db.create_all()
 
     if not UserData.query.filter_by(name=username).first():
-        user = UserData(name=username, password=password, phone=phone, auth_type='local')
-        db.session.add(user)
-        db.session.commit()
-        print('success')
+        user_mgr.add_user(username, password, phone=phone)
         return jsonify({'success': True, 'message': '注册成功'})
     else:
         return {'success': False, 'message': f'用户名{username}已存在'}
