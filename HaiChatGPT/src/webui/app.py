@@ -20,6 +20,7 @@ from .utils.user_manager import db as db
 app.config.from_pyfile('app_config.py')
 db.app = app
 db.init_app(app)
+db.create_all()
 
 from .utils.user_manager import UserData, UserHistory
 
