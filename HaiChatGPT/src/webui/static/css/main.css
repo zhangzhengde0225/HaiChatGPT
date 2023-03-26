@@ -147,6 +147,7 @@ background-color: #555555;
   background-color: #e6ecf9;
   padding: 10px;
   margin: 10px;
+  overflow: auto;
 }
 
 .answer_div {
@@ -155,6 +156,7 @@ background-color: #555555;
   background-color: #eafcf0;
   padding: 10px;
   margin: 10px;
+  overflow: auto;
 }
 
 
@@ -174,6 +176,13 @@ background-color: #555555;
   margin: 0px;
 }
 
+.qa_pairs {
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  margin: 0px;
+  overflow: auto;
+}
 
 .last_question {
   display: flex;
@@ -182,6 +191,7 @@ background-color: #555555;
   padding: 10px;
   margin: 10px;
 }
+
 .last_answer {
   display: flex;
   flex-direction: row;
@@ -202,10 +212,10 @@ background-color: #555555;
 
 .markdown-content {
   display: flex;
-  flex-direction: row;
-  background-color: #eafcf0;
-  padding: 10px;
-  margin: 10px;
+  flex-direction: column;
+  /* /* background-color: #eafcf0; */
+  padding: 0px;
+  margin: 0px; 
 }
 
 .code_block_title {

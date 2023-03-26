@@ -88,14 +88,14 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
                 except:
                     tmp[0] = content  # user的content，即问题
                     tmp[1] = 'Answer not saved. without nextdata'
-                    history.append(copy.deepcopy(tmp))
+                    # history.append(copy.deepcopy(tmp))  # 当已经提问，但无返回的时候，不添加
                     tmp = [None, None]
                     continue
                 next_role = next_data['role']
                 if next_role == 'user':
                     tmp[0] = content
                     tmp[1] = 'Answer not saved. next role is user'
-                    history.append(copy.deepcopy(tmp))
+                    history.append(copy.deepcopy(tmp))  # 不添加
                     tmp = [None, None]
                     continue
                 else:

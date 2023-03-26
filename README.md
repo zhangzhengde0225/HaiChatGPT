@@ -8,10 +8,10 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。�
 
 # 更新日志
 
++ [2023.03.27] 修复历史消息自动空多行的问题，优化了代理速度。
 + [2023.03.01] 性能升级！使用Token登录，接入官网版的ChatGPT(原使用API_KEY基于GPT3)
 + [2023.02.17] 官方版保姆级注册教程和临时梯子奉上，[注册教程](docs/reg_tutorial.md)。
 + [2023.02.14] 请求错误时不会崩溃，错误信息会显示在网页界面上。
-+ [2023.02.13] 可以设置个人API_KEY了，将OpenAI的[API_KEY](https://platform.openai.com/account/api-keys)粘贴到~/.openai/api_key中并保存即可。
 + [2023.02.11] 添加了Web GUI，可通过python flask_run.py运行。
 + [2023.02.08] 初始版本，可通过命令行运行。
 

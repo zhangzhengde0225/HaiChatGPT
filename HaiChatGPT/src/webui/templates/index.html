@@ -6,8 +6,8 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='/icons/ai.png')}}"/>
     <link rel="stylesheet" href="static/css/main.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
     <script src="static/js/history.js"></script>
     
@@ -72,7 +72,7 @@
         <!-- 最后一个回答区域 -->
         <div class="last_answer" id="last_answer" style="display: none;">
           <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="answer_img" />
-          <div id="markdown_content"></div>
+          <div id="markdown_content" class="markdown_content"></div>
         </div>
       </div>
       
