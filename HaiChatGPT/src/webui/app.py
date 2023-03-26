@@ -15,7 +15,7 @@ app.secret_key = 'this_is_bxx_session_key'  # 设置Session密钥，用于加密
 
 
 # 连接到MySQL数据库
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from .utils.user_manager import db as db
 app.config.from_pyfile('app_config.py')
 db.app = app
