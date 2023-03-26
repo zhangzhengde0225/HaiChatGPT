@@ -35,11 +35,6 @@ pip install hai-chat-gpt --upgrade # 安装，需python3.6+
 HaiChatGPT # 使用命令行运行
 ```
 
-## 获取Access Token
-
-需使用官方账号登录[ChatGPT](http://ai.com)后，从浏览器的cookies中获取，登录成功后点此处：
-[https://chat.openai.com/api/auth/session](https://chat.openai.com/api/auth/session)
-
 ## TODO
 + Web GUI，20230211，已完成
 + GPT-3.5，20230301，已完成
@@ -51,4 +46,5 @@ HaiChatGPT # 使用命令行运行
 
 zdzhang@ihep.ac.cn
 技术交流群：
+
 ![wechat](https://zhangzhengde0225.github.io/images/blog/hai-chatgpt-wechat-group-small.png)
