@@ -15,6 +15,7 @@ haichatgpt.egg-info/*
 nohup.out
 nohup.out*
 .vscode
+.hai_chat_gpt.egg-info/*
 
 *__pycache__/*
 
@@ -28,6 +29,8 @@ HaiChatGPT/src/webui/examples/*
 HaiChatGPT/examples/ihep_sso/*
 HaiChatGPT/examples/gpt35_api_demo/*
 
+dist/*
+build/*
 
 # #####################
 *~
