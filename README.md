@@ -45,6 +45,7 @@ HaiChatGPT # 使用命令行运行
 ## 联系我们
 
 zdzhang@ihep.ac.cn
-技术交流群：
+
+HaiChatGPT技术交流群：
 
 <img src="https://zhangzhengde0225.github.io/images/blog/haichatgpt-group.png" width="200" height="200">
