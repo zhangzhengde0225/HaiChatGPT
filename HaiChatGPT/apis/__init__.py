@@ -4,6 +4,7 @@
 
 # from .apis import HaiGF
 from .apis import damei
+from ..version import __appname__, __version__, __author__
 
 from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot as API_ChatBot
 # from ..repos.ChatGPT.src.revChatGPT.V3 import Chatbot as API_ChatBot_35
