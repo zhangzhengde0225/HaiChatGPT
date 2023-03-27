@@ -144,8 +144,9 @@ def run(**kwargs):
     debug = kwargs.get('debug', False)
     app.run(host=host, port=port, debug=debug)
     # socketio.run(app, host=host, port=port, debug=debug)
-    db.create_all()
-    
+    with app.app_context():
+        db.create_all()
+
     os.chdir(work_dir)
 
 
