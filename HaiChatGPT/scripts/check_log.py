@@ -71,9 +71,9 @@ class CheckLog(object):
         users_type_local = 0
         users_type_sso = 0
         for k, v in users_data.items():
-            if v['auth_type'] == 'local':
+            if v.get('auth_type') == 'local':
                 users_type_local += 1
-            elif v['auth_type'] == 'sso':
+            elif v.get('auth_type') == 'sso':
                 users_type_sso += 1
             else:
                 users_type_local += 1
