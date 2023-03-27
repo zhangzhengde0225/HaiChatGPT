@@ -25,11 +25,9 @@ mysql -u username -p
 ```myscql
 CREATE DATABASE IF NOT EXISTS mydatabase;
 ```
-3. 在 src/webui/app.py 中加入
+3. 在 src/webui/app_config.py 中加入
 ```python
-from flask_sqlalchemy import SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@host/mydatabase'
-db = SQLAlchemy(app)
+SQLALCHEMY_DATABASE_URI = 'mysql://username:password@host/mydatabase'
 ```
 4. 可以使用 query.filter_by 搜索数据库，例如搜索用户，会话，和信息
 ```python
