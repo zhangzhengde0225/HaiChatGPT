@@ -20,7 +20,7 @@ from .utils.user_manager import db as db
 app.config.from_pyfile('app_config.py')
 db.app = app
 db.init_app(app)
-db.create_all()
+
 
 from .utils.user_manager import UserData, UserHistory
 
@@ -144,7 +144,8 @@ def run(**kwargs):
     debug = kwargs.get('debug', False)
     app.run(host=host, port=port, debug=debug)
     # socketio.run(app, host=host, port=port, debug=debug)
-
+    db.create_all()
+    
     os.chdir(work_dir)
 
 
