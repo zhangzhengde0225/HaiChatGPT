@@ -7,10 +7,6 @@ const register_btn = document.getElementById('register-btn-in-form')
 
 
 console.log('login.js loaded');
-// console.log('loginForm: ', loginForm);
-// console.log('registerButton: ', registerButton);
-// console.log('sendCodeButton: ', sendCodeButton);
-// console.log('registerForm: ', registerForm);
 console.log('register_btn: ', register_btn);
 
 
@@ -49,11 +45,6 @@ loginForm.addEventListener('submit', (event) => {
     console.error(error);
   });
 
-  // 如果验证成功，返回index.html
-  // username.innerText = usernameValue;
-  // usernameLabel.style.display = 'inline-block';
-  // loginButton.style.display = 'none';
-  // logoutButton.style.display = 'inline-block';
 });
 
 // 显示注册表单
@@ -68,11 +59,6 @@ registerButton.addEventListener('click', () => {
   // console.log(registerForm)
 });
 
-// // 处理发送验证码按钮点击事件 TODO
-// sendCodeButton.addEventListener('click', () => {
-//   const phoneValue = document.getElementById('phone').value;
-//   // 在此处发送验证码
-// });
 
 
 // 点击注册按钮

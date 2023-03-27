@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>Dynamic Markdown to HTML Example using EventSource</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/styles/default.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.1/highlight.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
@@ -80,15 +80,14 @@
           codeBlock.parentNode.insertBefore(code_block_title, codeBlock);
         });
         // 用hljs高亮代码
-      hljs.highlightBlock(codeBlock);
+
+      hljs.highlightElement(codeBlock);
     });
 
     
   </script>
 
   <script>
-  // 初始化highlight.js
-  // hljs.initHighlighting();
 
   // 为每个代码块添加复制按钮
   document.querySelectorAll('pre code').forEach((codeBlock) => {
