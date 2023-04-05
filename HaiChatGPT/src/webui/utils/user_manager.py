@@ -4,103 +4,9 @@ import damei as dm
 import json
 from ....version import __appname__
 import time
-from datetime import datetime
+
 
 logger = dm.getLogger('user_manager')
-
-#from ..app import db
-from flask_sqlalchemy import SQLAlchemy
-db = SQLAlchemy()
-
-# 定义用户模型
-class UserData(db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-
-    name = db.Column(db.String(80), default='guest', unique=True, nullable=True)
-    password = db.Column(db.String(80))
-    phone = db.Column(db.Integer)
-    email = db.Column(db.String(80))
-    auth_type = db.Column(db.String(80))
-    api_key = db.Column(db.String(80))
-    cookies = db.Column(db.String(200))
-    
-    chats = db.relationship('UserChat', backref='name', lazy=True)
-    histories = db.relationship('UserHistory', backref='name', lazy=True)
-    config = db.relationship('UserConfig', backref='name', lazy=True)
-
-# TODO 用户-设置
-class UserConfig(db.Model):
-    __tablename__ = 'configs'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    temperature = db.Column(db.Float)
-    engine = db.Column(db.String(80))
-    api_key = db.Column(db.String(80))
-    proxy = db.Column(db.String(80))
-    max_tokens = db.Column(db.Float)
-
-# 定义历史记录模型
-class UserHistory(db.Model):
-    __tablename__ = 'histories'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    role = db.Column(db.String(200), default='user')
-    convo_id = db.Column(db.String(200), default='default')   
-    query = db.Column(db.Text)
-    text = db.Column(db.Text)
-    status = db.Column(db.String(80), default='default')
-
-# 将历史记录和会话分开保存
-# 用户-会话-信息
-# 用户-历史记录
-class UserChat(db.Model):
-    __tablename__ = 'chats'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    chat = db.Column(db.String(80), default='default', nullable=False)
-    messages = db.relationship('UserMessage', backref='chat', lazy=True)
-
-class UserMessage(db.Model):
-    __tablename__ = 'messages'
-
-    id = db.Column(db.Integer, primary_key=True)
-    chat_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
-
-    query = db.Column(db.Text, nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(80), default='default')
-
-
-def get_chat_and_message(user_name: str, chat_name='default'):
-    user = UserData.query.filter_by(name=user_name).first()
-    if not user:
-        logger.info(f"用户 {user_name} 不存在")
-
-    chat = UserChat.query.filter_by(
-        user_id=user.id, chat=chat_name).first()
-    if not chat:
-        logger.info(f"会话 {chat_name} 不存在")
-
-    # 读取Message
-    # messages = UserMessage.query.filter_by(chat_id=chat.id).all()
-    # messages = UserMessage.query.filter(UserMessage.chat_id == chat.id).all()
-    # 这两个语句会报错，未知原因
-    messages = db.session.query(UserMessage).filter_by(chat_id=chat.id).all()
-
-    result = []
-    for message in messages:
-        result.append({'query': message.query, 'text': message.text})
-    return result
 
 
 class UserManager(object):
@@ -166,72 +72,28 @@ class UserManager(object):
         one_user.update(kwargs)
         self._users[user] = one_user
         # TODO: 保存到文件中
-        # self.save_users_to_file(self._users)
-
-        # 添加用户到数据库中
-        if not UserData.query.filter_by(name=user).first():
-            user_data = UserData(name=user)
-            for key, value in one_user.items():
-                try:
-                    setattr(user_data, key, value)
-                except KeyError:
-                    print(f"KeyError: {user_data},{key},{value}")
-            db.session.add(user_data)
-            db.session.commit()
-        else:
-            logger.info(f"User {user} 存在.")
-
+        self.save_users_to_file(self._users)
 
     def remove_user(self, user):
         del self._users[user]
 
-        # 从数据库中删除用户
-        user_data = UserData.query.filter_by(name=user).first()
-        if user_data:
-            db.session.delete(user_data)
-            db.session.commit()
-            logger.info(f"User {user} 已被删除.")
-        else:
-            logger.info(f"User {user} 不存在.")
-
     def verify_user(self, user, password, **kwargs):
         # logger.info(f'Try local auth. all users: {self._users}')
         use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
-        
-        # 寻找本地的数据库
-        # 如果没有，尝试用sso验证,
-        # 如果有，用本地验证, 再尝试用sso验证
-        # TODO 还没有修改密码功能
-        user_data = UserData.query.filter_by(name=user).first()
-        if user_data is None:
-            if  use_sso_auth:
-                logger.info(f'Local auth failed, try sso auth.')
-                ok, msg = self.sso_verify_user(user, password, **kwargs)
-                if ok:
-                    user_data = UserData(name=user, password=password, auth_type='sso')
-                    db.session.add(user_data)
-                    db.session.commit()
-                    return True, ''
-                else:
-                    return False, f'本地用户不存在，统一认证用户验证失败，请尝试注册。msg: {msg}'
-            else:
-                return False, f'本地用户不存在，请尝试注册。msg: {msg}'
-        else:
-            if user_data.auth_type == 'sso' and use_sso_auth:
-                ok, msg = self.sso_verify_user(user, password, **kwargs)
-                if ok:
-                    user_data.password = password
-                    db.session.commit()
-                    return True, ''
-                else:
-                    return False, f'统一认证用户失败'
-            else:
-                if user_data.password == password:
-                    return True, ''
-                else:
-                    return False, '本地用户密码错误'
 
-        '''
+        if user in self._users.keys():
+            auth_type = self._users[user].get('auth_type', 'local')
+            is_ok = self._users[user]['password'] == password
+            if is_ok:
+                return True, ''
+            else:
+                pass
+                # return False, '密码错误'
+                # if auth_type == 'sso' and use_sso_auth:
+                #     return self.sso_verify_user(user, password, **kwargs)
+        else:
+            pass
+
         logger.info(f'Local auth failed, try sso auth.')
         if use_sso_auth:
             ok, msg = self.sso_verify_user(user, password, **kwargs)
@@ -240,7 +102,6 @@ class UserManager(object):
             else:
                 return False, f'本地和统一认证用户均失败，请尝试注册。msg: {msg}'
         return False, '本地用户不存在'
-        '''
 
     def sso_verify_user(self, user, password, **kwargs):
         ok, msg = self.sso_auth.verify_user(user, password)
@@ -296,8 +157,9 @@ class UserManager(object):
             self._cookies[user]['history_convos'][convo_id] = list()
         # self._cookies[user]['history'].append(one_entry)
         # print(self._cookies[user]['history_convos'][convo_id])
+
         one_entry['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        self._cookies[user]['history_convos'][convo_id].append(one_entry)        
+        self._cookies[user]['history_convos'][convo_id].append(one_entry)
         self.save_file(self._users_cookie_file, self._cookies)
 
     def get_permission_level(self, user):

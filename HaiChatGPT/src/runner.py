@@ -117,13 +117,15 @@ class Runner(object):
                 }
         
         from .webui.app import run as run_app
-        from .webui.app import user_mgr
-        user_mgr.use_sso_auth = opt.use_sso_auth
+        #from .webui.app import user_mgr
+        #user_mgr.use_sso_auth = opt.use_sso_auth
         
         run_app(
             host=self.opt.host,
             port=self.opt.port,
             debug=self.opt.use_fake_bot,
+            use_sso_auth=opt.use_sso_auth,
+            use_sql=opt.use_sql,
         )
 
     

@@ -13,23 +13,11 @@ logger = dm.get_logger('app')
 app = Flask(__name__)
 app.secret_key = 'this_is_bxx_session_key'  # 设置Session密钥，用于加密Session数据
 
+db = None
+user_mgr = None
 
-# 连接到MySQL数据库
-# from flask_sqlalchemy import SQLAlchemy
-from .utils.user_manager import db as db
-app.config.from_pyfile('app_config.py')
-db.app = app
-db.init_app(app)
-
-
-from .utils.user_manager import UserData, UserHistory
-
-from .utils.user_manager import UserManager
-user_mgr = UserManager()
 from .utils.web_object import WebObject
-webo = WebObject(user_mgr=user_mgr)
-
-
+webo = WebObject()
 
 from .utils.app_routes import *
 from .utils import general
@@ -80,7 +68,7 @@ def login():
     logger.debug(f'login请求的data为: {data}')
     username = data.get('username')
     password = data.get('password')
-    ok, msg = user_mgr.verify_user(username, password)
+    ok, msg = webo.user_mgr.verify_user(username, password)
     if ok:
         session['username'] = username
         # session['logged_users'] = session.get('logged_users', []) + [username]
@@ -109,23 +97,11 @@ def register():
     password = data.get('password')
     phone = data.get('phone')
 
-    #with app.app_context():
-    #    db.drop_all()
-    #    db.create_all()
-
-    if not UserData.query.filter_by(name=username).first():
-        user_mgr.add_user(username, password, phone=phone)
-        return jsonify({'success': True, 'message': '注册成功'})
-    else:
+    if webo.user_mgr.is_exist(username):
         return {'success': False, 'message': f'用户名{username}已存在'}
-
-    #if user_mgr.is_exist(username):
-    #    return {'success': False, 'message': f'用户名{username}已存在'}
-    #else:
-    #    user_mgr.add_user(username, password, phone=phone)
-    #    return jsonify({'success': True, 'message': '注册成功'})
-
-
+    else:
+        webo.user_mgr.add_user(username, password, phone=phone)
+        return jsonify({'success': True, 'message': '注册成功'})
 
 def run(**kwargs):
     # from gevent import pywsgi
@@ -137,15 +113,33 @@ def run(**kwargs):
     here = os.path.dirname(os.path.abspath(__file__))
     # os.chdir(here)
 
+    # setup UserManager
+    use_sso_auth = kwargs.get('use_sso_auth',False)
+    use_sql = kwargs.get('use_sql', False)
+    if use_sql:
+        from .utils.user_manager_sql import UserManagerSQL
+        user_mgr = UserManagerSQL()
+        # 连接到MySQL数据库
+        app.config.from_pyfile('app_config.py')
+        from .utils.user_manager_sql import db as db
+        db.app = app
+        db.init_app(app)
+        with app.app_context():
+            #db.drop_all()
+            db.create_all()
+    else:
+        from .utils.user_manager import UserManager
+        user_mgr = UserManager()
+    user_mgr.use_sso_auth = use_sso_auth
+
     # setup web object
+    webo.user_mgr = user_mgr
 
     host = kwargs.get('host', '127.0.0.1')
     port = kwargs.get('port', 5000)
     debug = kwargs.get('debug', False)
     app.run(host=host, port=port, debug=debug)
     # socketio.run(app, host=host, port=port, debug=debug)
-    with app.app_context():
-        db.create_all()
 
     os.chdir(work_dir)
 
