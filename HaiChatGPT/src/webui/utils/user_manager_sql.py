@@ -183,8 +183,9 @@ class UserManagerSQL(UserManager):
         return user_data.auth_type == "plus"
     
     def get_cookie(self, user):
-        return UserData.query.filter_by(name=user).first().cookies
-    
+        user_data = UserData.query.filter_by(name=user).first()
+        return user_data.cookies if user_data else {}
+
     def write_cookie(self, user, **kwargs):
         user_data = UserData.query.filter_by(name=user).first()
         if user_data is None:
