@@ -1,1 +1,1 @@
-SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost/database'
+SQLALCHEMY_DATABASE_URI = 'mysql://root:123qwe@localhost/user_data'
