@@ -184,7 +184,7 @@ class UserManagerSQL(UserManager):
     
     def get_cookie(self, user):
         user_data = UserData.query.filter_by(name=user).first()
-        return user_data.cookies if user_data else {}
+        return user_data.cookies if user_data else None
 
     def write_cookie(self, user, **kwargs):
         user_data = UserData.query.filter_by(name=user).first()
@@ -203,13 +203,13 @@ class UserManagerSQL(UserManager):
     def save_history(self, username, convo_id, one_entry):
         # logger.debug(f'Save history for user {user}: {one_entry}')
         # 搜索用户
-        user = UserData.query.filter_by(name=username).first()
-        if not user:
-            user = UserData.query.filter_by(name="public").first()
+        user_data = UserData.query.filter_by(name=username).first()
+        if not user_data:
+            user_data = UserData.query.filter_by(name="public").first()
             # TODO 每次会话创建有一个唯一ID的临时用户
-            if not user:
-                user = UserData(name="public")
-                db.session.add(user)
+            if not user_data:
+                user_data = UserData(name="public")
+                db.session.add(user_data)
                 db.session.commit()
 
         '''
@@ -233,15 +233,15 @@ class UserManagerSQL(UserManager):
             convo_id=convo_id,
             role=one_entry["role"],
             content=one_entry["content"],
-            user_id=user.id)
+            user_id=user_data.id)
         db.session.add(user_history)
         db.session.commit()
 
-    def get_permission_level(self, username):
-        user = UserData.query.filter_by(name=username).first()
-        if not user:  # 未登录
+    def get_permission_level(self, user):
+        user_data = UserData.query.filter_by(name=user).first()
+        if not user_data:  # 未登录
             return 0
-        elif user.auth_type == 'public':  # public
+        elif user_data.auth_type == 'public':  # public
             return 1
         else:
             if self.is_admin(user):  # admin
