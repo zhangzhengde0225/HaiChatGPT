@@ -205,10 +205,12 @@ class UserManagerSQL(UserManager):
         # 搜索用户
         user = UserData.query.filter_by(name=username).first()
         if not user:
+            user = UserData.query.filter_by(name="public").first()
             # TODO 每次会话创建有一个唯一ID的临时用户
-            user = UserData(name="quest")
-            db.session.add(user)
-            db.session.commit()
+            if not user:
+                user = UserData(name="public")
+                db.session.add(user)
+                db.session.commit()
 
         '''
         # 保存 chat
