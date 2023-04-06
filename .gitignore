@@ -31,7 +31,7 @@ HaiChatGPT/examples/gpt35_api_demo/*
 
 dist/*
 build/*
-HaiChatGPT/repos/*
+#HaiChatGPT/repos/*
 
 # #####################
 *~
