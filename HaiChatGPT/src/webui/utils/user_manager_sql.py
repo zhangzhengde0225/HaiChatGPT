@@ -150,17 +150,17 @@ class UserManagerSQL(UserManager):
             else:
                 return False, f'本地用户不存在，请尝试注册。msg: {msg}'
         else:
-            if user_data.auth_type == 'sso' and use_sso_auth:
-                ok, msg = self.sso_verify_user(user, password, **kwargs)
-                if ok:
-                    user_data.password = password
-                    db.session.commit()
-                    return True, ''
-                else:
-                    return False, f'统一认证用户失败'
+            if user_data.password == password:
+                return True, ''
             else:
-                if user_data.password == password:
-                    return True, ''
+                if user_data.auth_type == 'sso' and use_sso_auth:
+                    ok, msg = self.sso_verify_user(user, password, **kwargs)
+                    if ok:
+                        user_data.password = password
+                        db.session.commit()
+                        return True, ''
+                    else:
+                        return False, f'统一认证用户失败'
                 else:
                     return False, '本地用户密码错误'
     
