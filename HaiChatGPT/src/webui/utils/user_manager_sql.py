@@ -172,7 +172,7 @@ class UserManagerSQL(UserManager):
         if user_data is None:
             return False
         else:
-            return user_data.auth_type is "admin"
+            return user_data.auth_type == "admin"
     
     def is_plus(self, user):
         user_data = UserData.query.filter_by(name=user).first()
@@ -180,7 +180,7 @@ class UserManagerSQL(UserManager):
             return False
         if self.is_admin(user):
             return True
-        return user_data.auth_type is "plus"
+        return user_data.auth_type == "plus"
     
     def get_cookie(self, user):
         return UserData.query.filter_by(name=user).first().cookies
