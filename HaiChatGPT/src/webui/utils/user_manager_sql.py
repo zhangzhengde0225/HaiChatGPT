@@ -11,6 +11,7 @@ logger = dm.getLogger('user_manager')
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.orm.attributes import flag_modified
 db = SQLAlchemy()
 
 # 定义用户模型
@@ -189,9 +190,11 @@ class UserManagerSQL(UserManager):
         if user_data is None:
             raise Exception(f'User {user} not exist!')
         
-        one_cookies = UserData.query.filter_by(name=user).first().cookies
+        one_cookies = user_data.cookies
         one_cookies.update(kwargs)
-        UserData.query.filter_by(name=user).first().cookies = one_cookies
+        user_data.cookies = one_cookies
+        # 重要，sqlalchemy无法检测JSON变化，必须人工设置变化标识
+        flag_modified(user_data, "cookies")
         db.session.commit()
 
         logger.debug(f'Write cookie for user {user}: {one_cookies}')
