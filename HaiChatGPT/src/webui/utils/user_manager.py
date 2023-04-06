@@ -109,7 +109,7 @@ class UserManager(object):
         if ok:
             # logger.info(f'{user} ssoauth verify user success!')
             # 在本地保存用户信息，下次直接使用本地验证
-            if user not in self._users.keys():
+            if self.is_exist(user):
                 self.add_user(user, password, auth_type='sso')
             return True, ''
         else:
