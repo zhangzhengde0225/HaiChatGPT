@@ -13,9 +13,6 @@ logger = dm.get_logger('app')
 app = Flask(__name__)
 app.secret_key = 'this_is_bxx_session_key'  # 设置Session密钥，用于加密Session数据
 
-db = None
-user_mgr = None
-
 from .utils.web_object import WebObject
 webo = WebObject()
 

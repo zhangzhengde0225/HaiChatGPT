@@ -10,43 +10,33 @@ from .user_manager import UserManager
 logger = dm.getLogger('user_manager')
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import event
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
 db = SQLAlchemy()
+
+import uuid
 
 # 定义用户模型
 class UserData(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    name = db.Column(db.String(80), default='guest', unique=True, nullable=True)
+    name = db.Column(db.String(80), default='public', unique=True, nullable=True)
     password = db.Column(db.String(80))
     phone = db.Column(db.Integer)
     email = db.Column(db.String(80))
     auth_type = db.Column(db.String(80))
-    api_key = db.Column(db.String(80))
     cookies = db.Column(JSON, nullable=False, default={})
-    
+    uuid = db.Column(db.String(32))
+
     chats = db.relationship('UserChat', backref='name', lazy=True)
     histories = db.relationship('UserHistory', backref='name', lazy=True)
-    config = db.relationship('UserConfig', backref='name', lazy=True)
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-# TODO 用户-设置
-class UserConfig(db.Model):
-    __tablename__ = 'configs'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    temperature = db.Column(db.Float)
-    engine = db.Column(db.String(80))
-    api_key = db.Column(db.String(80))
-    proxy = db.Column(db.String(80))
-    max_tokens = db.Column(db.Float)
 
 # 定义历史记录模型
 class UserHistory(db.Model):
@@ -79,13 +69,25 @@ class UserMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     chat_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
 
-    query = db.Column(db.Text, nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(80), default='default')
+    role = db.Column(db.String(200), default='user')
+    content = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+# 监听UserData类的before_delete事件，删除chat
+@event.listens_for(UserData, 'before_delete')
+def delete_user_posts(mapper, connection, target):
+    UserChat.query.filter_by(user_id=target.id).delete()
+
+# 监听UserChat类的before_delete事件，删除message
+@event.listens_for(UserChat, 'before_delete')
+def delete_user_posts(mapper, connection, target):
+    UserMessage.query.filter_by(chat_id=target.id).delete()
 
 class UserManagerSQL(UserManager):
     def __init__(self, use_sso_auth=False) -> None:
         super().__init__(use_sso_auth)
+        #self._users = None
+        #self._cookies = None
 
     def read_users_from_file(self):
         pass
@@ -106,6 +108,7 @@ class UserManagerSQL(UserManager):
         one_user = dict()
         one_user['password'] = password
         one_user['auth_type'] = kwargs.get('auth_type', 'local')
+        one_user['uuid'] = uuid.uuid4().hex
         one_user.update(kwargs)
 
         # 添加用户到数据库中
@@ -123,6 +126,7 @@ class UserManagerSQL(UserManager):
 
     def remove_user(self, user):
         # 从数据库中删除用户
+        # TODO 现在是只删除用户，不删除历史记录
         user_data = UserData.query.filter_by(name=user).first()
         if user_data:
             db.session.delete(user_data)
@@ -132,13 +136,12 @@ class UserManagerSQL(UserManager):
             logger.info(f"User {user} 不存在.")
 
     def verify_user(self, user, password, **kwargs):
-        # logger.info(f'Try local auth. all users: {self._users}')
         use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
         
         user_data = UserData.query.filter_by(name=user).first()
         if user_data is None:
             if  use_sso_auth:
-                logger.info(f'Local auth failed, try sso auth.')
+                logger.debug(f'Local auth failed, try sso auth.')
                 ok, msg = self.sso_verify_user(user, password, **kwargs)
                 if ok:
                     user_data = UserData(name=user, password=password, auth_type='sso')
@@ -222,7 +225,7 @@ class UserManagerSQL(UserManager):
 
         # 保存 Message
         message = UserMessage(
-            chat_id=chat.id, query=one_entry["query"], text=one_entry["text"])
+            chat_id=chat.id, role=one_entry["role"], content=one_entry["content"])
         db.session.add(message)
         db.session.commit()
         '''
@@ -270,34 +273,6 @@ class UserManagerSQL(UserManager):
 
         result = []
         for message in messages:
-            result.append({'query': message.query, 'text': message.text})
+            result.append({'role': message.role, 'content': message.content})
         return result
     
-    def check_sql(self,db):
-        """
-        检查表结构是否一致，不一致则重新建表
-        """
-        from sqlalchemy import MetaData
-        metadata = MetaData(bind=db.engine)
-
-        def check_table_structure(db, table_class, table_name):
-            if not metadata.tables.get(table_name):
-                # 如果表不存在，创建表
-                db.create_all()
-                logger.info(f"{table_name} 不存在，创建表")
-            else:
-                # 如果表存在，检查表结构是否一致
-                table = db.metadata.tables[table_name]
-                local_table = table_class.__table__
-                if str(table) != str(local_table):
-                    # 如果表结构不一致，删除表并重新创建
-                    db.session.execute('DROP TABLE IF EXISTS mytable;')
-                    db.session.commit()
-                    db.create_all()
-                    logger.info(f"{table_name} 表结构不一致，删除表并重新创建")
-        
-        check_table_structure(db, UserData, 'users')
-        check_table_structure(db, UserConfig, 'configs')
-        check_table_structure(db, UserHistory, 'histories')
-        check_table_structure(db, UserChat, 'chats')
-        check_table_structure(db, UserMessage, 'messages')
