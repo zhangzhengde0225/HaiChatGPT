@@ -144,9 +144,7 @@ class UserManagerSQL(UserManager):
                 logger.debug(f'Local auth failed, try sso auth.')
                 ok, msg = self.sso_verify_user(user, password, **kwargs)
                 if ok:
-                    user_data = UserData(name=user, password=password, auth_type='sso')
-                    db.session.add(user_data)
-                    db.session.commit()
+                    self.add_user(user, password, auth_type='sso')
                     return True, ''
                 else:
                     return False, f'本地用户不存在，统一认证用户验证失败，请尝试注册。msg: {msg}'
