@@ -20,6 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--temperature', type=float, default=0.5, help='Temperature, 0 to 1, more is more random')
     parser.add_argument('--use-fake-bot', action='store_true', help='Use fakebot if true')
     parser.add_argument('--use-sso-auth', action='store_true', help='Use SSO auth if True')
+    parser.add_argument('--use-sql', action='store_true', help='Use sql if True')
     parser.add_argument('--debug', action='store_true', help='Debug mode')
     opt = parser.parse_args()
 

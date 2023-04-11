@@ -16,5 +16,9 @@ damei
 numpy # for damei
 easydict  # for damei
 
+mysqlclient # for sql
+pymysql # for sql
+Flask-SQLAlchemy  # for sql
+
 
 
