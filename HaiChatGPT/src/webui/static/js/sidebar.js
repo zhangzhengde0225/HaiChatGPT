@@ -11,11 +11,16 @@ user_name = localStorage.getItem('username')
 function show_login_by_local_storage() {
   local_user = localStorage.getItem('username');
   if (local_user == 'public' || local_user == null || local_user == 'null') {
-    // 未登录
     loginButton.style.display = 'inline-block';
     logoutButton.style.display = 'none';
-    usernameLabel.style.display = 'none';
-    usernameLabel.innerText = '';
+    usernameLabel.style.display = 'inline-block';
+    usernameLabel.innerText = 'public';
+  // } else if () {
+  //   // 未登录
+  //   loginButton.style.display = 'inline-block';
+  //   logoutButton.style.display = 'none';
+  //   usernameLabel.style.display = 'none';
+  //   usernameLabel.innerText = '';
   } else {
     // 已登录
     // console.log('sidebar.js 已登录', local_user);
@@ -32,6 +37,11 @@ show_login_by_local_storage();
 // 点击登录按钮 显示登录对话框
 loginButton.addEventListener('click', () => {
     window.location.href = 'login-dialog.html';
+  });
+
+// 点击用户名 显示用户信息
+usernameLabel.addEventListener('click', () => {
+    window.location.href = 'user-info.html';
   });
 
 // 监听 登出按钮 清除本地存储的用户名

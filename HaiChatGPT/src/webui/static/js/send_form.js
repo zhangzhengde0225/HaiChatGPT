@@ -13,25 +13,6 @@ const last_answer_content = document.getElementById('markdown_content');
 console.log('send_form.js loaded');
 prompt_text.focus();
 
-// 监听按下Enter键发送表单
-prompt_text.addEventListener('keydown', function(event) {
-    // 按下shift+enter键，输入换行
-    if (event.key === 'Enter' && event.shiftKey) {
-        event.preventDefault();
-        this.value += '\n';
-    };
-    // 按下ctrl+enter键，输入换行
-    if (event.key === 'Enter' && event.ctrlKey) {
-        event.preventDefault();
-        this.value += '\n';
-    };
-    // 按下enter键，发送消息
-    if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey) {
-        event.preventDefault();
-        document.getElementById('send-button').click();
-    };
-});
-
 
 // 按enter发送消息，按shift+enter换行
 sendForm.addEventListener('submit', (event) => {
@@ -55,6 +36,27 @@ sendForm.addEventListener('submit', (event) => {
 });
 
 
+// 监听按下Enter键发送表单
+prompt_text.addEventListener('keydown', function(event) {
+    // 按下shift+enter键，输入换行
+    if (event.key === 'Enter' && event.shiftKey) {
+        event.preventDefault();
+        this.value += '\n';
+    };
+    // 按下ctrl+enter键，输入换行
+    if (event.key === 'Enter' && event.ctrlKey) {
+        event.preventDefault();
+        this.value += '\n';
+    };
+    // 按下enter键，发送消息
+    if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey) {
+        event.preventDefault();
+        document.getElementById('send-button').click();
+    };
+});
+
+
+
 function submit_promt_form(event) {
     const messageValue = event.target.elements.prompt.value;
     // 在此处将消息发送给后台
@@ -66,7 +68,6 @@ function submit_promt_form(event) {
     // 清空输入框
     event.target.elements.prompt.value = '';
     
-
     fetch('/send_prompt', {
         method: 'POST',
         headers: {  
@@ -124,6 +125,8 @@ function submit_clear(event) {
         console.log('clear success');
         // 清空history
         document.getElementById('qa_pairs').innerHTML = '';
+        document.getElementById('last_question').style.display = "none";
+        document.getElementById('last_answer').style.display = "none";
         } else {
         // 清除失败，显示错误消息
         const message = data.message;

@@ -8,8 +8,17 @@ import time
 
 logger = dm.getLogger('user_manager')
 
+class PremisionLevel:
+    NONE = 0
+    PUBLIC = 1
+    FREE = 1
+    USER = 2  # 登录
+    PLUS = 3  # 付费用户
+    ADMIN = 4  # 管理员
+
 
 class UserManager(object):
+
     def __init__(self, use_sso_auth=False) -> None:
         self._users_file = f'{Path.home()}/.{__appname__}/users.json'
         self._users_cookie_file = f'{Path.home()}/.{__appname__}/users_cookie.json'
@@ -61,6 +70,45 @@ class UserManager(object):
     @property
     def cookies(self):
         return self._cookies
+    
+    def get_user_data(self, user):
+        """
+        与get_user_info的区别是，get_user_data不包含密码，并会补充一些信息，用于前端显示
+        样例：
+        {
+        "username": "public",
+        "phone": "13112345678",
+        "phone_verified": True,
+        "email": "zhangsan@example.com",
+        "user_type": "free",
+        "usage": 5,
+        "limit": 10,
+        "group": None,
+        "group_admin": False,
+        "group_members": None,
+        }
+        """
+        user_info = self.users.get(user, {})
+        # user_info.pop('password', None)
+
+        # print('user_info', user_info)
+        user_data = dict()
+        user_data['username'] = user
+        user_data['phone'] = user_info.get('phone', None)
+        user_data['phone_verified'] = user_info.get('phone_verified', False)
+        user_data['email'] = user_info.get('email', None)
+        user_data['user_type'] = user_info.get('user_type', 'free')
+        user_data['user_type'] = 'admin' if user_info.get('is_admin', False) else user_data['user_type']
+        user_data['usage'] = user_info.get('usage', 0)
+        user_data['limit'] = user_info.get('limit', 10)
+        default_group = 'ihep' if user_info.get('auth_type', 'local') == 'sso' else ''
+        user_data['group'] = user_info.get('group', default_group)
+        user_data['group'] = user_data['group'] if isinstance(user_data['group'], str) else ', '.join(user_data['group'])
+        user_data['own_group'] = user_info.get('own_group', None)
+        if user_data['own_group'] is not None:
+            user_data['group'] = user_data['own_group'] + '(own), ' + user_data['group']
+        user_data['group_members'] = user_info.get('group_members', None)
+        return user_data
     
     def get_user_info(self, user):
         return self.users[user]
@@ -131,6 +179,16 @@ class UserManager(object):
             return True
         return self._users[user].get('is_plus', False)
     
+    def is_sso_user(self, user):
+        if user not in self._users.keys():
+            return False
+        return self._users[user].get('auth_type', 'local') == 'sso'
+
+    def has_own_api_key(self, user):
+        if user not in self._users.keys():
+            return False
+        return self._cookies[user].get('api_key', False)
+
     def get_cookie(self, user):
         return self._cookies.get(user, None)
     
@@ -171,6 +229,29 @@ class UserManager(object):
                 return 4
             elif self.is_plus(user):  # plus
                 return 3
+            # elif self.is_sso_user(user):  # sso
+                # """SSO用户视为plus用户"""
+                # return 3
+            elif self.has_own_api_key(user):  # 有自己的api key
+                return 3
             else:
                 return 2  # 登录
+            
+    def user_level(self, user):
+        return self.get_permission_level(user)
+    
+    def user_level_str(self, user):
+        level = self.get_permission_level(user)
+        if level == 0:
+            return '未登录'
+        elif level == 1:
+            return '公共'
+        elif level == 2:
+            return '登录'
+        elif level == 3:
+            return 'plus'
+        elif level == 4:
+            return '管理员'
+        else:
+            raise Exception(f'Unknown user level: {level}')
         

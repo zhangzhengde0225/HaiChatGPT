@@ -49,6 +49,10 @@ def login_dialog():
     return render_template('login-dialog.html')
 
 
+@app.route('/user-info.html')
+def user_info():
+    return render_template('user-info.html')
+
 @app.route('/ip_addr')
 def ip_addr():
     # print(f'收到ip请求， {request}')
@@ -61,7 +65,7 @@ def ip_addr():
 @app.route('/clear', methods=['GET', 'POST'])
 def clear():
     user = general.get_user_from_session()
-    webo.delete_convo_and_save(user)  # 删除chatbot
+    webo.delete_convo_and_save(user, convo_id='default')  # 删除chatbot
     return jsonify({'success': True, 'message': '清空成功'})
 
 @app.route('/login', methods=['POST'])

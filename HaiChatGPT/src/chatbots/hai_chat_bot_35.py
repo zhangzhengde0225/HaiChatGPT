@@ -44,6 +44,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
 
         # 定义一个缓冲区，用于存储stream的结果
         self._stream_buffer = None
+        self.tmp_sys_prompt= None
 
         self.error_handler = ErrorHandler()
 
@@ -238,7 +239,6 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
                 self.set_user_cookie(system_prompt=sys_prompt, **kwargs)
                 info = f"系统指令已经设置为`{sys_prompt}`，输入sysc config查看"
                 return self.t2s(info)
-
         else:
             raise ValueError(f'未知的命令: `{command}`，输入`sysc help`查看帮助')
     

@@ -8,6 +8,7 @@ import requests
 from ..app import app
 from ....version import __appname__
 from ..fake_bot import FakeChatGPT
+from .file_manager import FileManager
 
 import logging
 from pathlib import Path
@@ -26,6 +27,7 @@ class WebObject(object):
     与web对象交互，强绑定
     """
     def __init__(self, **kwargs) -> None:
+        self.file_mgr = FileManager()
         self._stream = True
         """
         为适应不同username的请求，不同的username需要不同的chatbot
@@ -49,13 +51,20 @@ class WebObject(object):
         else:
             chatbot = self.chatbots[username]
             return chatbot
+        
+    def set_tmp_sys_prompt(self, username, sys_prompt):
+        chatbot = self.get_bot_by_username(username, create_if_no_exist=True)
+        chatbot.tmp_sys_prompt = sys_prompt
 
     def delete_convo_and_save(self, username, convo_id = 'default', **kwargs):
+        """
+        删除当前的chat，并保存到数据库中
+        """
         if username not in self.chatbots:
             return
         else:
             chatbot = self.chatbots[username]
-            one_convo = chatbot.conversation.get(convo_id, None)
+            one_convo = chatbot.conversation.get(convo_id, None)  # 其实一个chat
             if one_convo is None:
                 return
             else:

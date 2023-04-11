@@ -6,6 +6,8 @@
 from .apis import damei
 from ..version import __appname__, __version__, __author__
 
+from ..src.utils.auth_manager import AuthManager
+
 from ..repos.ChatGPT.src.revChatGPT.Official import Chatbot as API_ChatBot
 # from ..repos.ChatGPT.src.revChatGPT.V3 import Chatbot as API_ChatBot_35
 from ..src.chatbots.hai_chat_bot_35_cli import HChatBot as API_ChatBot_35

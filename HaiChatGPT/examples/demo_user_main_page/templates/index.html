@@ -1,0 +1,57 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户信息</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_info.css') }}" />
+    
+</head>
+<body>
+    <div id="user-form">
+    <form id="user-form">
+        <div class="user_info_item">
+            <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
+            <h2 class="title">用户信息</h2>
+        </div>
+        <div class='user_info_item'>
+            <div>用户名:</div>
+            <div>zhangsan</div>
+        </div>
+        <div class='user_info_item'>
+            <div>手机号:</div>
+            <div>12345678901</div>
+            <div>
+                <button type="button" id="send-code-button">发送验证码</button>
+            </div>
+        </div>
+        <div class='user_info_item'>
+            <div>邮箱:</div>
+            <div>12345678901</div>
+        </div>
+        <div class='user_info_item'>
+            <div>类型:</div>
+            <div>12345678901</div>
+        </div>
+        <div class='user_info_item'>
+            <div>额度:</div>
+            <div>12345678901</div>
+        </div>
+        <div class='user_info_item'>
+            <div>群组:</div>
+            <div>12345678901</div>
+        </div>
+        <div class='user_info_item'>
+            <div>群成员:</div>
+            <div>无</div>
+        </div>
+    </form>
+    </div>
+    
+    <script src="/static/js/user_info.js"></script>
+</body>
+
+
