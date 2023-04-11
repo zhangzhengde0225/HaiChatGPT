@@ -32,7 +32,7 @@ HaiChatGPT/examples/gpt35_api_test/*
 
 dist/*
 build/*
-# HaiChatGPT/repos/*
+#HaiChatGPT/repos/*
 
 # #####################
 *~
@@ -105,3 +105,6 @@ CMakeLists.txt.user*
 # --------
 *.dll
 *.exe
+
+# sql config
+HaiChatGPT/src/webui/app_config.py

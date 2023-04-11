@@ -157,7 +157,7 @@ class UserManager(object):
         if ok:
             # logger.info(f'{user} ssoauth verify user success!')
             # 在本地保存用户信息，下次直接使用本地验证
-            if user not in self._users.keys():
+            if not self.is_exist(user):
                 self.add_user(user, password, auth_type='sso')
             return True, ''
         else:
@@ -215,6 +215,7 @@ class UserManager(object):
             self._cookies[user]['history_convos'][convo_id] = list()
         # self._cookies[user]['history'].append(one_entry)
         # print(self._cookies[user]['history_convos'][convo_id])
+
         one_entry['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         self._cookies[user]['history_convos'][convo_id].append(one_entry)
         self.save_file(self._users_cookie_file, self._cookies)

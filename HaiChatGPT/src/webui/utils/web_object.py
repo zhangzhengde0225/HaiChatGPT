@@ -139,6 +139,7 @@ class WebObject(object):
             # raise ValueError(f'username: {username} not in chatbots')
         else:
             return chatbot.get_history(convo_id=convo_id, username=username, user_mgr=self.user_mgr)
+    
     def render(self, ret, **kwargs):
         return redirect(url_for("index", result=ret))
 

@@ -9,12 +9,38 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 基于OpenAI官方API实现。�
 # 更新日志
 
 + [2023.03.27] 修复历史消息自动空多行的问题，优化了代理速度。
++ [2023.03.13] 使用MySQL保存数据
 + [2023.03.01] 性能升级！使用Token登录，接入官网版的ChatGPT(原使用API_KEY基于GPT3)
 + [2023.02.17] 官方版保姆级注册教程和临时梯子奉上，[注册教程](docs/reg_tutorial.md)。
 + [2023.02.14] 请求错误时不会崩溃，错误信息会显示在网页界面上。
 + [2023.02.11] 添加了Web GUI，可通过python flask_run.py运行。
 + [2023.02.08] 初始版本，可通过命令行运行。
 
+# MySQL
+1. 安装好MySQL，并设置用户和密码
+2. 打开MySQL，并创建数据库
+```bash
+mysql -u username -p
+```
+```myscql
+CREATE DATABASE IF NOT EXISTS mydatabase;
+```
+3. 在 src/webui/app_config.py 中加入
+```python
+SQLALCHEMY_DATABASE_URI = 'mysql://username:password@host/mydatabase'
+```
+4. 可以使用 query.filter_by 搜索数据库，例如搜索用户，会话，和信息
+```python
+user = UserData.query.filter_by(name=user).first()
+chat = UserChat.query.filter_by(user_id=user.id, chat=chat_name).first()
+messages = UserMessage.query.filter_by(chat_id=chat.id).all()
+```
+5. flask 中也可以重建数据库
+```python
+with app.app_context():
+    db.drop_all()
+    db.create_all()
+```
 
 # 网页界面
 ![hai-gpt-webui](https://zhangzhengde0225.github.io/images/blog/haichatgpt-web-gui.jpg)
