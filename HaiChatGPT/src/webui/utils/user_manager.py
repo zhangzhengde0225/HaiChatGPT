@@ -256,3 +256,15 @@ class UserManager(object):
         else:
             raise Exception(f'Unknown user level: {level}')
         
+
+    def get_rate_limited(self, username):
+        if username == None or username == 'public':
+            a = 2
+            msg = f'公共用户访问速率限制1条/秒，当前负载{a}条/秒，等等再试或请登录绑定独占Bot。'
+            return True, msg
+        else:
+            return False, ''
+
+        
+        
+        
