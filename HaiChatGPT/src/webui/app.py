@@ -121,7 +121,8 @@ def run(**kwargs):
         from .utils.user_manager_sql import UserManagerSQL
         user_mgr = UserManagerSQL()
         # 连接到MySQL数据库
-        app.config.from_pyfile('app_config.py')
+        # app.config.from_pyfile('app_config.py')
+        app.config.from_pyfile(user_mgr.app_sql_config)
         from .utils.user_manager_sql import db as db
         db.app = app
         db.init_app(app)

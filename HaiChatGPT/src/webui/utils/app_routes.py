@@ -7,7 +7,7 @@ import damei as dm
 import traceback
 
 
-from ..app import app, user_mgr, webo
+from ..app import app, webo
 from .user_manager import PremisionLevel
 from . import general
 
@@ -99,7 +99,7 @@ def get_user_data():
     """
     user = general.get_user_from_session()
     # logger.debug(f'收到get_user_data请求: user: {user}')
-    user_data = user_mgr.get_user_data(user)
+    user_data = webo.user_mgr.get_user_data(user)
     result = {'success': True, 'user_data': user_data}
     return jsonify(result)
 
@@ -109,8 +109,8 @@ def upload():
     user = general.get_user_from_session()
     logger.debug(f'收到upload请求: user: {user}')
     # 限制权限为plus及以上
-    if user_mgr.user_level(user) < PremisionLevel.PLUS:
-        return jsonify({'success': False, 'message': f'您是{user_mgr.user_level_str(user)}用户，需要PLUS或使用个人API_KEY'})
+    if webo.user_mgr.user_level(user) < PremisionLevel.PLUS:
+        return jsonify({'success': False, 'message': f'您是{webo.user_mgr.user_level_str(user)}用户，需要PLUS或使用个人API_KEY'})
     # 保存文件，解析文件，返回内容和TOKENS
     content, num_tokens = webo.file_mgr.process_uploaded_file(
         request=request, username=user)
