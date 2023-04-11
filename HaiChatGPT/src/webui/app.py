@@ -124,6 +124,7 @@ def run(**kwargs):
         with app.app_context():
             #db.drop_all()
             db.create_all()
+            user_mgr.save_user_to_sql()
     else:
         from .utils.user_manager import UserManager
         user_mgr = UserManager()

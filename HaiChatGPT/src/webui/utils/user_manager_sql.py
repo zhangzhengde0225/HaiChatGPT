@@ -25,7 +25,7 @@ class UserData(db.Model):
 
     name = db.Column(db.String(80), default='public', unique=True, nullable=True)
     password = db.Column(db.String(80))
-    phone = db.Column(db.Integer)
+    phone = db.Column(db.String(80))
     email = db.Column(db.String(80))
     auth_type = db.Column(db.String(80))
     cookies = db.Column(JSON, nullable=False, default={})
@@ -91,6 +91,14 @@ class UserManagerSQL(UserManager):
 
     def read_users_from_file(self):
         pass
+
+    def save_user_to_sql(self):
+        if self._users is not None:
+            for user, values in self._users.items():
+                password = values['password']
+                del values['password']
+                self.add_user(user,password,**values)
+                
 
     def read_cookies_from_file(self):
         pass
