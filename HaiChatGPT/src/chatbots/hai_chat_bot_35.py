@@ -8,6 +8,7 @@ import traceback
 
 from ...repos.ChatGPT.src.revChatGPT.V3 import Chatbot
 from ..utils.check_network import verify_api_key
+from ..webui.utils.request_limiter import RequestLimiter
 
 import damei as dm
 import time
@@ -47,6 +48,8 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
         self.tmp_sys_prompt= None
 
         self.error_handler = ErrorHandler()
+
+        self.request_limiter = RequestLimiter(limit_rate=1, unit='second')
 
     @property
     def stream_buffer(self):
@@ -128,6 +131,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
         self.temperature = temperature
 
     def _query_stream(self, query, **kwargs):
+        stream_interval = kwargs.pop('stream_interval', None)
 
         ret = self.ask_stream(
             prompt=query,
@@ -145,6 +149,8 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
                     text += content
                     b = text.replace("\n", "<|im_br|>")
                     yield f'data: {b}\n\n'
+                    if stream_interval is not None:
+                        time.sleep(stream_interval)
                     # logger.debug(f'content: {content}')
                 self.last_answer = text
                 self._stream_buffer = None
@@ -158,7 +164,14 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
     def query_stream(self, query, **kwargs):
         """包含错误处理的query_stream"""
         try:
-            if query.startswith('sysc') or query.startswith('SYSC'):
+            limited, msg = self.request_limiter.is_limited()
+            if limited:
+                msg = f'【错误】请求速率达到限制, {msg}，请稍后再试'
+                user_name = kwargs.get('user_name', None)
+                if user_name == 'public':
+                    msg += '或登录绑定独占Bot。'
+                return self.text2stream(msg)
+            elif query.startswith('sysc') or query.startswith('SYSC'):
                 # logger.debug(f'command: {query}')
                 return self._handle_commands(query, **kwargs)
             else:

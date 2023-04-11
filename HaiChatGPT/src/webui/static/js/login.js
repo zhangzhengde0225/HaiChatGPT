@@ -7,13 +7,13 @@ const register_btn = document.getElementById('register-btn-in-form')
 
 
 console.log('login.js loaded');
-console.log('register_btn: ', register_btn);
+// console.log('register_btn: ', register_btn);
 
 
 // 处理登录表单提交事件
 loginForm.addEventListener('submit', (event) => {
   event.preventDefault(); // 阻止表单提交
-  console.log('submit event', event)
+  // console.log('submit event', event)
   const usernameValue = event.target.elements.username.value;
   const passwordValue = event.target.elements.password.value;
   fetch('/login', {
@@ -54,20 +54,32 @@ registerButton.addEventListener('click', () => {
   // registerForm.style.display = 'block';
   const registerFormDIV = document.getElementById('register-form-div');
   registerFormDIV.style.display = 'block';
-  console.log('loginForm.style.display: ', loginForm.style.display);
-  console.log('registerForm.style.display: ', registerForm.style.display);
+  // console.log('loginForm.style.display: ', loginForm.style.display);
+  // console.log('registerForm.style.display: ', registerForm.style.display);
   // console.log(registerForm)
 });
-
 
 
 // 点击注册按钮
 register_btn.addEventListener('click', (event) => {
   event.preventDefault(); // 阻止表单提交
-  console.log('register event', event)
+  // console.log('register event', event)
   const nameValue = registerForm.elements.name.value
   const passwordValue = registerForm.elements.reg_password.value
   const phoneValue = registerForm.elements.phone.value
+  const emailValue = registerForm.elements.reg_email.value
+  if (!validatePasswordStrength(passwordValue)) {
+    alert('密码必须包含数字、字母、符号且长度大于等于6');
+    return;
+  }
+  if (!validatePhoneNumber(phoneValue)) {
+    alert('手机号码不正确');
+    return;
+  }
+  if (!validateEmail(emailValue)) {
+    alert('邮箱格式不正确');
+    return;
+  }
   
   // 在此处将用户名和密码发送给后台进行验证
   // 使用fetch API发送POST请求
@@ -79,7 +91,8 @@ register_btn.addEventListener('click', (event) => {
     body: JSON.stringify({
       username: nameValue,
       password: passwordValue,
-      phone: phoneValue
+      phone: phoneValue,
+      email: emailValue,
     })
   })
   .then(response => response.json())
@@ -98,3 +111,30 @@ register_btn.addEventListener('click', (event) => {
     console.error(error);
   });
 });
+
+// 验证手机号码
+function validatePhoneNumber(phoneNumber) {
+  var phonePattern = /^\d{11}$/;
+  return phonePattern.test(phoneNumber);
+}
+
+
+// 验证密码强度，包含数字、字母、符号且长度大于等于6
+function validatePasswordStrength(password) {
+  var hasNumber = /\d/;
+  var hasLetter = /[a-zA-Z]/;
+  var hasSymbol = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/;
+
+  return (
+    password.length >= 6 &&
+    hasNumber.test(password) &&
+    hasLetter.test(password) &&
+    hasSymbol.test(password)
+  );
+}
+
+// 验证邮箱格式
+function validateEmail(email) {
+  var emailPattern = /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/;
+  return emailPattern.test(email);
+}
