@@ -299,6 +299,7 @@ textarea {
   background-color: #696969;
   color: #ffffff;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .show-on-mobile-chat-name {
@@ -314,6 +315,13 @@ textarea {
   align-items: center;
   /* gap: 10px; */
   margin-bottom: 10px;
+}
+
+.form-btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* margin-top: 10px; */
 }
 
 .drop-zone {

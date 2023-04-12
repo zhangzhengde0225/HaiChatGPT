@@ -20,7 +20,6 @@
           New Chat
         </div>
         <div class="chats">
-          提示:
           <li>ChatGPT能回答问题、提供建议、写代码、翻译、生成、提供知识、解决方案等
           <!-- <li>一个简单的例子, prompt: 我想让你担任Android开发工程师中文面试官。我将成为候选人，您将向我询问Android开发工程师职位的面试问题。我希望你只作为面试官回答。不要一次写出所有的问题。我希望你只对我进行采访。问我问题，等待我的回答。不要写解释。像面试官一样一个一个问我，等我回答。我的第一句话是“面试官你好” -->
           <!-- <li>示例：请写一段快速排序的代码</li> -->
@@ -28,14 +27,13 @@
           <!-- <br></br> -->
           <!-- <li>这是使用作者的同一个Key的免费抢先体验版，仅供测试使用。</li> -->
           <div>重要更新：</div>
-          <li>03.12登录用户独享bot</li>
-          <li>03.08基于GPT-3.5的性能升级！</li>
+          <li>04.11优化响应速率</li>
+          <!-- <li>03.08基于GPT-3.5的性能升级</li> -->
           <li>2023.02.08初始版本</li>
-          <br>
-          <li>报告错误请点击：
-            <a class='hyper_link' href="https://github.com/zhangzhengde0225/HaiChatGPT/issues">issue</a>
-            <div>或邮件zdzhang@ihep.ac.cn</div>
-          </li>
+          <!-- <li>报告错误： -->
+            <!-- <a class='hyper_link' href="https://github.com/zhangzhengde0225/HaiChatGPT/issues">issue</a> -->
+            <!-- <div>或邮件zdzhang@ihep.ac.cn</div> -->
+          <!-- </li> -->
           <li>技术交流群:
           <img class='qr_code' src="/static/icons/hai-chatgpt-wechat-group-small.png">
           <!-- <li>由于OpenAI不对国内服务，注册官方需要科学上网、邮箱、国外的手机号(可用sms-activate代替)，奉上
@@ -59,6 +57,8 @@
       <div class="show-on-mobile-title" id="show-on-mobile-title">
         <button id="expand-sidebar-btn">展开侧栏</button>
         <div class="show-on-mobile-chat-name">Chat: Default</div>
+        <!-- <span id="username-label" style="display: flex" class="hyper_link">
+          欢迎<span id="username"></span></span> -->
         <!-- <button>add</button> -->
       </div>
 
@@ -84,17 +84,22 @@
           <div id="markdown_content" class="markdown_content"></div>
         </div>
       </div>
-      <div class="upload-file" id="upload-file">
-        <div id="file-path"></div>
-        <div class="drop-zone" id="drop-zone">拖拽文件(.py, .pdf等)到此处可提问内容</div>
-        <button id="file-remove">移除</button>
-      </div>
       
       <form id="send-form">
         <textarea type="submit" name="prompt" placeholder="输入prompt(支持中英文等)，默认：sysc help，请勿输入隐私数据" id="prompt"></textarea>
-        <button id="send-button">发送</button>
-        <button id="clear-button">清空</button>
+        <div class='form-btns' style="display: flex; direction: row;"> 
+          <div>
+            <button id="send-button">发送</button>
+            <button id="clear-button">清空</button>
+          </div>
+          <div class="upload-file" id="upload-file">
+            <div id="file-path"></div>
+            <div class="drop-zone" id="drop-zone">拖拽文件(.py等)到此处可提问</div>
+            <button id="file-remove">移除</button>
+          </div>
+        </div>
       </form>
+      
       
     </div>
     <!-- 添加脚本 -->
