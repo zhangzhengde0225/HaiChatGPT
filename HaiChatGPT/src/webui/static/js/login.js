@@ -123,7 +123,7 @@ function validatePhoneNumber(phoneNumber) {
 function validatePasswordStrength(password) {
   var hasNumber = /\d/;
   var hasLetter = /[a-zA-Z]/;
-  var hasSymbol = /[@-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/;
+  var hasSymbol = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/@]/;
 
   return (
     password.length >= 6 &&
