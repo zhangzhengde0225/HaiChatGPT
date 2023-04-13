@@ -69,7 +69,7 @@ register_btn.addEventListener('click', (event) => {
   const phoneValue = registerForm.elements.phone.value
   const emailValue = registerForm.elements.reg_email.value
   if (!validatePasswordStrength(passwordValue)) {
-    alert('密码必须大于等于6位且包含同时数字、字母和符号');
+    alert('密码必须大于等于6位且同时包含数字、字母和符号');
     return;
   }
   if (!validatePhoneNumber(phoneValue)) {
@@ -123,7 +123,7 @@ function validatePhoneNumber(phoneNumber) {
 function validatePasswordStrength(password) {
   var hasNumber = /\d/;
   var hasLetter = /[a-zA-Z]/;
-  var hasSymbol = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/;
+  var hasSymbol = /[@-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/;
 
   return (
     password.length >= 6 &&
