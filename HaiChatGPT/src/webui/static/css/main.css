@@ -202,15 +202,15 @@ background-color: #555555;
   margin: 10px;
   overflow: auto;
 }
-/* 
-.last_answer2 {
+
+.public-user-alert {
   display: flex;
   flex-direction: row;
-  background-color: #eafcf0;
+  background-color: #ff9898;
   padding: 10px;
   margin: 10px;
-  border-radius: 5px; 
-}*/
+  overflow: auto;
+}
 
 .markdown-content {
   display: flex;

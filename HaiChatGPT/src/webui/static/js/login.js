@@ -69,7 +69,7 @@ register_btn.addEventListener('click', (event) => {
   const phoneValue = registerForm.elements.phone.value
   const emailValue = registerForm.elements.reg_email.value
   if (!validatePasswordStrength(passwordValue)) {
-    alert('密码必须包含数字、字母、符号且长度大于等于6');
+    alert('密码必须大于等于6位且包含同时数字、字母和符号');
     return;
   }
   if (!validatePhoneNumber(phoneValue)) {

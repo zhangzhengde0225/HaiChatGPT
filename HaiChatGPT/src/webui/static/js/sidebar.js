@@ -3,6 +3,7 @@
 const loginButton = document.getElementById('login-button');
 const logoutButton = document.getElementById('logout-button');
 const usernameLabel = document.getElementById('username-label');
+const public_user_alert = document.getElementById('public-user-alert');
 
 user_name = localStorage.getItem('username')
 // console.log(user_name); 
@@ -15,6 +16,7 @@ function show_login_by_local_storage() {
     logoutButton.style.display = 'none';
     usernameLabel.style.display = 'inline-block';
     usernameLabel.innerText = 'public';
+    public_user_alert.style.display = 'flex';
   // } else if () {
   //   // 未登录
   //   loginButton.style.display = 'inline-block';
@@ -28,6 +30,7 @@ function show_login_by_local_storage() {
     loginButton.style.display = 'none';
     logoutButton.style.display = 'inline-block';
     usernameLabel.style.display = 'inline-block';
+    public_user_alert.style.display = 'none';
   }
 }
 

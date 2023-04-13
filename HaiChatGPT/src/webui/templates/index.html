@@ -34,13 +34,14 @@
             <!-- <a class='hyper_link' href="https://github.com/zhangzhengde0225/HaiChatGPT/issues">issue</a> -->
           
           <!-- </li> -->
-          <div>无项目，不喜勿喷，随时下架</div>
-          <li>反馈和交流群:
+          
+          <li>技术交流群:
           <img class='qr_code' src="/static/icons/hai-chatgpt-wechat-group-small.png">
           <!-- <li>由于OpenAI不对国内服务，注册官方需要科学上网、邮箱、国外的手机号(可用sms-activate代替)，奉上
             <a class='hyper_link' href="https://code.ihep.ac.cn/zdzhang/haichatgpt/-/blob/main/docs/reg_tutorial.md">
             保姆级注册教程和临时梯子</a>。 -->
           <div>报告错误请邮件: zdzhang@ihep.ac.cn</div>
+          <div>欢迎反馈，不喜勿喷</div>
         </div>
         <div class="settings">
           <div id="user-form">  <!-- 左下角的用户表单 -->
@@ -49,7 +50,6 @@
             <button id="login-button">登录</button>
             <button id="logout-button" style="display:none">登出</button>
           </div>
-          <script src="/static/js/sidebar.js"></script>
         </div>
         <div id="ip_addr">ip: </div>
     </div>
@@ -84,6 +84,8 @@
           <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="answer_img" />
           <div id="markdown_content" class="markdown_content"></div>
         </div>
+        <div class='public-user-alert' id="public-user-alert" style="display: none">
+            未登录用户共享一个Bot，响应较慢，请左下角登录</div>
       </div>
       
       <form id="send-form">
@@ -105,6 +107,7 @@
     </div>
     <!-- 添加脚本 -->
     <script src="static/js/main.js"></script>
+    <script src="/static/js/sidebar.js"></script>
     <script src="static/js/adapt_to_mobile.js"></script>
     <script src="/static/js/send_form.js"></script>
     <script src="/static/js/stream_answer.js"></script>
