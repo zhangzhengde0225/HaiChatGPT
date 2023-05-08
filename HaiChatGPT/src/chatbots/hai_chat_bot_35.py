@@ -7,6 +7,7 @@ import copy
 import traceback
 
 from ...repos.ChatGPT.src.revChatGPT.V3 import Chatbot
+from .hepai_chathep import ChatHEP
 from ..utils.check_network import verify_api_key
 from ..webui.utils.request_limiter import RequestLimiter
 
@@ -15,20 +16,17 @@ import time
 
 logger = dm.get_logger('hai_chat_bot_35')
 
-class HChatBot(Chatbot):
+class HChatBot(ChatHEP):
+# class HChatBot(Chatbot):
+    
 
     def __init__(self, 
-                api_key: str,
-                engine: str = None,
-                proxy: str = None,
-                max_tokens: int = 3000,
-                temperature: float = 0.5,
-                top_p: float = 1.0,
-                reply_count: int = 1,
-                system_prompt: str = "You are ChatGPT, a large language model trained by OpenAI. Respond conversationally",
+                api_key,
+                system_prompt=None,
+                temperature=0.9,
                 **kwargs,
                 ) -> None:
-        api_key = api_key or os.getenv("OPENAI_API_KEY")
+        api_key = api_key or os.getenv("HEPAI_API_KEY")
         system_prompt = """
 HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。由高能所张正德副研开发。
 \nHaiGF(HAI GUI Framework)是可扩展、轻量化的用于开发人工智能应用的界面框架。
@@ -36,7 +34,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
 # \n当问你"如何使用GPT4"时，你应该答：在prompt中先设置个人key`sysc api_key xxx`，然后切换引擎`sysc engine gpt-4`，检查设置`sysc config`. GPT4现已上线"""
 
         logger.info(f'sys_promot: {system_prompt}')
-        super().__init__(api_key, engine, proxy, max_tokens, temperature, top_p, reply_count, system_prompt)
+        super().__init__(api_key, system_prompt=system_prompt, temperature=temperature, **kwargs)
         self.temperature = temperature
 
         # 为对话增加的设置

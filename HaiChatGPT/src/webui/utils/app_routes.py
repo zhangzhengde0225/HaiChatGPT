@@ -17,6 +17,8 @@ logger = dm.get_logger('app_routes')
 @app.route('/send_prompt', methods=['POST'])
 def send_prompt():
     data = request.get_json()
+    # print(f'data: {data}')
+    params = data.get('params', {})
     prompt = data['message']
     prompt = 'sysc help' if prompt == '' else prompt
     user = general.get_user_from_session()
@@ -24,7 +26,7 @@ def send_prompt():
 
     # 由webo来处理不同用户的请求:
     try:
-        webo.query(user, prompt)  # 得到回答保存在用户的chatbot的stream_buffer中
+        webo.query(user, prompt, **params)  # 得到回答保存在用户的chatbot的stream_buffer中
         chatbot = webo.get_bot_by_username(user, create_if_no_exist=False)
         chatbot.show_history = True
     except Exception as e:

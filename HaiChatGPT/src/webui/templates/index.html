@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>HaiChatGPT</title>
+    <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
     <link rel="shortcut icon" href="{{ url_for('static', filename='/icons/ai.png')}}"/>
@@ -69,8 +69,14 @@
 
       <div class="title">
         <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
-        <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
-        <div>v1.1.0. A free trail version of GPT-3.5.</div>
+        <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">ChatHEP</a>
+        <div>v1.1.1</div>
+        <label for="engine">引擎:</label>
+        <select name="engine" id="engine">
+          <option value="gpt-3.5-turbo-0301">gpt-3.5-turbo-0301</option>
+          <option value="chathep-0503">chathep-0503</option>
+        </select>
+        <!-- <div>v1.1.1. A free trail version of GPT-3.5.</div> -->
         <!-- <div>a free trail version of ChatGPT based on <a href="openai.com">OpenAI</a>.</div> -->
       </div>
       

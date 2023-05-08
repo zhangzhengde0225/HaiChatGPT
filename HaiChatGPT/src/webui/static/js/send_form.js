@@ -20,7 +20,7 @@ sendForm.addEventListener('submit', (event) => {
     // 如果点击send按钮，就执行下面的函数
     if (event.submitter.id === 'send-button') {
         console.log('send pressed');
-        submit_promt_form(event);  // 提交prmpt
+        submit_promt_form(event);  // 提交prompt
     };
     // 如果点击enter键，就执行下面的函数
     if (event.key === 'Enter') {
@@ -67,6 +67,8 @@ function submit_promt_form(event) {
     sendButton.disabled = true;
     // 清空输入框
     event.target.elements.prompt.value = '';
+
+    engine = document.getElementById('engine').value;
     
     fetch('/send_prompt', {
         method: 'POST',
@@ -74,7 +76,8 @@ function submit_promt_form(event) {
         'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-        message: messageValue
+            params: {'engine': engine},
+            message: messageValue
         })
     })
     .then(response => response.json())

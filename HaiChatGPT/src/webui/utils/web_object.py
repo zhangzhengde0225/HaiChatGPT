@@ -89,20 +89,21 @@ class WebObject(object):
         )
         return chatbot
 
-    def query(self, username, text):
+    def query(self, username, text, **kwargs):
         """
         根据用户名获取bot，然后query_stream, 返回就保存在bot.stream_buffer中
         """
         chatbot = self.get_bot_by_username(username, create_if_no_exist=True)
 
-        """
-        用户设置的缓存信息
-        """
+        ### 更新用户设置的缓存信息
         user_cookie = self.user_mgr.get_cookie(username)
         if user_cookie is not None:
             # 修改chatbot的参数
             self.set_bot_params(chatbot, **user_cookie)  # 根据cookie设置chatbot的参数
         stream_interval = 0.2 if username == 'public' else None  # 限制public的流式响应速度
+        engine = kwargs.get('engine', None)
+        if engine is not None:
+            self.set_bot_params(chatbot, engine=engine)
         
         # logger.debug(f'Username: {username}, user_cookie: {user_cookie}')
         # logger.info(f'webo chatbots: {len(self.chatbots)} {self.chatbots.keys()}')')
