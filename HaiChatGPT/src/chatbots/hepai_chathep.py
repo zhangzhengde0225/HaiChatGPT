@@ -8,7 +8,8 @@ ENCODER = tiktoken.get_encoding("gpt2")
 
 Engine2Model = {
     "gpt-3.5-turbo-0301": 'hepai/gpt-3.5-turbo',
-    "chathep-0503": "hepai/chathep-20230503"
+    "chathep-0503": "hepai/chathep-20230503",
+    "chatbep-0509": "hepai/chathep-20230509"
 }
 
 class ChatHEP(Chatbot):
@@ -22,6 +23,13 @@ class ChatHEP(Chatbot):
         self.system_prompt = system_prompt
         print(f'system_prompt: {self.system_prompt}')
         pass
+
+    def engine2model(self, engine):
+        if 'chathep' in engine:
+            # like "chathep-0503" → "hepai/chathep-20230503"
+            return f'hepai/{engine.split("-")[0]}-2023{engine.split("-")[1]}'
+        else:
+            return "hepai/gpt-3.5-turbo"
 
     @property
     def prompt_lang(self):
@@ -73,19 +81,19 @@ class ChatHEP(Chatbot):
         self.__truncate_conversation(convo_id=convo_id)  # 根据max_tokens截断会话
         # print(self.conversation[convo_id])
         
-        model = Engine2Model[self.engine]
+        model = self.engine2model(self.engine)
         api_key = kwargs.get("api_key", self.api_key)
         data = {
             "model": model,
             "messages": self.conversation[convo_id],
             "temperature": kwargs.get("temperature", self.temperature),
             "stream": True,
-            "timeout": 20,
+            "timeout": 60,
             # "user": role,
         }
         
         response = self.session.post(
-            "http://chat.ihep.ac.cn:42901/v1/chat/completions",
+            "https://chat.ihep.ac.cn/v1/chat/completions",
             proxies=self.session.proxies,
             headers={"Authorization": f"Bearer {api_key}"},
             json=data,
