@@ -73,9 +73,10 @@ class ChatHEP(Chatbot):
                 system_prompt = self.tmp_sys_prompt
                 # self.tmp_sys_prompt = None
         current_prompt = self.conversation[convo_id][0]["content"]
-        if current_prompt != system_prompt:
-            self.conversation[convo_id][0]["content"] = system_prompt
+        # if current_prompt != system_prompt:
+        self.conversation[convo_id][0]["content"] = system_prompt
         ### zzd end
+        # print('xx valid system_prompt:', system_prompt)
         
         self.add_to_conversation(prompt, "user", convo_id=convo_id)  # 添加用户输入到会话
         self.__truncate_conversation(convo_id=convo_id)  # 根据max_tokens截断会话

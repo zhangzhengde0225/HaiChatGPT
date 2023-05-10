@@ -28,7 +28,7 @@ class HChatBot(ChatHEP):
                 ) -> None:
         api_key = api_key or os.getenv("HEPAI_API_KEY")
         system_prompt = """
-You are ChatHEP, answering questions conversationally.
+You are a language model, answering questions conversationally.
 """
 # HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。由高能所张正德副研开发。
 # \nHaiGF(HAI GUI Framework)是可扩展、轻量化的用于开发人工智能应用的界面框架。
