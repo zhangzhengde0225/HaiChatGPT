@@ -10,6 +10,7 @@ from ...repos.ChatGPT.src.revChatGPT.V3 import Chatbot
 from .hepai_chathep import ChatHEP
 from ..utils.check_network import verify_api_key
 from ..webui.utils.request_limiter import RequestLimiter
+from ..utils.auth_manager import AuthLevel
 
 import damei as dm
 import time
@@ -387,7 +388,7 @@ You are a language model, answering questions conversationally.
         """
         return info
     
-    def auth_permission_level(self, require=2, **kwargs):
+    def auth_permission_level(self, require=AuthLevel.LOGGED_IN, **kwargs):
         """
         require: 所需等级权限，0为未登录，1为Public，2为登录，3为Plus，4为Admin
         """
@@ -399,17 +400,27 @@ You are a language model, answering questions conversationally.
         assert user_mgr.get_permission_level(user_name) >= require, f'Permission denied for user "{user_name}".'
 
     def _sysc_set_engine(self, *args, **kwargs):
-        self.auth_permission_level(require=2, **kwargs)
+        self.auth_permission_level(require=AuthLevel.LOGGED_IN, **kwargs)
         self.engine = args[0]
         self.set_user_cookie(engine=args[0], **kwargs)
         info = f"引擎已经设置为{args[0]}，输入sysc config查看"
         return info
 
     def _sysc_set_api_key(self, *args, **kwargs):
-        self.auth_permission_level(require=2, **kwargs)
+        self.auth_permission_level(require=AuthLevel.LOGGED_IN, **kwargs)
         # 验证api_key可用性
         api_key = args[0]
-        assert verify_api_key(api_key=api_key, timeout=3, proxies=self.session.proxies), 'API密钥无效'
+        if api_key == 'unset':  # 清除api_key
+            webo = kwargs.pop('webo', None)
+            assert webo is not None, 'No webo provided.'
+            api_key = webo.params_for_instantiation.get('api_key', None)
+            self.api_key = api_key
+            self.set_user_cookie(api_key=api_key, **kwargs)
+            return 'API密钥已设置为默认'
+        # TODO: 20230519之前写的验证是验证openai的API_KEY，但还在是hepai的了，需要改
+        # assert verify_api_key(api_key=api_key, timeout=3, proxies=self.session.proxies), 'API密钥无效'
+        if len(api_key) < 12:
+            return 'API密钥无效'
         self.set_user_cookie(api_key=args[0], **kwargs)
         self.api_key = args[0]
         secrete_api_key = f'{args[0][:4]}{"*"*(len(args[0])-8)}{args[0][-4:]}'
