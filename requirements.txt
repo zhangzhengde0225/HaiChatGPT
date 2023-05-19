@@ -21,4 +21,7 @@ pymysql # for sql
 Flask-SQLAlchemy  # for sql
 
 
+# python-ldap  # for sso-auth, 需要`conda install python-ldap`处理依赖关系
+
+
 

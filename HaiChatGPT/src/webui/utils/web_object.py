@@ -8,6 +8,7 @@ import requests
 from ..app import app
 from ....version import __appname__
 from ..fake_bot import FakeChatGPT
+from .file_manager import FileManager
 
 import logging
 from pathlib import Path
@@ -26,6 +27,7 @@ class WebObject(object):
     与web对象交互，强绑定
     """
     def __init__(self, **kwargs) -> None:
+        self.file_mgr = FileManager()
         self._stream = True
         """
         为适应不同username的请求，不同的username需要不同的chatbot
@@ -49,13 +51,20 @@ class WebObject(object):
         else:
             chatbot = self.chatbots[username]
             return chatbot
+        
+    def set_tmp_sys_prompt(self, username, sys_prompt):
+        chatbot = self.get_bot_by_username(username, create_if_no_exist=True)
+        chatbot.tmp_sys_prompt = sys_prompt
 
     def delete_convo_and_save(self, username, convo_id = 'default', **kwargs):
+        """
+        删除当前的chat，并保存到数据库中
+        """
         if username not in self.chatbots:
             return
         else:
             chatbot = self.chatbots[username]
-            one_convo = chatbot.conversation.get(convo_id, None)
+            one_convo = chatbot.conversation.get(convo_id, None)  # 其实一个chat
             if one_convo is None:
                 return
             else:
@@ -80,28 +89,32 @@ class WebObject(object):
         )
         return chatbot
 
-    def query(self, username, text):
+    def query(self, username, text, **kwargs):
         """
         根据用户名获取bot，然后query_stream, 返回就保存在bot.stream_buffer中
         """
         chatbot = self.get_bot_by_username(username, create_if_no_exist=True)
 
-        """
-        用户设置的缓存信息
-        """
+        ### 更新用户设置的缓存信息
         user_cookie = self.user_mgr.get_cookie(username)
         if user_cookie is not None:
             # 修改chatbot的参数
             self.set_bot_params(chatbot, **user_cookie)  # 根据cookie设置chatbot的参数
+        stream_interval = 0.2 if username == 'public' else None  # 限制public的流式响应速度
+        engine = kwargs.get('engine', None)
+        if engine is not None:
+            self.set_bot_params(chatbot, engine=engine)
         
         # logger.debug(f'Username: {username}, user_cookie: {user_cookie}')
-        logger.info(f'webo chatbots: {len(self.chatbots)} {self.chatbots.keys()}')
+        # logger.info(f'webo chatbots: {len(self.chatbots)} {self.chatbots.keys()}')')
+        # logger.debug(f'Username: {username}, user_cookie: {user_cookie}')
 
         stream = chatbot.query_stream(
             text, 
             user_mgr=self.user_mgr, 
             user_name=username,
             webo = self,
+            stream_interval=stream_interval
             )
         chatbot._stream_buffer = stream
         return stream

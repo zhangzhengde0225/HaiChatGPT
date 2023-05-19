@@ -30,11 +30,12 @@ class Chatbot:
         temperature: float = 0.5,
         top_p: float = 1.0,
         reply_count: int = 1,
-        system_prompt: str = "You are ChatGPT, a large language model trained by OpenAI. Respond conversationally",
+        system_prompt: str = None,
     ) -> None:
         """
         Initialize Chatbot with API key (from https://platform.openai.com/account/api-keys)
         """
+        system_prompt = system_prompt if system_prompt is not None else "You are ChatGPT, a large language model trained by OpenAI. Respond conversationally"
         self.engine = engine or ENGINE
         self.session = requests.Session()
         self.api_key = api_key
@@ -125,12 +126,17 @@ class Chatbot:
         if convo_id not in self.conversation:  # 重置会话，只保留role为system的会话
             self.reset(convo_id=convo_id, system_prompt=self.system_prompt)
         
-        ### zzd 读取和更新system_prompt
+        ### zzd: 读取和更新system_prompt
         system_prompt = kwargs.get("system_prompt", self.system_prompt)
+        if hasattr(self, "tmp_sys_prompt"):
+            if self.tmp_sys_prompt != None:
+                system_prompt = self.tmp_sys_prompt
+                # self.tmp_sys_prompt = None
         current_prompt = self.conversation[convo_id][0]["content"]
         if current_prompt != system_prompt:
             self.conversation[convo_id][0]["content"] = system_prompt
         ### end
+        # print(self.conversation[convo_id][0]["content"])
         
         self.add_to_conversation(prompt, "user", convo_id=convo_id)  # 添加用户输入到会话
         self.__truncate_conversation(convo_id=convo_id)  # 根据max_tokens截断会话

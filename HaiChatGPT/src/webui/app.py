@@ -44,6 +44,10 @@ def login_dialog():
     return render_template('login-dialog.html')
 
 
+@app.route('/user-info.html')
+def user_info():
+    return render_template('user-info.html')
+
 @app.route('/ip_addr')
 def ip_addr():
     # print(f'收到ip请求， {request}')
@@ -56,7 +60,7 @@ def ip_addr():
 @app.route('/clear', methods=['GET', 'POST'])
 def clear():
     user = general.get_user_from_session()
-    webo.delete_convo_and_save(user)  # 删除chatbot
+    webo.delete_convo_and_save(user, convo_id='default')  # 删除chatbot
     return jsonify({'success': True, 'message': '清空成功'})
 
 @app.route('/login', methods=['POST'])
@@ -117,7 +121,8 @@ def run(**kwargs):
         from .utils.user_manager_sql import UserManagerSQL
         user_mgr = UserManagerSQL()
         # 连接到MySQL数据库
-        app.config.from_pyfile('app_config.py')
+        # app.config.from_pyfile('app_config.py')
+        app.config.from_pyfile(user_mgr.app_sql_config)
         from .utils.user_manager_sql import db as db
         db.app = app
         db.init_app(app)

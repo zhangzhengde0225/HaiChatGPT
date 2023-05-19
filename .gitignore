@@ -27,7 +27,8 @@ HaiChatGPT/src/webui/examples/*
 
 # secrets
 HaiChatGPT/examples/ihep_sso/*
-HaiChatGPT/examples/gpt35_api_demo/*
+HaiChatGPT/examples/gpt35_api_test/*
+
 
 dist/*
 build/*

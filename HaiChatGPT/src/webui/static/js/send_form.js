@@ -13,6 +13,29 @@ const last_answer_content = document.getElementById('markdown_content');
 console.log('send_form.js loaded');
 prompt_text.focus();
 
+
+// 按enter发送消息，按shift+enter换行
+sendForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // 阻止表单提交
+    // 如果点击send按钮，就执行下面的函数
+    if (event.submitter.id === 'send-button') {
+        console.log('send pressed');
+        submit_promt_form(event);  // 提交prompt
+    };
+    // 如果点击enter键，就执行下面的函数
+    if (event.key === 'Enter') {
+        console.log('enter pressed');
+        submit_promt_form(event);  // 也是提交prompt
+    };
+    // 点击clear按钮，就执行下面的函数
+    if (event.submitter.id === 'clear-button') {
+        console.log('clear pressed');
+        // 清空输入框、
+        submit_clear(event);
+    };
+});
+
+
 // 监听按下Enter键发送表单
 prompt_text.addEventListener('keydown', function(event) {
     // 按下shift+enter键，输入换行
@@ -33,27 +56,6 @@ prompt_text.addEventListener('keydown', function(event) {
 });
 
 
-// 按enter发送消息，按shift+enter换行
-sendForm.addEventListener('submit', (event) => {
-    event.preventDefault(); // 阻止表单提交
-    // 如果点击send按钮，就执行下面的函数
-    if (event.submitter.id === 'send-button') {
-        console.log('send pressed');
-        submit_promt_form(event);  // 提交prmpt
-    };
-    // 如果点击enter键，就执行下面的函数
-    if (event.key === 'Enter') {
-        console.log('enter pressed');
-        submit_promt_form(event);  // 也是提交prompt
-    };
-    // 点击clear按钮，就执行下面的函数
-    if (event.submitter.id === 'clear-button') {
-        console.log('clear pressed');
-        // 清空输入框、
-        submit_clear(event);
-    };
-});
-
 
 function submit_promt_form(event) {
     const messageValue = event.target.elements.prompt.value;
@@ -65,15 +67,17 @@ function submit_promt_form(event) {
     sendButton.disabled = true;
     // 清空输入框
     event.target.elements.prompt.value = '';
-    
 
+    engine = document.getElementById('engine').value;
+    
     fetch('/send_prompt', {
         method: 'POST',
         headers: {  
         'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-        message: messageValue
+            params: {'engine': engine},
+            message: messageValue
         })
     })
     .then(response => response.json())
@@ -124,6 +128,8 @@ function submit_clear(event) {
         console.log('clear success');
         // 清空history
         document.getElementById('qa_pairs').innerHTML = '';
+        document.getElementById('last_question').style.display = "none";
+        document.getElementById('last_answer').style.display = "none";
         } else {
         // 清除失败，显示错误消息
         const message = data.message;

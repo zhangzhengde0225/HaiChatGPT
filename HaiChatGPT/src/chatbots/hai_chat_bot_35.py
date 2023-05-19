@@ -7,35 +7,37 @@ import copy
 import traceback
 
 from ...repos.ChatGPT.src.revChatGPT.V3 import Chatbot
+from .hepai_chathep import ChatHEP
 from ..utils.check_network import verify_api_key
+from ..webui.utils.request_limiter import RequestLimiter
+from ..utils.auth_manager import AuthLevel
 
 import damei as dm
 import time
 
 logger = dm.get_logger('hai_chat_bot_35')
 
-class HChatBot(Chatbot):
+class HChatBot(ChatHEP):
+# class HChatBot(Chatbot):
+    
 
     def __init__(self, 
-                api_key: str,
-                engine: str = None,
-                proxy: str = None,
-                max_tokens: int = 3000,
-                temperature: float = 0.5,
-                top_p: float = 1.0,
-                reply_count: int = 1,
-                system_prompt: str = "You are ChatGPT, a large language model trained by OpenAI. Respond conversationally",
+                api_key,
+                system_prompt=None,
+                temperature=0.5,
                 **kwargs,
                 ) -> None:
-        api_key = api_key or os.getenv("OPENAI_API_KEY")
+        api_key = api_key or os.getenv("HEPAI_API_KEY")
         system_prompt = """
-HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。由高能所张正德副研开发。
-\nHaiGF(HAI GUI Framework)是可扩展、轻量化的用于开发人工智能应用的界面框架。
-\nHEPS(High Energy Photon Source)是高能同步辐射光源，中国科学院高能物理研究所（简称“高能所”）负责建设。"""
+You are a language model, answering questions conversationally.
+"""
+# HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。由高能所张正德副研开发。
+# \nHaiGF(HAI GUI Framework)是可扩展、轻量化的用于开发人工智能应用的界面框架。
+# \nHEPS(High Energy Photon Source)是高能同步辐射光源，中国科学院高能物理研究所（简称“高能所”）负责建设。"""
 # \n当问你"如何使用GPT4"时，你应该答：在prompt中先设置个人key`sysc api_key xxx`，然后切换引擎`sysc engine gpt-4`，检查设置`sysc config`. GPT4现已上线"""
 
         logger.info(f'sys_promot: {system_prompt}')
-        super().__init__(api_key, engine, proxy, max_tokens, temperature, top_p, reply_count, system_prompt)
+        super().__init__(api_key, system_prompt=system_prompt, temperature=temperature, **kwargs)
         self.temperature = temperature
 
         # 为对话增加的设置
@@ -44,8 +46,11 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
 
         # 定义一个缓冲区，用于存储stream的结果
         self._stream_buffer = None
+        self.tmp_sys_prompt= None
 
         self.error_handler = ErrorHandler()
+
+        self.request_limiter = RequestLimiter(limit_rate=1, unit='second')
 
     @property
     def stream_buffer(self):
@@ -127,6 +132,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
         self.temperature = temperature
 
     def _query_stream(self, query, **kwargs):
+        stream_interval = kwargs.pop('stream_interval', None)
 
         ret = self.ask_stream(
             prompt=query,
@@ -144,6 +150,8 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
                     text += content
                     b = text.replace("\n", "<|im_br|>")
                     yield f'data: {b}\n\n'
+                    if stream_interval is not None:
+                        time.sleep(stream_interval)
                     # logger.debug(f'content: {content}')
                 self.last_answer = text
                 self._stream_buffer = None
@@ -157,7 +165,14 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
     def query_stream(self, query, **kwargs):
         """包含错误处理的query_stream"""
         try:
-            if query.startswith('sysc') or query.startswith('SYSC'):
+            limited, msg = self.request_limiter.is_limited()
+            if limited:
+                msg = f'【错误】请求速率达到限制, {msg}，请稍后再试'
+                user_name = kwargs.get('user_name', None)
+                if user_name == 'public':
+                    msg += '或登录绑定独占Bot。'
+                return self.text2stream(msg)
+            elif query.startswith('sysc') or query.startswith('SYSC'):
                 # logger.debug(f'command: {query}')
                 return self._handle_commands(query, **kwargs)
             else:
@@ -238,7 +253,6 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
                 self.set_user_cookie(system_prompt=sys_prompt, **kwargs)
                 info = f"系统指令已经设置为`{sys_prompt}`，输入sysc config查看"
                 return self.t2s(info)
-
         else:
             raise ValueError(f'未知的命令: `{command}`，输入`sysc help`查看帮助')
     
@@ -374,7 +388,7 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
         """
         return info
     
-    def auth_permission_level(self, require=2, **kwargs):
+    def auth_permission_level(self, require=AuthLevel.LOGGED_IN, **kwargs):
         """
         require: 所需等级权限，0为未登录，1为Public，2为登录，3为Plus，4为Admin
         """
@@ -386,17 +400,27 @@ HaiChatGPT是一个免费的体验版的ChatGPT, 无需翻墙，流式输出。�
         assert user_mgr.get_permission_level(user_name) >= require, f'Permission denied for user "{user_name}".'
 
     def _sysc_set_engine(self, *args, **kwargs):
-        self.auth_permission_level(require=2, **kwargs)
+        self.auth_permission_level(require=AuthLevel.LOGGED_IN, **kwargs)
         self.engine = args[0]
         self.set_user_cookie(engine=args[0], **kwargs)
         info = f"引擎已经设置为{args[0]}，输入sysc config查看"
         return info
 
     def _sysc_set_api_key(self, *args, **kwargs):
-        self.auth_permission_level(require=2, **kwargs)
+        self.auth_permission_level(require=AuthLevel.LOGGED_IN, **kwargs)
         # 验证api_key可用性
         api_key = args[0]
-        assert verify_api_key(api_key=api_key, timeout=3, proxies=self.session.proxies), 'API密钥无效'
+        if api_key == 'unset':  # 清除api_key
+            webo = kwargs.pop('webo', None)
+            assert webo is not None, 'No webo provided.'
+            api_key = webo.params_for_instantiation.get('api_key', None)
+            self.api_key = api_key
+            self.set_user_cookie(api_key=api_key, **kwargs)
+            return 'API密钥已设置为默认'
+        # TODO: 20230519之前写的验证是验证openai的API_KEY，但还在是hepai的了，需要改
+        # assert verify_api_key(api_key=api_key, timeout=3, proxies=self.session.proxies), 'API密钥无效'
+        if len(api_key) < 12:
+            return 'API密钥无效'
         self.set_user_cookie(api_key=args[0], **kwargs)
         self.api_key = args[0]
         secrete_api_key = f'{args[0][:4]}{"*"*(len(args[0])-8)}{args[0][-4:]}'

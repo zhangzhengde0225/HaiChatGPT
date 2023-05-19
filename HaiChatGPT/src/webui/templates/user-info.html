@@ -1,0 +1,70 @@
+<!-- 实现用户主页 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <title>用户信息</title>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/user-info.css') }}" />
+    
+</head>
+<body>
+    <div id="user-form">
+    <form id="user-form">
+        <div class="user_info_item">
+            <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
+            <h2 class="title">用户信息</h2>
+        </div>
+        <div class='user_info_item'>
+            <div>用户名:</div>
+            <div id="username">Null</div>
+        </div>
+        <div class='user_info_item'>
+            <div>邮箱:</div>
+            <div id="email"></div>
+            <div style="display: none;">
+                <button type="button" id="email_button">填写</button>
+            </div>
+        </div>
+        <div class='user_info_item'>
+            <div>手机号:</div>
+            <div id="phone"></div>
+            <div>
+                <button type="button" id="send-code-button">验证</button>
+            </div>
+        </div>
+        
+        <div class='user_info_item'>
+            <div>额度:</div>
+            <div id="limit"></div>
+            <div id="pay">
+                <button type="button" id="pay-button">充值</button>
+            </div>
+        </div>
+        <div class='user_info_item'>
+            <div>群组:</div>
+            <div id="group"></div>
+            <div style="display: none;">
+                <button type="button" id="group-button">创建</button>
+            </div>
+        </div>
+        <div class='user_info_item' id="user_members_item" style="display: none">
+            <div>群成员:</div>
+            <div id="group_members"></div>
+        </div>
+        <div class='user_info_item'>
+            <div>类型:</div>
+            <div id="user_type"></div>
+        </div>
+        <div class='user_info_item' style="display: none">
+            <div id="public_note">当前为公共账户，请<a href="login-dialog.html" class="hyper_link">登录</a>~</div>
+        </div>
+    </form>
+    </div>
+    
+    <script src="/static/js/user_info.js"></script>
+</body>
+
+

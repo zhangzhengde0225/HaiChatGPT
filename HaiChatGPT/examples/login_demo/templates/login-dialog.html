@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="static/login-style.css">
+  </head>
+  <body>
+    <h1>Login Example</h1>
+    <div id="login-form">
+      <form id="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password" style="display: none">Password:</label>
+        <input type="password" id="password" name="password" style="display: none"><br>
+        <button type="submit">Login</button>
+        <button type="button" id="register-button" style="display: none">Register</button> <!-- 添加注册按钮 -->
+      </form>
+
+      <!-- 添加注册表单 -->
+      <form id="register-form" style="display: none">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br>
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone"><br>
+        <label for="code">Code:</label>
+        <input type="text" id="code" name="code"><br>
+        <button type="button" id="send-code-button">Send Code</button>
+        <button type="register" id="register-button">Register</button>
+      </form>
+    </div>
+
+    <script src="static/js/login.js"></script>
+  </body>
+</html>

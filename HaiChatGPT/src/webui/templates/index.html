@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>HaiChatGPT</title>
+    <title></title>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
     <link rel="shortcut icon" href="{{ url_for('static', filename='/icons/ai.png')}}"/>
     <link rel="stylesheet" href="static/css/main.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.1.0/markdown-it.min.js"></script>
@@ -18,46 +19,67 @@
         <div class="new-chat">
           New Chat
         </div>
-        <div class="history">
-          提示:
-          <li>ChatGPT能回答问题、提供建议、写代码、翻译、生成、提供知识、解决方案等
+        <div class="chats">
+          <li>AI语言模型能回答问题、提供建议、写代码、翻译、生成、提供知识、解决方案等
           <!-- <li>一个简单的例子, prompt: 我想让你担任Android开发工程师中文面试官。我将成为候选人，您将向我询问Android开发工程师职位的面试问题。我希望你只作为面试官回答。不要一次写出所有的问题。我希望你只对我进行采访。问我问题，等待我的回答。不要写解释。像面试官一样一个一个问我，等我回答。我的第一句话是“面试官你好” -->
           <!-- <li>示例：请写一段快速排序的代码</li> -->
           <!-- <li><a class='hyper_link' href="https://github.com/PlexPt/awesome-chatgpt-prompts-zh">ChatGPT中文调教指南</a> -->
           <!-- <br></br> -->
           <!-- <li>这是使用作者的同一个Key的免费抢先体验版，仅供测试使用。</li> -->
           <div>重要更新：</div>
-          <li>03.12登录用户独享bot</li>
-          <li>03.08基于GPT-3.5的性能升级！</li>
+          <li>05.09测试ChatHEP-13b</li>
+          <li>04.11优化响应速率</li>
+          <!-- <li>03.08基于GPT-3.5的性能升级</li> -->
           <li>2023.02.08初始版本</li>
-          <br>
-          <li>报告错误请点击：
-            <a class='hyper_link' href="https://github.com/zhangzhengde0225/HaiChatGPT/issues">issue</a>
-            <div>或邮件zdzhang@ihep.ac.cn</div>
-          </li>
+          <!-- <li>报告错误： -->
+            <!-- <a class='hyper_link' href="https://github.com/zhangzhengde0225/HaiChatGPT/issues">issue</a> -->
+          
+          <!-- </li> -->
+          
           <li>技术交流群:
           <img class='qr_code' src="/static/icons/hai-chatgpt-wechat-group-small.png">
           <!-- <li>由于OpenAI不对国内服务，注册官方需要科学上网、邮箱、国外的手机号(可用sms-activate代替)，奉上
             <a class='hyper_link' href="https://code.ihep.ac.cn/zdzhang/haichatgpt/-/blob/main/docs/reg_tutorial.md">
             保姆级注册教程和临时梯子</a>。 -->
+          <div>报告错误请邮件: zdzhang@ihep.ac.cn</div>
+          <a class='hyper_link' href="https://github.com/zhangzhengde0225/HaiChatGPT">
+            Github开源地址</a>
+          <a class='hyper_link' href="https://code.ihep.ac.cn/zdzhang/haichatgpt/-/blob/main/docs/FAQ.md">
+            FAQ</a>
+          <div>欢迎反馈，不喜勿喷</div>
         </div>
         <div class="settings">
           <div id="user-form">  <!-- 左下角的用户表单 -->
-            <button id="login-button">Login</button>
-            <span id="username-label" style="display:none">Welcome, <span id="username"></span></span>
-            <button id="logout-button" style="display:none">Logout</button>
+            <span id="username-label" style="display: flex" class="hyper_link">
+              欢迎，<span id="username"></span></span>
+            <button id="login-button">登录</button>
+            <button id="logout-button" style="display:none">登出</button>
           </div>
-          <script src="/static/js/sidebar.js"></script>
         </div>
         <div id="ip_addr">ip: </div>
     </div>
 
-
     <div class="main" id="main">
+      <div class="show-on-mobile-title" id="show-on-mobile-title">
+        <button id="expand-sidebar-btn">展开侧栏</button>
+        <div class="show-on-mobile-chat-name">Chat: Default</div>
+        <!-- <span id="username-label" style="display: flex" class="hyper_link">
+          欢迎<span id="username"></span></span> -->
+        <!-- <button>add</button> -->
+      </div>
+
       <div class="title">
         <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
-        <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">HaiChatGPT</a>
-        <div>a free trail version of ChatGPT based on <a href="openai.com">OpenAI</a>.</div>
+        <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">ChatHEP</a>
+        <div>Chat with High Energy Physics v1.1.2</div>
+        <label for="engine"><b>引擎: </b></label>
+        <select name="engine" id="engine">
+          <option value="gpt-3.5-turbo-0301">gpt-3.5-turbo-0301</option>
+          <option value="chathep-0509">chathep-13b-0509</option>
+          <option value="chathep-0503">chathep-13b-0503</option>
+        </select>
+        <!-- <div>v1.1.1. A free trail version of GPT-3.5.</div> -->
+        <!-- <div>a free trail version of ChatGPT based on <a href="openai.com">OpenAI</a>.</div> -->
       </div>
       
       <div class="output" id="output">
@@ -74,19 +96,36 @@
           <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="answer_img" />
           <div id="markdown_content" class="markdown_content"></div>
         </div>
+        <div class='public-user-alert' id="public-user-alert" style="display: none">
+            未登录用户共用一个Bot，响应速度较慢，请先
+            <a href="login-dialog.html">登录</a>
+        </div>
       </div>
       
       <form id="send-form">
-        <textarea type="submit" name="prompt" placeholder="输入prompt(支持中英文等)，默认：sysc help" id="prompt"></textarea>
-        <button id="send-button">send</button>
-        <button id="clear-button">clear</button>
+        <textarea type="submit" name="prompt" placeholder="输入prompt(支持中英文等)，默认：sysc help，请勿输入隐私数据" id="prompt"></textarea>
+        <div class='form-btns' style="display: flex; direction: row;"> 
+          <div>
+            <button id="send-button">发送</button>
+            <button id="clear-button">清空</button>
+          </div>
+          <div class="upload-file" id="upload-file">
+            <div id="file-path"></div>
+            <!-- <div class="drop-zone" id="drop-zone">拖拽文件(.py等)到此处可提问</div> -->
+            <button id="file-remove">移除</button>
+          </div>
+        </div>
       </form>
+      
       
     </div>
     <!-- 添加脚本 -->
     <script src="static/js/main.js"></script>
+    <script src="/static/js/sidebar.js"></script>
+    <script src="static/js/adapt_to_mobile.js"></script>
     <script src="/static/js/send_form.js"></script>
     <script src="/static/js/stream_answer.js"></script>
+    <script src="/static/js/upload_file.js"></script>
   </body>
 </html>
 

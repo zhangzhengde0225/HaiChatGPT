@@ -12,6 +12,15 @@ from ...version import __appname__
 
 logger = dm.get_logger('auth_manager')
 
+class AuthLevel:
+    """权限等级"""
+    UNLOGIN = 0
+    PUBLIC = 1
+    LOGGED_IN = 2
+    PLUS = 3
+    ADMIN = 4
+
+
 class AuthManager:
     def __init__(self):
         self.config_path = f'{Path.home()}/.{__appname__}/auth.yaml'

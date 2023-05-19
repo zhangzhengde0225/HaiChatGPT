@@ -1,6 +1,6 @@
 
-
-
+const username_div = document.getElementById('username');
+const markdownContent = document.getElementById('markdown_content');
 console.log('stream_answer.js loaded');
 
 
@@ -10,6 +10,7 @@ var source = new EventSource("/stream");
 const md = window.markdownit();
 // hljs.initHighlighting();  // 代码高亮的库
 hljs.highlightAll();  // 代码高亮的库
+
 
 
 source.onmessage = function(event) {

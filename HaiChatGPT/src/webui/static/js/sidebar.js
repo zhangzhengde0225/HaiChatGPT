@@ -3,6 +3,7 @@
 const loginButton = document.getElementById('login-button');
 const logoutButton = document.getElementById('logout-button');
 const usernameLabel = document.getElementById('username-label');
+const public_user_alert = document.getElementById('public-user-alert');
 
 user_name = localStorage.getItem('username')
 // console.log(user_name); 
@@ -11,11 +12,17 @@ user_name = localStorage.getItem('username')
 function show_login_by_local_storage() {
   local_user = localStorage.getItem('username');
   if (local_user == 'public' || local_user == null || local_user == 'null') {
-    // 未登录
     loginButton.style.display = 'inline-block';
     logoutButton.style.display = 'none';
-    usernameLabel.style.display = 'none';
-    usernameLabel.innerText = '';
+    usernameLabel.style.display = 'inline-block';
+    usernameLabel.innerText = 'public';
+    public_user_alert.style.display = 'flex';
+  // } else if () {
+  //   // 未登录
+  //   loginButton.style.display = 'inline-block';
+  //   logoutButton.style.display = 'none';
+  //   usernameLabel.style.display = 'none';
+  //   usernameLabel.innerText = '';
   } else {
     // 已登录
     // console.log('sidebar.js 已登录', local_user);
@@ -23,15 +30,22 @@ function show_login_by_local_storage() {
     loginButton.style.display = 'none';
     logoutButton.style.display = 'inline-block';
     usernameLabel.style.display = 'inline-block';
+    public_user_alert.style.display = 'none';
   }
 }
 
 show_login_by_local_storage();
 
 
+
 // 点击登录按钮 显示登录对话框
 loginButton.addEventListener('click', () => {
     window.location.href = 'login-dialog.html';
+  });
+
+// 点击用户名 显示用户信息
+usernameLabel.addEventListener('click', () => {
+    window.location.href = 'user-info.html';
   });
 
 // 监听 登出按钮 清除本地存储的用户名

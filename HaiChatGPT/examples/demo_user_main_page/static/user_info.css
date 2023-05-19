@@ -1,0 +1,60 @@
+@font-face {
+    font-family: "ColfaxAI";
+    src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2)
+        format("woff2"),
+      url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "ColfaxAI";
+    src: url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff2) format("woff2"),
+      url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff) format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+
+#user-form {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  }
+
+.user_info_item {
+  display: flex;
+  flex-direction: row;
+  padding: auto;
+  text-align: left;
+  
+}
+
+
+.send-code-button {
+  display: block;
+  margin-bottom: 15px;
+  width: auto;
+}
+/* 
+.user_info_item > div {
+  display: flex;
+  flex-direction: column;
+} */
+
+.user_info_item > div:first-child {
+  min-width: 80px;
+  margin-right: 10px;
+}
+/* 
+.user_info_item > div:last-child {
+  min-width: 80px;
+  margin-right: 10px;
+} */
+

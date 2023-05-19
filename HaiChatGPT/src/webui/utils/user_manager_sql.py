@@ -86,8 +86,21 @@ def delete_user_posts(mapper, connection, target):
 class UserManagerSQL(UserManager):
     def __init__(self, use_sso_auth=False) -> None:
         super().__init__(use_sso_auth)
-        #self._users = None
-        #self._cookies = None
+        self.sql_config_file = f'{Path.home()}/.{__appname__}/app_sql_config.py'
+
+    @property
+    def app_sql_config(self):
+        file_path = self.sql_config_file
+        if os.path.exists(file_path):
+            return file_path
+        else:
+            content = 'SQLALCHEMY_DATABASE_URI = '
+            x = input(f"请输入数据库地址，(例如：mysql://xxx@localhost/xxx):\n")
+            content += f'"{x}"\n'
+            logger.info(f'set app_sql_config to {content}')
+            with open(file_path, 'w') as f:
+                f.write(content)
+            return file_path
 
     def read_users_from_file(self):
         pass

@@ -59,9 +59,10 @@ class Runner(object):
 
             cli_main_token(chatbot)
 
-    def run_webui(self):
+    def run_webui(self, **kwargs):
         """Run the web interface."""
         opt = self.opt
+        use_token = kwargs.get('use_token', False)
 
         # 参数：host, port, debug, use_api_key, proxy, engine
 
@@ -95,7 +96,7 @@ class Runner(object):
             chatbot = HChatBot(**webo.params_for_instantiation)
             check_network(chatbot, timeout=5)
             del chatbot
-        else:
+        elif use_token:
             from .chatbots.hai_chat_bot_token import HTokenChatBot
             webo.uninstantiated_chatbot = HTokenChatBot
             config = {}
@@ -115,6 +116,25 @@ class Runner(object):
                 # 'temperature': opt.temperature,
                 'max_qa': 5,
                 }
+        else:  # TODO: 支持从HepAI的API获取结果
+            from .chatbots.hai_chat_bot_35 import HChatBot
+            from .utils.check_network import check_network
+            webo.uninstantiated_chatbot = HChatBot
+
+            api_key = self.auth_manager.current_api_key
+
+            webo.params_for_instantiation = {
+                'api_key': api_key,
+                # 'engine': opt.engine,
+                'proxy': opt.proxy,
+                # "max_tokens": 3000,
+                'temperature': opt.temperature,
+                }
+            
+            # chatbot = HChatBot(**webo.params_for_instantiation)
+            # check_network(chatbot, timeout=5)
+            # del chatbot
+            
         
         from .webui.app import run as run_app
         #from .webui.app import user_mgr
