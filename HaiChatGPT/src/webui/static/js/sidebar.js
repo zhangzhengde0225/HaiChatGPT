@@ -80,6 +80,12 @@ logoutButton.addEventListener('click', function(event) {
       logoutButton.style.display = 'none';
       usernameLabel.style.display = 'none';
       usernameLabel.innerText = '';
+
+      if (data.redirect){
+        window.location.href = data.url;
+        console.log('data.redicrect: ', data.url);
+      }
+
     } else {
       // 登出失败
       alert(data.message);

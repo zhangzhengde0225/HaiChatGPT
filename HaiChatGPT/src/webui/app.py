@@ -6,6 +6,7 @@ import damei as dm
 import traceback
 from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response, stream_with_context
+from flask import render_template_string
 from flask import session, jsonify
 
 logger = dm.get_logger('app')
@@ -17,6 +18,7 @@ from .utils.web_object import WebObject
 webo = WebObject()
 
 from .utils.app_routes import *
+from .utils.auth import *
 from .utils import general
 
 @app.route("/", methods=("GET", "POST"))
@@ -41,6 +43,12 @@ def index():
     
 @app.route('/login-dialog.html')
 def login_dialog():
+    if webo.user_mgr.use_sso_auth:
+        login_sso_url = url_for('login_sso', _external=True)
+        logger.info(f"login_sso_url: {login_sso_url}")
+        return redirect(login_sso_url)
+    else:
+        pass
     return render_template('login-dialog.html')
 
 
@@ -77,8 +85,25 @@ def login():
     else:
         return {'success': False, 'message': msg}
         
+@app.route('/login_test', methods=['POST', 'GET'])
+def login_test():
+    user_name = general.get_user_from_session(msg='logout')
+    if user_name is None:
+        return jsonify({'success': False, 'message': '用户未登录'})
+    # session['username'] = None
+    session.pop('username', None)
+    ret = {'success': True, 'message': f'{user_name} 登出成功'}
     
-@app.route('/logout', methods=['POST'])
+    session.pop('username', None)
+    session.pop('access_token', None)
+    session.pop('refresh_token', None)
+    aouth_logout_url = "https://login.ihep.ac.cn/logout"
+    home_url = url_for('index', _external=True)
+    full_url = f"{aouth_logout_url}?WebserverURL={home_url}"
+    logger.info(f"full_url: {full_url}")
+    return redirect(full_url)
+
+@app.route('/logout', methods=['POST', 'GET'])
 def logout():
     # user_name = request.get_json().get('username')
     user_name = general.get_user_from_session(msg='logout')
@@ -86,7 +111,24 @@ def logout():
         return jsonify({'success': False, 'message': '用户未登录'})
     # session['username'] = None
     session.pop('username', None)
-    ret = {'success': True, 'message': f'{user_name} 登出成功'}
+    ret = {'success': True, 'message': f'{user_name} 登出成功', 'redirect': False, 'url': None}
+
+    # 退出登录后，退出oauth，重定向到主页
+    if webo.user_mgr.use_sso_auth:
+        session.pop('access_token', None)
+        session.pop('refresh_token', None)
+        aouth_logout_url = "https://login.ihep.ac.cn/logout"
+        home_url = url_for('index', _external=True)
+        
+        full_url = f"{aouth_logout_url}?WebServerURL={home_url}"
+        ret['redirect'] = True
+        ret['url'] = full_url
+        logger.info(f"full_url: {full_url}")
+        return jsonify(ret)
+    else:
+        # 不进行重定向
+        pass
+    
     logger.debug(f'logout返回: {ret}')
     return jsonify(ret)
 
@@ -134,6 +176,7 @@ def run(**kwargs):
         from .utils.user_manager import UserManager
         user_mgr = UserManager()
     user_mgr.use_sso_auth = use_sso_auth
+
 
     # setup web object
     webo.user_mgr = user_mgr

@@ -7,6 +7,8 @@ import time
 from datetime import datetime
 from .user_manager import UserManager
 
+from .auth import ihepAuth, oauth
+
 logger = dm.getLogger('user_manager')
 
 from flask_sqlalchemy import SQLAlchemy
@@ -158,7 +160,6 @@ class UserManagerSQL(UserManager):
 
     def verify_user(self, user, password, **kwargs):
         use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
-        
         user_data = UserData.query.filter_by(name=user).first()
         if user_data is None:
             if  use_sso_auth:
