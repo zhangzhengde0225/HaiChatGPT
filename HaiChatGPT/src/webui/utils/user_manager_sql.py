@@ -88,6 +88,8 @@ class UserManagerSQL(UserManager):
         super().__init__(use_sso_auth)
         self.sql_config_file = f'{Path.home()}/.{__appname__}/app_sql_config.py'
 
+        self._tmp_user_cookies = dict()
+
     @property
     def app_sql_config(self):
         file_path = self.sql_config_file
@@ -197,8 +199,14 @@ class UserManagerSQL(UserManager):
         return user_data.auth_type == "plus"
     
     def get_cookie(self, user):
+        """新增临时内存缓存，避免频繁读取数据库"""
+        if user in self._tmp_user_cookies:
+            return self._tmp_user_cookies[user]
         user_data = UserData.query.filter_by(name=user).first()
-        return user_data.cookies if user_data else None
+        cookie = user_data.cookies if user_data else None
+        if cookie:
+            self._tmp_user_cookies[user] = cookie
+        return cookie
 
     def write_cookie(self, user, **kwargs):
         user_data = UserData.query.filter_by(name=user).first()
@@ -210,6 +218,7 @@ class UserManagerSQL(UserManager):
         user_data.cookies = one_cookies
         # 重要，sqlalchemy无法检测JSON变化，必须人工设置变化标识
         flag_modified(user_data, "cookies")
+        self._tmp_user_cookies[user] = one_cookies  # 添加到临时缓存
         db.session.commit()
 
         logger.debug(f'Write cookie for user {user}: {one_cookies}')
