@@ -68,7 +68,7 @@ class IHEPAuth:
             authorize_params={
                 'theme': self.config['authorize_params']['theme'],
                 'redirect_uri': self.config['authorize_params']['redirect_uri'],
-            }
+            },
         )
 
     def verify_user(self, username, password, **kwargs):
@@ -98,18 +98,19 @@ def login_sso():
 
 @app.route('/callback', methods=['GET', 'POST'])
 def callback():
-    logger.info("oauth.ihep callback")
-    
-    logger.info( oauth.ihep.client_secret  )
     # TODO 原则上ihep.authorize_access_token应该能自动配置client_secret和client_id
-    token_info = oauth.ihep.authorize_access_token( 
-                        client_secret = oauth.ihep.client_secret, 
-                        client_id=oauth.ihep.client_id 
-                    )
+    # 但是这里需要手动配置，否则会报错
+    try:
+        token_info = oauth.ihep.authorize_access_token(
+            client_secret=ihepAuth.config['client_secret'],
+            client_id=ihepAuth.config['client_id'],
+        )
+    except Exception as e:
+        logger.error(e)
+        return redirect('/login-dialog.html')
     
     token = token_info['access_token']
     userInfo = json.loads(token_info['userInfo'])
-    logger.info(userInfo)
     
     username = userInfo['cstnetId']
     password = userInfo['password']
@@ -118,15 +119,13 @@ def callback():
     expiert_in = token_info['expires_in']
     expires_at = token_info['expires_at']
     
-    logger.info(f"token: {token}")
     # 保存访问令牌
     session['username'] = username
     session['umtId'] = umtId
     session['access_token'] = token
     session['refresh_token'] = refreshToken
 
-    logger.info(userInfo)
-
+    logger.info(f'oauth for ihep callback, umtId: {umtId}')
     # 保存用户信息
     webo.user_mgr.add_user(username, password, phone=None)
 
@@ -138,5 +137,6 @@ def logout_sso():
     session.pop('username', None)
     session.pop('access_token', None)
     session.pop('refresh_token', None)
+
     return redirect('/')
 

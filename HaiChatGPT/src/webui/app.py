@@ -12,7 +12,9 @@ from flask import session, jsonify
 logger = dm.get_logger('app')
 
 app = Flask(__name__)
-app.secret_key = 'this_is_bxx_session_key'  # 设置Session密钥，用于加密Session数据
+app.secret_key = '123456'  # 设置Session密钥，用于加密Session数据
+app.config['SESSION_PERMANENT'] = False # 设置session是否永久有效
+app.config['SESSION_USE_SIGNER'] = True # 设置是否对session进行签名
 
 from .utils.web_object import WebObject
 webo = WebObject()
@@ -43,12 +45,6 @@ def index():
     
 @app.route('/login-dialog.html')
 def login_dialog():
-    if webo.user_mgr.use_sso_auth:
-        login_sso_url = url_for('login_sso', _external=True)
-        logger.info(f"login_sso_url: {login_sso_url}")
-        return redirect(login_sso_url)
-    else:
-        pass
     return render_template('login-dialog.html')
 
 
@@ -114,7 +110,9 @@ def logout():
     ret = {'success': True, 'message': f'{user_name} 登出成功', 'redirect': False, 'url': None}
 
     # 退出登录后，退出oauth，重定向到主页
-    if webo.user_mgr.use_sso_auth:
+    access_token = session.get('access_token')
+    logger.debug(f'access_token: {access_token}')
+    if webo.user_mgr.use_sso_auth and access_token is not None:
         session.pop('access_token', None)
         session.pop('refresh_token', None)
         aouth_logout_url = "https://login.ihep.ac.cn/logout"
