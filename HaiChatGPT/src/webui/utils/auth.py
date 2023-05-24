@@ -6,9 +6,7 @@ from ....version import __appname__
 
 from flask import redirect, url_for, session, request, flash
 from authlib.integrations.flask_client import OAuth
-from authlib.integrations.requests_client import OAuth2Session
-# from authlib import Config
-# from authlib.oauth2.rfc6749 import Config
+# from authlib.integrations.requests_client import OAuth2Session
 
 from ..app import app, webo
 import damei as dm
