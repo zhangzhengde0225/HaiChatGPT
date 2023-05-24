@@ -68,3 +68,29 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+#register-button{
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  float: right;
+}
+
+#umt-login {
+  display: block;
+  background-color: #d7ffd8;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float: center;
+}
+
+
+/* 美化 fieldset 元素 */
+fieldset {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  max-width: 400px;
+}

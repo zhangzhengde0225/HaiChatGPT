@@ -9,6 +9,14 @@ const register_btn = document.getElementById('register-btn-in-form')
 console.log('login.js loaded');
 // console.log('register_btn: ', register_btn);
 
+// 点击oauth登录按钮
+const registerF_umt = document.getElementById('umt-login');
+registerF_umt.addEventListener('click', (event) => {
+  event.preventDefault();
+    // 重定向到响应的 URL
+  window.location.href = '/login_sso';
+});
+
 
 // 处理登录表单提交事件
 loginForm.addEventListener('submit', (event) => {
@@ -16,6 +24,7 @@ loginForm.addEventListener('submit', (event) => {
   // console.log('submit event', event)
   const usernameValue = event.target.elements.username.value;
   const passwordValue = event.target.elements.password.value;
+  
   fetch('/login', {
     method: 'POST',
     headers: {
@@ -44,7 +53,7 @@ loginForm.addEventListener('submit', (event) => {
   .catch(error => {
     console.error(error);
   });
-
+  
 });
 
 // 显示注册表单
@@ -138,3 +147,4 @@ function validateEmail(email) {
   var emailPattern = /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/;
   return emailPattern.test(email);
 }
+

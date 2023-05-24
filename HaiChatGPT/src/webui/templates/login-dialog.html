@@ -14,13 +14,34 @@
           <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
           <div class="title">HaiChatGPT</div>
         </div>
-        <label for="username">用户名或IHEP统一认证帐号</label>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">密码</label>
-        <input type="password" id="password" name="password"><br>
-        <button type="submit">登录</button>
-        <button type="button" id="register-button" formnovalidate>注册</button> <!-- 添加注册按钮 -->
-        
+        <fieldset>
+          <label >统一认证账号登录</label>
+          <button type="submit" id="umt-login" formnovalidate> 登录 </button>
+        </fieldset>
+        <hr class="centered-hr">
+        <fieldset>
+          <label for="username">本地用户登录</label>
+          <label for="username">用户名</label>
+          <input type="text" id="username" name="username" placeholder="请输入本地用户名" required><br>
+          <label id="password-label" for="password" style="display: none;">密码</label>
+          <input type="password" id="password" name="password" placeholder="请输入密码" style="display: none;"><br>
+          <script>
+            // 获取用户名和密码输入框
+            var usernameInput = document.getElementById("username");
+            var passwordInput = document.getElementById("password");
+            var passwordlabel = document.getElementById("password-label");
+            
+            // 监听用户名输入框的 focus 事件
+            usernameInput.addEventListener("focus", function() {
+              // 显示密码输入框和标签
+              passwordInput.style.display = "inline";
+              passwordlabel.style.display = "inline";
+              document.getElementsByTagName("label")[1].style.display = "inline";
+            });
+          </script>
+          <button type="submit"" formnovalidate >登录</button>
+          <button type="button" id="register-button" formnovalidate>注册</button> <!-- 添加注册按钮 -->
+        </fieldset>
       </form>
     </div>
 

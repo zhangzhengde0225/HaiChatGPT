@@ -36,8 +36,6 @@ function show_login_by_local_storage() {
 
 show_login_by_local_storage();
 
-
-
 // 点击登录按钮 显示登录对话框
 loginButton.addEventListener('click', () => {
     window.location.href = 'login-dialog.html';
@@ -80,6 +78,11 @@ logoutButton.addEventListener('click', function(event) {
       logoutButton.style.display = 'none';
       usernameLabel.style.display = 'none';
       usernameLabel.innerText = '';
+
+      if (data.redirect){
+        window.location.href = data.url;
+      }
+
     } else {
       // 登出失败
       alert(data.message);
