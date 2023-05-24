@@ -77,9 +77,21 @@
 
 #umt-login {
   display: block;
-  background-color: #d7ffd8;
+  background-color: #003399;
   border: 1px solid #ccc;
-  border-radius: 2px;
+  color: #ffffff;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float: center;
+}
+
+#local-login {
+  display: block;
+  background-color: #725e84;
+  border: 1px solid #ccc;
+  color: #ffffff;
+  border-radius: 5px;
   margin-top: 10px;
   margin-bottom: 10px;
   float: center;

@@ -91,7 +91,7 @@ ihepAuth = IHEPAuth()
 
 @app.route('/login_sso')
 def login_sso():
-    # redirect_uri = 'http://192.168.68.22:5555/callback'
+    # redirect_uri = 'http://ai.ihep.ac.cn:5555/callback'
     redirect_uri = url_for('callback', _external=True)
     logger.info(f"redirect_uri: {redirect_uri}")
     return oauth.ihep.authorize_redirect(redirect_uri)
