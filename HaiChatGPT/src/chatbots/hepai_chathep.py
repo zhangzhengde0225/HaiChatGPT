@@ -6,12 +6,6 @@ import dataclasses
 from ...repos.ChatGPT.src.revChatGPT.V3 import Chatbot
 ENCODER = tiktoken.get_encoding("gpt2")
 
-Engine2Model = {
-    "gpt-3.5-turbo-0301": 'hepai/gpt-3.5-turbo',
-    "chathep-0503": "hepai/chathep-20230503",
-    "chatbep-0509": "hepai/chathep-20230509"
-}
-
 class ChatHEP(Chatbot):
     def __init__(self, api_key, system_prompt=None, **kwargs):
         super().__init__(api_key, system_prompt=system_prompt, **kwargs)
@@ -22,14 +16,14 @@ class ChatHEP(Chatbot):
         # self.system_prompt = system_prompt if system_prompt is not None else "You are ChatGPT, answering questions conversationally"
         self.system_prompt = system_prompt
         print(f'system_prompt: {self.system_prompt}')
-        pass
 
     def engine2model(self, engine):
+        return engine  # engine就是模型名字，别名和引擎名字的差别index.html中体现
         if 'chathep' in engine:
             # like "chathep-0503" → "hepai/chathep-20230503"
             return f'hepai/{engine.split("-")[0]}-2023{engine.split("-")[1]}'
         else:
-            return "hepai/gpt-3.5-turbo"
+            return "openai/gpt-3.5-turbo"
 
     @property
     def prompt_lang(self):
@@ -128,7 +122,7 @@ class ChatHEP(Chatbot):
         need_print = kwargs.get('print', True)
         # prompt = "Hello!"
         system_prompt = self.system_prompt if sys_prompt is None else sys_prompt
-        api_key = 'iRRkpnBUdsHbYpzSCjdDHawrjTAfvC'  # 这个是hepai的api_key
+        api_key = os.getenv('HEPAI_API_KEY')
 
         result = hai.LLM.chat(
                 model=self.models[0],

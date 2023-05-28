@@ -73,11 +73,11 @@
         <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="icon" />
         <a class="title2" href="https://code.ihep.ac.cn/zdzhang/hai">ChatHEP</a>
         <div>Chat with High Energy Physics v1.1.2</div>
-        <label for="engine"><b>引擎: </b></label>
+        <label for="engine"><b>模型: </b></label>
         <select name="engine" id="engine">
-          <option value="gpt-3.5-turbo-0301">gpt-3.5-turbo-0301</option>
-          <option value="chathep-0509">chathep-13b-0509</option>
-          <option value="chathep-0503">chathep-13b-0503</option>
+          <option value="openai/gpt-3.5-turbo">ChatGPT</option>
+          <option value="hepai/chathep-13b-0528">ChatHEP-13B-0528</option>
+          <option value="lm-sys/vicuna-13b">Vicuna-13B</option>
         </select>
         <!-- <div>v1.1.1. A free trail version of GPT-3.5.</div> -->
         <!-- <div>a free trail version of ChatGPT based on <a href="openai.com">OpenAI</a>.</div> -->
@@ -97,6 +97,7 @@
           <img src="{{ url_for('static', filename='/icons/ai.png') }}" class="answer_img" />
           <div id="markdown_content" class="markdown_content"></div>
         </div>
+        <!-- <div class='public-user-alert'>2023年5月28日22时 临时维护 恢复时间请关注左侧栏交流群。</div> -->
         <div class='public-user-alert' id="public-user-alert" style="display: none">
             未登录用户共用一个Bot，响应速度较慢，请先
             <a href="login-dialog.html">登录</a>
