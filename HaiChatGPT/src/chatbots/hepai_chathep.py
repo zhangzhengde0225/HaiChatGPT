@@ -17,7 +17,7 @@ class ChatHEP(Chatbot):
         super().__init__(api_key, system_prompt=system_prompt, **kwargs)
         models = hai.Model.list()  # 列出可用模型
         print(models)
-        self.models = ['hepai/chathep-20230503', 'hepai/gpt-3.5-turbo']
+        self.models = ['hepai/chathep-20230503', 'openai/gpt-3.5-turbo']
         self._language = kwargs.get('language', 'en')
         # self.system_prompt = system_prompt if system_prompt is not None else "You are ChatGPT, answering questions conversationally"
         self.system_prompt = system_prompt
@@ -29,7 +29,7 @@ class ChatHEP(Chatbot):
             # like "chathep-0503" → "hepai/chathep-20230503"
             return f'hepai/{engine.split("-")[0]}-2023{engine.split("-")[1]}'
         else:
-            return "hepai/gpt-3.5-turbo"
+            return "openai/gpt-3.5-turbo"
 
     @property
     def prompt_lang(self):

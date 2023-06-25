@@ -275,24 +275,64 @@ class UserManagerSQL(UserManager):
                 return 2  # 登录
             
 
-    def get_chat_and_message(self,user_name: str, chat_name='default'):
+    def get_history(self,user_name: str, inedx = 0, length = 100):
+        if user_name.strip() == '':
+            return None
+
         user = UserData.query.filter_by(name=user_name).first()
+        logger.info(f"get_chat_and_message: {user}")
         if not user:
             logger.info(f"用户 {user_name} 不存在")
+            return None
+        
+        # 读取历史记录
+        # 按时间倒序排列
+        histories = UserHistory.query.filter_by(user_id=user.id).order_by(UserHistory.created_at.asc()).limit(length).all()
 
-        chat = UserChat.query.filter_by(
-            user_id=user.id, chat=chat_name).first()
-        if not chat:
-            logger.info(f"会话 {chat_name} 不存在")
+        # 按照convo_id 分组
+        sessions = {}
+        for history in histories:
+            if history.convo_id not in sessions:
+                sessions[history.convo_id] = []
+            sessions[history.convo_id].append({'role': history.role, 
+                                               'content': history.content, 
+                                               'created_at': history.created_at})
+            # logger.info(f"get_history: {history}")
+        
+        return sessions
 
-        # 读取Message
-        # messages = UserMessage.query.filter_by(chat_id=chat.id).all()
-        # messages = UserMessage.query.filter(UserMessage.chat_id == chat.id).all()
-        # 这两个语句会报错，未知原因
-        messages = db.session.query(UserMessage).filter_by(chat_id=chat.id).all()
 
-        result = []
-        for message in messages:
-            result.append({'role': message.role, 'content': message.content})
-        return result
+    def get_chat_and_message(self,user_name: str, chat_name='default'):
+        user = UserData.query.filter_by(name=user_name).first()
+        logger.info(f"get_chat_and_message: {user}")
+        if not user:
+            logger.info(f"用户 {user_name} 不存在")
+            return None
+
+        # 读取chat
+        # 遍历所有chat，找到对应的chat
+        chats = UserChat.query.filter_by(user_id=user.id).all()
+        logger.info(f"get_chat_and_message: {chats}")
+        
+        sessions = {}
+        for chat in chats:
+            result = []
+            chat = UserChat.query.filter_by(
+                user_id=user.id, chat=chat_name).first()
+            if not chat:
+                logger.info(f"会话 {chat_name} 不存在")
+
+            # 读取Message
+            # messages = UserMessage.query.filter_by(chat_id=chat.id).all()
+            # messages = UserMessage.query.filter(UserMessage.chat_id == chat.id).all()
+            # 这两个语句会报错，未知原因
+            messages = db.session.query(UserMessage).filter_by(chat_id=chat.id).all()
+
+            for message in messages:
+                result.append({'role': message.role, 'content': message.content})
+                logger.info(f"get_chat_and_message: {message}")
+
+            sessions[chat] = result
+            
+        return sessions
     

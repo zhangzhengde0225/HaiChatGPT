@@ -8,6 +8,8 @@ from pathlib import Path
 from flask import Flask, redirect, render_template, request, url_for, Response, stream_with_context
 from flask import render_template_string
 from flask import session, jsonify
+from flask_cors import CORS
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 logger = dm.get_logger('app')
 
@@ -16,10 +18,23 @@ app.secret_key = '123456'  # 设置Session密钥，用于加密Session数据
 app.config['SESSION_PERMANENT'] = False # 设置session是否永久有效
 app.config['SESSION_USE_SIGNER'] = True # 设置是否对session进行签名
 
+#app.config['APPLICATION_ROOT'] = '/chatapi' # 设置应用的根路径
+
+#def simple(env, resp):
+#    resp(b'200 OK', [(b'Content-Type', b'text/plain')])
+#    return [b'Hello WSGI World']
+
+#app.wsgi_app = DispatcherMiddleware(simple, {'/chatapi': app.wsgi_app})
+
+# 设置跨域
+# CORS(app, resources={r"/*": {"origins": "http://example.com"}})
+CORS(app)
+
 from .utils.web_object import WebObject
 webo = WebObject()
 
 from .utils.app_routes import *
+from .utils.api_routes import *
 from .utils.auth import *
 from .utils import general
 
@@ -45,6 +60,16 @@ def index():
     
 @app.route('/login-dialog.html')
 def login_dialog():
+    # 检测到是其他网站发起的，需要保存referer
+    try:
+        callback = request.args.get('callback')
+        logger.info(f'login-dialog.html请求的data为: {callback}')
+        if callback is not None:
+            session['callback'] = callback
+    except:
+        pass
+    
+    logger.info(f'login-dialog.html session: {session}')
     return render_template('login-dialog.html')
 
 
@@ -77,28 +102,26 @@ def login():
     if ok:
         session['username'] = username
         # session['logged_users'] = session.get('logged_users', []) + [username]
-        return jsonify({'success': True, 'message': '登录成功', 'username': session['username']})
+        message =  {'success': True, 'message': '登录成功', 'username': session['username']}
     else:
-        return {'success': False, 'message': msg}
-        
-@app.route('/login_test', methods=['POST', 'GET'])
-def login_test():
-    user_name = general.get_user_from_session(msg='logout')
-    if user_name is None:
-        return jsonify({'success': False, 'message': '用户未登录'})
-    # session['username'] = None
-    session.pop('username', None)
-    ret = {'success': True, 'message': f'{user_name} 登出成功'}
-    
-    session.pop('username', None)
-    session.pop('access_token', None)
-    session.pop('refresh_token', None)
-    aouth_logout_url = "https://login.ihep.ac.cn/logout"
-    home_url = url_for('index', _external=True)
-    full_url = f"{aouth_logout_url}?WebserverURL={home_url}"
-    logger.info(f"full_url: {full_url}")
-    return redirect(full_url)
+        message = {'success': False, 'message': msg}
 
+    # 检测到是其他网站发起的登录请求，需要重定向到其他网站，并返回用户名    
+    if 'callback' in session:
+        callback = session.pop('callback', None)
+        # 重定向到其他网站，并返回用户名
+        access_token = "hatbot_access_token"
+        secret_key = app.secret_key
+        token = jwt.encode({'username': username, 'access_token': access_token}, secret_key, algorithm='HS256')
+        # TODO: 这里需要修改，不能直接返回token
+        session['access_token'] = access_token
+        logger.info(f'重定向到其他网站: {callback}?username={username}&token={token}')
+        callback_url = (f'{callback}?username={username}&token={token}')
+        message["url"] = callback_url
+
+    return jsonify(message)
+
+        
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
     # user_name = request.get_json().get('username')

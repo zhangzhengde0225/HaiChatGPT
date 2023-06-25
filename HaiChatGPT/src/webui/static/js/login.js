@@ -43,7 +43,10 @@ loginForm.addEventListener('submit', (event) => {
       localStorage.setItem('username', username);
       // 提示登录成功
       alert(`登录成功，欢迎您，${username}！`);
-      window.location.href = '/';
+      
+      const redirect_url = data?.url ?? '/'; // 如果data.url存在则使用data.url，否则使用'/'
+      window.location.href = redirect_url;
+        
     } else {
       // 登录失败，显示错误消息
       const message = data.message;

@@ -4,13 +4,17 @@ import json
 from typing import Any
 from ....version import __appname__
 
-from flask import redirect, url_for, session, request, flash
+from flask import redirect, url_for, make_response, session, request, flash, jsonify
+from functools import wraps
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.requests_client import OAuth2Session
+
+import jwt
 # from authlib import Config
 # from authlib.oauth2.rfc6749 import Config
 
 from ..app import app, webo
+from ..utils import general
 import damei as dm
 
 logger = dm.get_logger('oauth2')
@@ -87,6 +91,26 @@ class IHEPAuth:
         else:
             return responce.json()
 
+    # TODO 需要重写
+    def token_required(self, f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            token = request.headers.get('Authorization')
+
+            if not token:
+                return jsonify({'message': 'No token provided'}), 401
+
+            try:
+                data = jwt.decode(token, app.config['SECRET_KEY'])
+                #current_user = User.query.filter_by(id=data['id']).first()
+                current_user = None
+            except:
+                return jsonify({'message': 'Invalid token'}), 401
+
+            return f(current_user, *args, **kwargs)
+
+        return decorated
+
 ihepAuth = IHEPAuth()
 
 @app.route('/login_sso')
@@ -94,7 +118,30 @@ def login_sso():
     # redirect_uri = 'http://192.168.68.22:5555/callback'
     redirect_uri = url_for('callback', _external=True)
     logger.info(f"redirect_uri: {redirect_uri}")
-    return oauth.ihep.authorize_redirect(redirect_uri)
+    authorize_redirect = oauth.ihep.authorize_redirect(redirect_uri)
+    logger.info(f"authorize_redirect: {authorize_redirect.headers}")
+    return authorize_redirect
+
+@app.route('/api/login_sso', methods=['GET'])
+def api_login_sso():
+    # redirect_uri = 'http://192.168.68.22:5555/callback'
+    callback = request.args.get('callback', None)
+
+    if callback is None:
+        return jsonify({'message': 'No callback provided'}), 401
+    else:
+        session['callback'] = callback
+
+    redirect_uri = url_for('callback', _external=True)
+    logger.info(f"redirect_uri: {redirect_uri}")
+    authorize_redirect = oauth.ihep.authorize_redirect(redirect_uri)
+    logger.info(f"authorize_redirect: {authorize_redirect.headers}")
+    locaton = authorize_redirect.headers.get('Location')
+
+    logger.info(f"callback: {session['callback']}")
+
+    return jsonify({'location': locaton})
+    return authorize_redirect.headers.get('Location')
 
 @app.route('/callback', methods=['GET', 'POST'])
 def callback():
@@ -105,13 +152,13 @@ def callback():
             client_secret=ihepAuth.config['client_secret'],
             client_id=ihepAuth.config['client_id'],
         )
+        ok = True
     except Exception as e:
         logger.error(e)
         return redirect('/login-dialog.html')
     
     token = token_info['access_token']
-    userInfo = json.loads(token_info['userInfo'])
-    
+    userInfo = json.loads(token_info['userInfo'])  
     username = userInfo['cstnetId']
     password = userInfo['password']
     umtId = userInfo['umtId']
@@ -127,16 +174,34 @@ def callback():
 
     logger.info(f'oauth for ihep callback, umtId: {umtId}')
     # 保存用户信息
-    webo.user_mgr.add_user(username, password, phone=None)
+    webo.user_mgr.add_user(username, password, phone=None, auth_type='sso')
+
+    if ok:
+        msg = jsonify({'success': True, 'message': '登录成功', 'username': session['username']})
+    else:
+        msg = jsonify({'success': False, 'message': '登录失败'})
+
+    # 检测到是从其他网站跳转过来的，需要重定向到其他网站，并返回用户名
+    if 'callback' in session:
+        callback = session.pop('callback', None)
+        # 重定向到其他网站
+        secret_key = app.secret_key
+        token = jwt.encode({'username': username, 'access_token': token}, secret_key, algorithm='HS256')
+        
+        logger.info(f'重定向到其他网站: {callback}')
+        logger.info(f'username:{username}, token:{token}')
+        # 将 token 存储在 Cookie 中
+        data = jsonify({'username': username, 'token': token})
+
+        response = make_response(redirect(f'{callback}?username={username}&token={token}') )
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        # 添加 auth
+        # response.headers.add("authorization",token)
+        # response.set_cookie('token', token)
+
+        # logger.info(f'response: {response.headers}')
+        
+        return response
 
     # 重定向到主页
-    return redirect('/')
-
-@app.route('/logout_sso')
-def logout_sso():
-    session.pop('username', None)
-    session.pop('access_token', None)
-    session.pop('refresh_token', None)
-
-    return redirect('/')
-
+    return redirect('/') 
