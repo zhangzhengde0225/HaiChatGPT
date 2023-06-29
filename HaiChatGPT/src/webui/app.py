@@ -183,6 +183,7 @@ def run(**kwargs):
     if use_sql:
         from .utils.user_manager_sql import UserManagerSQL
         user_mgr = UserManagerSQL()
+        logger.info(f'使用sql数据库')
         # 连接到MySQL数据库
         # app.config.from_pyfile('app_config.py')
         app.config.from_pyfile(user_mgr.app_sql_config)

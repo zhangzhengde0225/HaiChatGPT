@@ -16,12 +16,6 @@ from . import general
 
 logger = dm.get_logger('api_routes')
 
-@app.route('/next')
-def nextjs():
-    url = 'http://localhost:5556' + request.full_path
-    response = requests.get(url)
-    return response.content
-
 # api 服务
 @app.route('/api/redirect')
 def api_redirect():
@@ -137,7 +131,7 @@ def api_method(method):
     jwt_token = request.headers.get('Authorization', None)
     jwt_data = jwt.decode(jwt_token, app.secret_key, algorithms=['HS256'])
     logger.info(f'api_method: {method}')
-    logger.info(f'request headers: {request.headers}')
+    # logger.info(f'request headers: {request.headers}')
 
 
     username = jwt_data.get('username', None)
@@ -246,7 +240,7 @@ def api_method(method):
         print(chats_sessions['default'] )
 
         logger.debug(f'收到get_user_session请求: user: {username}')
-        logger.info(f'chats_sessions: {chats_sessions}')
+        # logger.info(f'chats_sessions: {chats_sessions}')
         return jsonify({'success': True, 'message': username, "sessions": chats_sessions})
 
     if method == "test":

@@ -162,16 +162,7 @@ class UserManagerSQL(UserManager):
         use_sso_auth = kwargs.get('use_sso_auth', self.use_sso_auth)
         user_data = UserData.query.filter_by(name=user).first()
         if user_data is None:
-            if  use_sso_auth:
-                logger.debug(f'Local auth failed, try sso auth.')
-                ok, msg = self.sso_verify_user(user, password, **kwargs)
-                if ok:
-                    self.add_user(user, password, auth_type='sso')
-                    return True, ''
-                else:
-                    return False, f'本地用户不存在，统一认证用户验证失败，请尝试注册。msg: {msg}'
-            else:
-                return False, f'本地用户不存在，请尝试注册。msg: {msg}'
+            return False, f'本地用户不存在，请尝试注册。msg: {msg}'
         else:
             if user_data.password == password:
                 return True, ''
