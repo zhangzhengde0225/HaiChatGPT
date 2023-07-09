@@ -9,9 +9,13 @@ ENCODER = tiktoken.get_encoding("gpt2")
 class ChatHEP(Chatbot):
     def __init__(self, api_key, system_prompt=None, **kwargs):
         super().__init__(api_key, system_prompt=system_prompt, **kwargs)
-        models = hai.Model.list()  # 列出可用模型
+        models = hai.Model.list(
+            # url='https://aiapi.ihep.ac.cn:42901'
+            url='http://chat.ihep.ac.cn:42901'
+        )  # 列出可用模型
         print(models)
-        self.models = ['hepai/chathep-20230503', 'hepai/gpt-3.5-turbo']
+        # self.models = ['hepai/chathep-20230503', 'hepai/gpt-3.5-turbo']
+        self.models = models
         self._language = kwargs.get('language', 'en')
         # self.system_prompt = system_prompt if system_prompt is not None else "You are ChatGPT, answering questions conversationally"
         self.system_prompt = system_prompt
@@ -84,8 +88,10 @@ class ChatHEP(Chatbot):
             "temperature": kwargs.get("temperature", self.temperature),
             "stream": True,
             "timeout": 60,
+            "user_name": kwargs.get('user_name', 'public')
             # "user": role,
         }
+        # print(f'xx333x: data: {data}')
         
         response = self.session.post(
             "https://chat.ihep.ac.cn/v1/chat/completions",

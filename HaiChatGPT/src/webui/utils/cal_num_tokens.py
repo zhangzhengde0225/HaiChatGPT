@@ -12,7 +12,8 @@ def cal_num_tokens(prompt):
     :return:
     """
     response = requests.post(
-        "http://192.168.68.22:42901/v1/inference",
+        # "http://192.168.68.22:42901/v1/inference",
+        "https://aiapi.ihep.ac.cn/v1/inference",
         json={
             "model": "gpt2/fast-tokenizer",
             "prompt": prompt,
