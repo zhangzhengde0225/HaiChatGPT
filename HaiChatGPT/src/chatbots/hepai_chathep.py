@@ -93,10 +93,13 @@ class ChatHEP(Chatbot):
             # "user": role,
         }
         
+        hepai_api_key = os.environ.get('HEPAI_API_KEY')
+        assert hepai_api_key is not None, 'You must provide an `API_KEY` in the `Authorization` header.'
+       
         response = self.session.post(
-            "https://chat.ihep.ac.cn/v1/chat/completions",
+            "http://aiapi.ihep.ac.cn:42901/v1/chat/completions",
             proxies=self.session.proxies,
-            headers={"Authorization": f"Bearer {api_key}"},
+            headers={"Authorization": f"Bearer {hepai_api_key}"},
             json=data,
             stream=True,
         )

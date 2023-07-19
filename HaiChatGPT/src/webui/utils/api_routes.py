@@ -1,4 +1,5 @@
 
+import os
 
 from flask import redirect, url_for, make_response, session, request, flash, jsonify
 import requests
@@ -128,28 +129,48 @@ def api_test():
 
 @app.route('/api/<method>', methods=['POST', 'GET'])
 def api_method(method):
-    jwt_token = request.headers.get('Authorization', None)
-    jwt_data = jwt.decode(jwt_token, app.secret_key, algorithms=['HS256'])
+    # jwt_token = request.headers.get('Authorization', None)
+    # jwt_data = jwt.decode(jwt_token, app.secret_key, algorithms=['HS256'])
     logger.info(f'api_method: {method}')
     # logger.info(f'request headers: {request.headers}')
-
-
-    username = jwt_data.get('username', None)
-    if username is None:
-        return Response('username is None', status=400)
-    logger.info(f'username: {username}')
-
-    # access_token = jwt_data.get('access_token', None)
+    token = request.headers.get('Authorization', None)
+    logger.info(f'token: {token}')
     
-    # if access_token is None:
-    #    logger.error(f'access_token is None')
-    #    return Response('access_token is None', status=400)
-        
     try:
         data = request.get_json()
         logger.info(f'收到请求: {data}')
     except Exception as e:
         pass
+
+    username = request.args.get('username', None)
+    try:
+        username = data.pop('username', username)
+    except Exception as e:
+        pass
+
+    if username is None:
+        return Response('username is None', status=400)
+    logger.info(f'username: {username}')
+
+    # 验证token
+    hepai_api_key = os.environ.get('HEPAI_API_KEY')
+    assert hepai_api_key is not None, 'You must provide an `API_KEY` in the `Authorization` header.'
+    headers={"Authorization": f"Bearer {hepai_api_key}"}
+    
+    response = requests.post(
+    url=f'http://aiapi.ihep.ac.cn:42901/admin',
+    headers=headers,
+    json={
+        'function': 'verify_access_token',
+        "access_token": token,
+    },)
+
+    token_verify = response.json()
+    if token_verify['success'] is False:
+        return Response('token is invalid', status=400)
+    logger.info(f'rep.json: {response.json()}')
+    if token_verify['message'] != username:
+        return Response('username is not match', status=400)
 
     # chat 功能
     
@@ -169,6 +190,7 @@ def api_method(method):
         def Api_stream():
             # stream 输出完后，添加一个结束标志
             text0 = "data: "
+            count = 0
             for i,line in enumerate(stream_buffer):
                 # 只输出最后一个字符，即最后一个
                 text1 = line                
@@ -177,13 +199,15 @@ def api_method(method):
                 text0 = text1.replace("\n\n","")
             
                 yield f"data: {line}"
-                yield f"id: {i}\n\n"
+                yield f"id: {count}\n\n"
                 yield f"event: message\n\n"
+
+                count = count + 1
 
             line = "[DONE]"
             logger.info(f'line: {line}')
             yield f'data: {line}\n\n'
-            yield f"id: {i+1}\n\n"
+            yield f"id: {count}\n\n"
             yield f"event: message\n\n"
 
         stream = Api_stream()
@@ -202,7 +226,7 @@ def api_method(method):
         except Exception as e:
             data = {}
 
-        length = data.get('length', 10)
+        length = data.get('length', 50)
 
         one_convo = webo.get_history(username)
         
@@ -237,7 +261,7 @@ def api_method(method):
         for message in chats_sessions['default']:
             message['content'] = message['content'].replace("<|im_br|>","\n")
 
-        print(chats_sessions['default'] )
+        # print(chats_sessions['default'] )
 
         logger.debug(f'收到get_user_session请求: user: {username}')
         # logger.info(f'chats_sessions: {chats_sessions}')
